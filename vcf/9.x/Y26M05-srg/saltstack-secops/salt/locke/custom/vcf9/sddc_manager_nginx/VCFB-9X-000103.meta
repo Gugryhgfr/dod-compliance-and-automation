@@ -1,0 +1,60 @@
+version: 1
+display_name: VCFB-9X-000103 - The VMware Cloud Foundation SDDC Manager NGINX server must prevent rendering inside a frame or iframe on another site.
+global_description: |-
+  Clickjacking, also known as a “UI redress attack”, is when an attacker uses multiple transparent or opaque layers to trick a user into clicking on a button or link on another page when they were intending to click on the top level page. Thus, the attacker is “hijacking” clicks meant for their page and routing them to another page, most likely owned by another application, domain, or both.
+
+  Using a similar technique, keystrokes can also be hijacked. With a carefully crafted combination of stylesheets, iframes, and text boxes, a user can be led to believe they are typing in the password to their email or bank account, but are instead typing into an invisible frame controlled by the attacker.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFB-9X-000103
+  srg:
+    - SRG-APP-000516-WSR-000174
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_sddc_manager_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation SDDC Manager NGINX server must prevent rendering inside a frame or iframe on another site.
+    control_id: VCFB-9X-000103
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify a header is configured to set X-Frame-Options.
+
+      View the running configuration by running the following command:
+
+      # nginx -T 2>&1 | sed -n "/\sserver\s{/,/.*location\s.*{/p" | grep "add_header X-Frame-Options"
+
+      Example result:
+
+      add_header X-Frame-Options "SAMEORIGIN";
+      add_header X-Frame-Options "SAMEORIGIN";
+
+      There should be one result for each server defined in NGINX.
+
+      If the "X-Frame-Options" header is not configured to "SAMEORIGIN", this is a finding.
+
+      Note: There can be several add_header directives. These directives are inherited from the previous configuration level if and only if there are no add_header directives defined on the current level so care must be taken if add_header is defined at multiple levels to include headers configured at a higher level.
+    rationale: |-
+      Clickjacking, also known as a “UI redress attack”, is when an attacker uses multiple transparent or opaque layers to trick a user into clicking on a button or link on another page when they were intending to click on the top level page. Thus, the attacker is “hijacking” clicks meant for their page and routing them to another page, most likely owned by another application, domain, or both.
+
+      Using a similar technique, keystrokes can also be hijacked. With a carefully crafted combination of stylesheets, iframes, and text boxes, a user can be led to believe they are typing in the password to their email or bank account, but are instead typing into an invisible frame controlled by the attacker.
+    remediation: |-
+      Navigate to and open:
+
+      The nginx.conf (/etc/nginx/nginx.conf by default or the included file where the server is defined) file.
+
+      Add a add_header directive, for example:
+
+      add_header X-Frame-Options "SAMEORIGIN";
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload
+
+      Note: There can be several add_header directives. These directives are inherited from the previous configuration level if and only if there are no add_header directives defined on the current level so care must be taken if add_header is defined at multiple levels to include headers configured at a higher level.

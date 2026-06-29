@@ -1,0 +1,47 @@
+version: 1
+display_name: PHTN-50-000267 - The Photon operating system must be configured to use the pam_deny.so module.
+global_description: |-
+  By requiring the use of the pam_deny.so module, any authentication attempt that does not explicitly succeed with a previous PAM module will be denied. This ensures that no unhandled or ambiguous authentication paths allow unintended access, thereby enforcing a fail-safe mechanism against unauthorised system logins.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000267
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must be configured to use the pam_deny.so module.
+    control_id: PHTN-50-000267
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following commands to verify the pam_deny.so module is used:
+
+      # grep '^auth' /etc/pam.d/system-auth
+
+      Example result:
+
+      auth required pam_faillock.so preauth
+      auth sufficient pam_unix.so
+      auth required pam_faillock.so authfail
+      auth optional pam_faildelay.so delay=4000000
+      auth required pam_deny.so
+
+      If the pam_deny.so module is not present, or is not configured as the last auth entry, this is a finding.
+    rationale: |-
+      By requiring the use of the pam_deny.so module, any authentication attempt that does not explicitly succeed with a previous PAM module will be denied. This ensures that no unhandled or ambiguous authentication paths allow unintended access, thereby enforcing a fail-safe mechanism against unauthorised system logins.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/pam.d/system-auth
+
+      Add or update the following lines making sure it is present as the last auth entry:
+
+      auth required pam_deny.so

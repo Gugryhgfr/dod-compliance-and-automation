@@ -1,0 +1,47 @@
+version: 1
+display_name: PHTN-50-000221 - The Photon operating system must configure Secure Shell (SSH) to restrict LoginGraceTime.
+global_description: |-
+  By default, SSH unauthenticated connections are left open for two minutes before being closed. This setting is too permissive as no legitimate login would need such an amount of time to complete a login. Quickly terminating idle or incomplete login attempts will free up resources and reduce the exposure any partial logon attempts may create.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000221
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must configure Secure Shell (SSH) to restrict LoginGraceTime.
+    control_id: PHTN-50-000221
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify the running configuration of sshd:
+
+      # sshd -T|&grep -i LoginGraceTime
+
+      Example result:
+
+      logingracetime 30
+
+      If "LoginGraceTime" is not set to "30", this is a finding.
+    rationale: |-
+      By default, SSH unauthenticated connections are left open for two minutes before being closed. This setting is too permissive as no legitimate login would need such an amount of time to complete a login. Quickly terminating idle or incomplete login attempts will free up resources and reduce the exposure any partial logon attempts may create.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/ssh/sshd_config
+
+      Ensure the "LoginGraceTime" line is uncommented and set to the following:
+
+      LoginGraceTime 30
+
+      At the command line, run the following command:
+
+      # systemctl restart sshd.service

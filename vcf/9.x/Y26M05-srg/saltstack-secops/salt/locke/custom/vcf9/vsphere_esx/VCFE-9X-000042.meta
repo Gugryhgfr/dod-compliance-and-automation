@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFE-9X-000042 - The ESX host must enforce a 90-day maximum password lifetime restriction.
+global_description: |-
+  Any password, no matter how complex, can eventually be cracked. Therefore, passwords need to be changed periodically. If the VMM does not limit the lifetime of passwords and force users to change their passwords, there is the risk that the VMM passwords could be compromised.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000042
+  srg:
+    - SRG-OS-000076-VMM-000430
+  cci:
+    - CCI-004066
+  nist:
+    - IA-5 (1) (h)
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must enforce a 90-day maximum password lifetime restriction.
+    control_id: VCFE-9X-000042
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "Security.PasswordMaxDays" value and verify it is set to "90".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Security.PasswordMaxDays
+
+      If the "Security.PasswordMaxDays" setting is not set to "90", this is a finding.
+    rationale: |-
+      Any password, no matter how complex, can eventually be cracked. Therefore, passwords need to be changed periodically. If the VMM does not limit the lifetime of passwords and force users to change their passwords, there is the risk that the VMM passwords could be compromised.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Security.PasswordMaxDays" value and configure it to "90".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Security.PasswordMaxDays | Set-AdvancedSetting -Value 90

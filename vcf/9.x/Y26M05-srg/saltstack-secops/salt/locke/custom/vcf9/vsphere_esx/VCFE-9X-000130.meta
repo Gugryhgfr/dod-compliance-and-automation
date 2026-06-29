@@ -1,0 +1,74 @@
+version: 1
+display_name: VCFE-9X-000130 - The ESX Image Profile and vSphere Installation Bundle (VIB) acceptance level must be verified.
+global_description: |-
+  Verify the ESX Image Profile to only allow signed VIBs. An unsigned VIB represents untested code installed on an ESX host. The ESX Image profile supports four acceptance levels:
+
+  1. VMwareCertified - VIBs created, tested, and signed by VMware.
+  2. VMwareAccepted - VIBs created by a VMware partner but tested and signed by VMware.
+  3. PartnerSupported - VIBs created, tested, and signed by a certified VMware partner.
+  4. CommunitySupported - VIBs that have not been tested by VMware or a VMware partner.
+
+  Community Supported VIBs are not supported and do not have a digital signature. To protect the security and integrity of ESX hosts, do not allow unsigned (CommunitySupported) VIBs to be installed on hosts.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000130
+  srg:
+    - SRG-OS-000366-VMM-001430
+  cci:
+    - CCI-001774
+    - CCI-003992
+  nist:
+    - CM-14
+    - CM-7 (5) (b)
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX Image Profile and vSphere Installation Bundle (VIB) acceptance level must be verified.
+    control_id: VCFE-9X-000130
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Security Profile.
+
+      Under "Host Image Profile Acceptance Level" view the acceptance level.
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $esxcli.software.acceptance.get.Invoke()
+
+      If the acceptance level is "CommunitySupported", this is a finding.
+    rationale: |-
+      Verify the ESX Image Profile to only allow signed VIBs. An unsigned VIB represents untested code installed on an ESX host. The ESX Image profile supports four acceptance levels:
+
+      1. VMwareCertified - VIBs created, tested, and signed by VMware.
+      2. VMwareAccepted - VIBs created by a VMware partner but tested and signed by VMware.
+      3. PartnerSupported - VIBs created, tested, and signed by a certified VMware partner.
+      4. CommunitySupported - VIBs that have not been tested by VMware or a VMware partner.
+
+      Community Supported VIBs are not supported and do not have a digital signature. To protect the security and integrity of ESX hosts, do not allow unsigned (CommunitySupported) VIBs to be installed on hosts.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Security Profile.
+
+      Under "Host Image Profile Acceptance Level", click "Edit".
+
+      Using the drop-down selection, set the acceptance level as "VMwareCertified", "VMwareAccepted", or "PartnerSupported". The default is "PartnerSupported".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $arguments = $esxcli.software.acceptance.set.CreateArgs()
+      $arguments.level = "PartnerSupported"
+      $esxcli.software.acceptance.set.Invoke($arguments)
+
+      Note: "VMwareCertified" or "VMwareAccepted" may be substituted for "PartnerSupported", depending on local requirements. These are case sensitive.

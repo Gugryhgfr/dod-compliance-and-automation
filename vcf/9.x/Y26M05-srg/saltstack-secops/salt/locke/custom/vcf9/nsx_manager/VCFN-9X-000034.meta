@@ -1,0 +1,38 @@
+version: 1
+display_name: VCFN-9X-000034 - The VMware Cloud Foundation NSX Manager must be configured with only one local account to be used as the account of last resort in the event the authentication server is unavailable.
+global_description: |-
+  Authentication for administrative (privileged level) access to the device is required at all times. An account can be created on the device's local database for use when the authentication server is down or connectivity between the device and the authentication server is not operable. This account is referred to as the account of last resort since it is intended to be used as a last resort and when immediate administrative access is absolutely necessary.
+
+  The account of last resort logon credentials must be stored in a sealed envelope and kept in a safe. The safe must be periodically audited to verify the envelope remains sealed. The signature of the auditor and the date of the audit should be added to the envelope as a record. Administrators should secure the credentials and disable the root account (if possible) when not needed for system administration functions.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFN-9X-000034
+  srg:
+    - SRG-APP-000148-NDM-000346
+  cci:
+    - CCI-001358
+    - CCI-002111
+  nist:
+    - AC-2 (7) (a)
+    - AC-2 a
+benchmark_id:
+  vcf9_nsx_manager:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Manager must be configured with only one local account to be used as the account of last resort in the event the authentication server is unavailable.
+    control_id: VCFN-9X-000034
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the NSX Manager web interface, go to the System >> Settings >> User Management >> Local Users and view the status column.
+
+      If the audit, guestuser1, or guestuser2 local accounts are active, this is a finding.
+    rationale: |-
+      Authentication for administrative (privileged level) access to the device is required at all times. An account can be created on the device's local database for use when the authentication server is down or connectivity between the device and the authentication server is not operable. This account is referred to as the account of last resort since it is intended to be used as a last resort and when immediate administrative access is absolutely necessary.
+
+      The account of last resort logon credentials must be stored in a sealed envelope and kept in a safe. The safe must be periodically audited to verify the envelope remains sealed. The signature of the auditor and the date of the audit should be added to the envelope as a record. Administrators should secure the credentials and disable the root account (if possible) when not needed for system administration functions.
+    remediation: |-
+      From the NSX Manager web interface, go to the System >> Settings >> User Management >> Local Users.
+
+      Select the menu drop down next to the user to modify and click "Deactivate User".

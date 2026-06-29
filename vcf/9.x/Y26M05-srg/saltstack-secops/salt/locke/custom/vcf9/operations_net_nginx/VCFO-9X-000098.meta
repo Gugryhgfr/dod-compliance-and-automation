@@ -1,0 +1,53 @@
+version: 1
+display_name: VCFO-9X-000098 - The VMware Cloud Foundation Operations for Networks Platform NGINX server must prefer server ciphers over client ciphers when using SSL/TLS.
+global_description: |-
+  During the initial setup of a Transport Layer Security (TLS) connection to the web server, the client sends a list of supported cipher suites in order of preference.  The web server will reply with the cipher suite it will use for communication from the client list.  If an attacker can intercept the submission of cipher suites to the web server and place, as the preferred cipher suite, a weak export suite, the encryption used for the session becomes easy for the attacker to break, often within minutes to hours.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFO-9X-000098
+  srg:
+    - SRG-APP-000439-WSR-000188
+  cci:
+    - CCI-002418
+  nist:
+    - SC-8
+benchmark_id:
+  vcf9_operations_net_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation Operations for Networks Platform NGINX server must prefer server ciphers over client ciphers when using SSL/TLS.
+    control_id: VCFO-9X-000098
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify the NGINX is configured to prefer server TLS ciphers.
+
+      View the running configuration by running the following command:
+
+      # nginx -T 2>&1 | sed -n '/server\s{/{:a;N;/.*location/!ba;/listen.*\sssl/p}' | grep ssl_prefer_server_ciphers
+
+      Example configuration:
+
+      http {
+      ssl_prefer_server_ciphers on;
+      }
+
+      If the "ssl_prefer_server_ciphers" directive is not configured in the http context or set to "off", this is a finding.
+
+      If the "ssl_prefer_server_ciphers" directive is configured in a server context and set to "off", this is a finding.
+    rationale: |-
+      During the initial setup of a Transport Layer Security (TLS) connection to the web server, the client sends a list of supported cipher suites in order of preference.  The web server will reply with the cipher suite it will use for communication from the client list.  If an attacker can intercept the submission of cipher suites to the web server and place, as the preferred cipher suite, a weak export suite, the encryption used for the session becomes easy for the attacker to break, often within minutes to hours.
+    remediation: |-
+      Navigate to and open:
+
+      The /etc/nginx/sites-available/vnera file.
+
+      Add or update the "ssl_prefer_server_ciphers" directive for the server context listening on port 443, for example:
+
+      ssl_prefer_server_ciphers on;
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload

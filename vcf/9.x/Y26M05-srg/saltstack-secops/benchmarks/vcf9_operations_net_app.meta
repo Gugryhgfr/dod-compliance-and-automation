@@ -1,0 +1,13 @@
+name: vcf9_operations_net_app
+display_name: VMware Cloud Foundation 9.x - Operations for Networks (Application)
+desc: Custom benchmark ported from the VMware Cloud Foundation 9.x STIG Readiness Guide.
+version: '1'
+authority: custom
+reference: VMware Cloud Foundation 9.x STIG Readiness Guide (Y26M05)
+ids:
+  - VCFA-9X-000024
+  - VCFA-9X-000376
+  - VCFA-9X-000377
+  - VCFA-9X-000379
+  - VCFA-9X-000380
+  - VCFA-9X-000386

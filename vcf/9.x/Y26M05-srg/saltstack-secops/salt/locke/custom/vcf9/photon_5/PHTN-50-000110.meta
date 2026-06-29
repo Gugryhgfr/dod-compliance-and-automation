@@ -1,0 +1,50 @@
+version: 1
+display_name: PHTN-50-000110 - The Photon operating system must allocate audit record storage capacity to store audit records when audit records are not immediately sent to a central audit record storage facility.
+global_description: |-
+  Audit logs are most useful when accessible by date, rather than size. This can be accomplished through a combination of an audit log rotation and setting a reasonable number of logs to keep. This ensures that audit logs are accessible to the ISSO in the event of a central log processing failure.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000110
+  srg:
+    - SRG-OS-000341-GPOS-00132
+  cci:
+    - CCI-001849
+  nist:
+    - AU-4
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must allocate audit record storage capacity to store audit records when audit records are not immediately sent to a central audit record storage facility.
+    control_id: PHTN-50-000110
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify auditd is configured to keep a number of audit logs in the event of a central log processing failure:
+
+      # grep -E "^num_logs|^max_log_file_action" /etc/audit/auditd.conf
+
+      Example result:
+
+      num_logs = 5
+      max_log_file_action = ROTATE
+
+      If "num_logs" is not configured to "5" or greater, this is a finding.
+      If "max_log_file_action" is not configured to "ROTATE", this is a finding.
+    rationale: |-
+      Audit logs are most useful when accessible by date, rather than size. This can be accomplished through a combination of an audit log rotation and setting a reasonable number of logs to keep. This ensures that audit logs are accessible to the ISSO in the event of a central log processing failure.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/audit/auditd.conf
+
+      Ensure the following lines are present, not duplicated, and not commented:
+
+      num_logs = 5
+      max_log_file_action = ROTATE
+
+      At the command line, run the following command:
+
+      # pkill -SIGHUP auditd

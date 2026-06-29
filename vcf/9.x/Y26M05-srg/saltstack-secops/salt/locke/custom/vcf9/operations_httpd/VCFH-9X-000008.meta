@@ -1,0 +1,69 @@
+version: 1
+display_name: VCFH-9X-000008 - The VMware Cloud Foundation Operations Apache HTTP service must initiate session logging upon start up.
+global_description: |-
+  An attacker can compromise a web server during the startup process. If logging is not initiated until all the web server processes are started, key information may be missed and not be available during a forensic investigation. To ensure all logable events are captured, the web server must begin logging once the first web server process is initiated.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFH-9X-000008
+  srg:
+    - SRG-APP-000092-WSR-000055
+  cci:
+    - CCI-001464
+    - CCI-001851
+  nist:
+    - AU-14 (1)
+    - AU-4 (1)
+benchmark_id:
+  vcf9_operations_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations Apache HTTP service must initiate session logging upon start up.
+    control_id: VCFH-9X-000008
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify the "log_config_module" is present.
+
+      At the command prompt, run the following:
+
+      # httpd -M | grep -i "log_config_module"
+
+      Example output:
+
+      log_config_module (shared)
+
+      If the "log_config_module" is not found, this is a finding.
+
+      Verify the "CustomLog" directive is defined.
+
+      At the command prompt, run the following:
+
+      # grep -i "CustomLog" /etc/httpd/conf/httpd.conf /etc/httpd/conf/extra/httpd-ssl.conf /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf
+
+      Example output:
+
+      CustomLog "/var/log/apache2/access_log" common
+
+      If "CustomLog" is not present, this is a finding.
+
+      If "CustomLog" does not use a "LogFormat" with the required elements, this is a finding.
+
+      Note: The required elements are "%h, %l, %u, %t, %r, %>s, and %b", and are covered by control VCFH-9X-000007.
+    rationale: |-
+      An attacker can compromise a web server during the startup process. If logging is not initiated until all the web server processes are started, key information may be missed and not be available during a forensic investigation. To ensure all logable events are captured, the web server must begin logging once the first web server process is initiated.
+    remediation: |-
+      Navigate to and open:
+
+      /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf
+
+      Note: If the offending configuration was found in a different file edit that file instead.
+
+      Add or update the "CustomLog" directive, for example:
+
+      CustomLog "/var/log/apache2/access_log" common
+
+      Reload the configuration by running the following command:
+
+      # systemctl reload httpd

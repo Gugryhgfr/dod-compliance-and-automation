@@ -1,0 +1,51 @@
+version: 1
+display_name: PHTN-50-000200 - The Photon operating system must configure the Secure Shell (SSH) SyslogFacility.
+global_description: |-
+  Automated monitoring of remote access sessions allows organizations to detect cyber attacks and ensure ongoing compliance with remote access policies by auditing connection activities.
+
+  Shipping SSH authentication events to syslog allows organizations to use their log aggregators to correlate forensic activities among multiple systems.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000200
+  srg:
+    - SRG-OS-000032-GPOS-00013
+  cci:
+    - CCI-000067
+  nist:
+    - AC-17 (1)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must configure the Secure Shell (SSH) SyslogFacility.
+    control_id: PHTN-50-000200
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify the running configuration of sshd:
+
+      # sshd -T|&grep -i SyslogFacility
+
+      Example result:
+
+      syslogfacility AUTHPRIV
+
+      If "syslogfacility" is not set to "AUTH" or "AUTHPRIV", this is a finding.
+    rationale: |-
+      Automated monitoring of remote access sessions allows organizations to detect cyber attacks and ensure ongoing compliance with remote access policies by auditing connection activities.
+
+      Shipping SSH authentication events to syslog allows organizations to use their log aggregators to correlate forensic activities among multiple systems.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/ssh/sshd_config
+
+      Ensure the "SyslogFacility" line is uncommented and set to the following:
+
+      SyslogFacility AUTHPRIV
+
+      At the command line, run the following command:
+
+      # systemctl restart sshd.service

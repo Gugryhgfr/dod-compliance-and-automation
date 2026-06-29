@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFE-9X-000240 - The ESX host must not automatically grant administrative permissions to Active Directory groups.
+global_description: |-
+  When adding ESX hosts to Active Directory, the group specified by the "Config.HostAgent.plugins.hostsvc.esxAdminsGroup" advanced setting can be automatically granted administrative access to ESX. This behavior should be disabled and access intentionally granted if appropriate.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000240
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must not automatically grant administrative permissions to Active Directory groups.
+    control_id: VCFE-9X-000240
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "Config.HostAgent.plugins.hostsvc.esxAdminsGroupAutoAdd" value and verify it is not set to "true".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Config.HostAgent.plugins.hostsvc.esxAdminsGroupAutoAdd
+
+      If the "Config.HostAgent.plugins.hostsvc.esxAdminsGroupAutoAdd" setting is set to "true", this is a finding.
+    rationale: |-
+      When adding ESX hosts to Active Directory, the group specified by the "Config.HostAgent.plugins.hostsvc.esxAdminsGroup" advanced setting can be automatically granted administrative access to ESX. This behavior should be disabled and access intentionally granted if appropriate.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Config.HostAgent.plugins.hostsvc.esxAdminsGroupAutoAdd" key and configure its value to "false".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Config.HostAgent.plugins.hostsvc.esxAdminsGroupAutoAdd | Set-AdvancedSetting -Value "false"

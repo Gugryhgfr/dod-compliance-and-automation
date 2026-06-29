@@ -1,0 +1,58 @@
+version: 1
+display_name: PHTN-50-000082 - The Photon operating system must protect audit tools from unauthorized access.
+global_description: |-
+  Protecting audit information also includes identifying and protecting the tools used to view and manipulate log data. Therefore, protecting audit tools is necessary to prevent unauthorized operation on audit information.
+
+  Operating systems providing tools to interface with audit information will leverage user permissions and roles identifying the user accessing the tools and the corresponding rights the user enjoys in order to make access decisions regarding the access to audit tools.
+
+  Audit tools include, but are not limited to, vendor-provided and open source audit tools needed to successfully view and manipulate audit information system activity and records. Audit tools include custom queries and report generators.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000082
+  srg:
+    - SRG-OS-000256-GPOS-00097
+  cci:
+    - CCI-001493
+    - CCI-001494
+    - CCI-001495
+  nist:
+    - AU-9
+    - AU-9 a
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must protect audit tools from unauthorized access.
+    control_id: PHTN-50-000082
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify permissions on audit tools:
+
+      # stat -c "%n is owned by %U and group owned by %G and permissions are %a" /usr/sbin/auditctl /usr/sbin/auditd /usr/sbin/aureport /usr/sbin/ausearch /usr/sbin/autrace /usr/sbin/augenrules
+
+      Expected result:
+
+      /usr/sbin/auditctl is owned by root and group owned by root and permissions are 755
+      /usr/sbin/auditd is owned by root and group owned by root and permissions are 755
+      /usr/sbin/aureport is owned by root and group owned by root and permissions are 755
+      /usr/sbin/ausearch is owned by root and group owned by root and permissions are 755
+      /usr/sbin/autrace is owned by root and group owned by root and permissions are 755
+      /usr/sbin/augenrules is owned by root and group owned by root and permissions are 750
+
+      If any file is not owned by root or group owned by root or permissions are more permissive than listed above, this is a finding.
+    rationale: |-
+      Protecting audit information also includes identifying and protecting the tools used to view and manipulate log data. Therefore, protecting audit tools is necessary to prevent unauthorized operation on audit information.
+
+      Operating systems providing tools to interface with audit information will leverage user permissions and roles identifying the user accessing the tools and the corresponding rights the user enjoys in order to make access decisions regarding the access to audit tools.
+
+      Audit tools include, but are not limited to, vendor-provided and open source audit tools needed to successfully view and manipulate audit information system activity and records. Audit tools include custom queries and report generators.
+    remediation: |-
+      At the command line, run the following commands for each file returned:
+
+      # chown root:root <file>
+      # chmod 750 <file>
+
+      Note: Update permissions to match the target file as listed in the check text.

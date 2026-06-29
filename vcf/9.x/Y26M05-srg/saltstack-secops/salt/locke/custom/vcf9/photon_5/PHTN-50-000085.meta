@@ -1,0 +1,40 @@
+version: 1
+display_name: PHTN-50-000085 - The Photon operating system must limit privileges to change software resident within software libraries.
+global_description: |-
+  If the operating system were to allow any user to make changes to software libraries, then those changes might be implemented without undergoing the appropriate testing and approvals that are part of a robust change management process.
+
+  This requirement applies to operating systems with software libraries that are accessible and configurable, as in the case of interpreted languages. Software libraries also include privileged programs which execute with escalated privileges. Only qualified and authorized individuals shall be allowed to obtain access to information system components for purposes of initiating changes, including upgrades and modifications.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000085
+  srg:
+    - SRG-OS-000259-GPOS-00100
+  cci:
+    - CCI-001499
+  nist:
+    - CM-5 (6)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must limit privileges to change software resident within software libraries.
+    control_id: PHTN-50-000085
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify software library permissions are not writable by others:
+
+      # find /usr/lib/ -type f -perm -o+w -printf '%p, %u:%g:%m\
+      '
+
+      If there is any output, this is a finding.
+    rationale: |-
+      If the operating system were to allow any user to make changes to software libraries, then those changes might be implemented without undergoing the appropriate testing and approvals that are part of a robust change management process.
+
+      This requirement applies to operating systems with software libraries that are accessible and configurable, as in the case of interpreted languages. Software libraries also include privileged programs which execute with escalated privileges. Only qualified and authorized individuals shall be allowed to obtain access to information system components for purposes of initiating changes, including upgrades and modifications.
+    remediation: |-
+      At the command line, run the following for each file returned:
+
+      # chmod o-w <file>

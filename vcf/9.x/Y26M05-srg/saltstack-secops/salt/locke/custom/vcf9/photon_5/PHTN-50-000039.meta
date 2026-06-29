@@ -1,0 +1,43 @@
+version: 1
+display_name: PHTN-50-000039 - The operating system must store only encrypted representations of passwords.
+global_description: |-
+  Passwords need to be protected at all times, and encryption is the standard method for protecting passwords. If passwords are not encrypted, they can be plainly read (i.e., clear text) and easily compromised.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000039
+  srg:
+    - SRG-OS-000073-GPOS-00041
+  cci:
+    - CCI-004062
+  nist:
+    - IA-5 (1) (d)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The operating system must store only encrypted representations of passwords.
+    control_id: PHTN-50-000039
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify passwords are stored with only encrypted representations:
+
+      # grep ^ENCRYPT_METHOD /etc/login.defs
+
+      Example result:
+
+      ENCRYPT_METHOD SHA512
+
+      If the "ENCRYPT_METHOD" option is not set to "SHA512", is missing or commented out, this is a finding.
+    rationale: |-
+      Passwords need to be protected at all times, and encryption is the standard method for protecting passwords. If passwords are not encrypted, they can be plainly read (i.e., clear text) and easily compromised.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/login.defs
+
+      Add or update the following line:
+
+      ENCRYPT_METHOD SHA512

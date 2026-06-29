@@ -1,0 +1,66 @@
+version: 1
+display_name: VCFE-9X-000221 - The ESX host must configure virtual switch security policies to reject promiscuous mode requests.
+global_description: |-
+  When promiscuous mode is enabled for a virtual switch, all virtual machines (VMs) connected to the Portgroup have the potential to read all packets across that network (only the virtual machines connected to that Portgroup).
+
+  Promiscuous mode is disabled by default on the ESX Server, and this is the recommended setting. Promiscuous mode can be set at the vSwitch and/or the Portgroup level. Switch-level settings can be overridden at the Portgroup level.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000221
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must configure virtual switch security policies to reject promiscuous mode requests.
+    control_id: VCFE-9X-000221
+    scored: true
+    profile:
+      - default
+    information: |-
+      This control addresses ESX standard switches. Distributed switches are addressed in the vCenter STIG. If there is no standard switch on the ESX host, this is not applicable.
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> Networking >> Virtual Switches.
+
+      On each standard switch, click the ellipse (...) button next to each port group and select "Edit Settings".
+
+      Click the "Security" tab. Verify that "Promiscuous Mode" is set to "Reject" and that "Override" is not checked.
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      Get-VirtualSwitch | Get-SecurityPolicy
+      Get-VirtualPortGroup | Get-SecurityPolicy | Select-Object *
+
+      If the "Promiscuous Mode" policy is set to "Accept" (or "true", via PowerCLI) or the security policy inherited from the virtual switch is overridden, this is a finding.
+    rationale: |-
+      When promiscuous mode is enabled for a virtual switch, all virtual machines (VMs) connected to the Portgroup have the potential to read all packets across that network (only the virtual machines connected to that Portgroup).
+
+      Promiscuous mode is disabled by default on the ESX Server, and this is the recommended setting. Promiscuous mode can be set at the vSwitch and/or the Portgroup level. Switch-level settings can be overridden at the Portgroup level.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> Networking >> Virtual Switches.
+
+      On each standard switch, click "Edit" and select Security.
+
+      Set "Promiscuous Mode" to "Reject". Click "OK".
+
+      For each port group, click the ellipse (...) button and select "Edit Settings" then Security.
+
+      Set "Promiscuous Mode" to "Reject" and uncheck the "Override" box. Click "OK".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      Get-VirtualSwitch | Get-SecurityPolicy | Set-SecurityPolicy -AllowPromiscuous $false
+      Get-VirtualPortGroup | Get-SecurityPolicy | Set-SecurityPolicy -AllowPromiscuousInherited $true

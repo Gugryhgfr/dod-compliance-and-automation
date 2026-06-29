@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFN-9X-000115 - The VMware Cloud Foundation NSX Manager must be configured as a cluster.
+global_description: |-
+  Failure in a known state can address safety or security in accordance with the mission needs of the organization. Failure to a known secure state helps prevent a loss of confidentiality, integrity, or availability in the event of a failure of the SDN controller. Preserving network element state information helps to facilitate continuous network operations minimal or no disruption to mission-essential workload processes and flows.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFN-9X-000115
+  srg:
+    - SRG-APP-000516-NDM-000317
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_nsx_manager:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Manager must be configured as a cluster.
+    control_id: VCFN-9X-000115
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the NSX Manager web interface, go to System >> Configuration >> Appliances.
+
+      Verify there are three NSX Managers deployed, a VIP or external load balancer is configured, and the cluster is in a healthy state.
+
+      If there are not three NSX Managers deployed and a VIP or external load balancer configured and the cluster is in a healthy state, this is a finding.
+    rationale: |-
+      Failure in a known state can address safety or security in accordance with the mission needs of the organization. Failure to a known secure state helps prevent a loss of confidentiality, integrity, or availability in the event of a failure of the SDN controller. Preserving network element state information helps to facilitate continuous network operations minimal or no disruption to mission-essential workload processes and flows.
+    remediation: |-
+      To add additional NSX Manager appliances do the following:
+
+      From the NSX Manager web interface, go to System >> Configuration >> Appliances, and then click "Add NSX Appliance".
+
+      Supply the required information to add additional nodes as needed, up to three total.
+
+      To configure NSX with a cluster VIP or external load balancer do the following:
+
+      From the NSX Manager web interface, go to System >> Configuration >> Appliances, and then click "Set Virtual IP", enter a VIP that is part of the same subnet as the other management nodes, and then click "Save".
+
+      To configure NSX with an external load balancer, setup an external load balancer with the following requirements:
+
+      - Configure the external load balancer to control traffic to the NSX Manager nodes.
+      - Configure the external load balancer to use the round robin method and configure source persistence for the load balancer's virtual IP.
+      - Create or import a signed certificate and apply the same certificate to all the NSX Manager nodes. The certificate must have the FQDN of the virtual IP and each of the nodes in the SAN.
+
+      Note: An external load balancer will not work with the NSX Manager VIP. Do not configure an NSX Manager VIP if using an external load balancer.
+
+      If the cluster status is not in a healthy state identify the degraded component on the appliance and troubleshoot the issue with the error information provided.

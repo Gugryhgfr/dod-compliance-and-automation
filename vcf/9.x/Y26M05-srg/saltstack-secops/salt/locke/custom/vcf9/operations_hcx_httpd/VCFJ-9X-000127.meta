@@ -1,0 +1,49 @@
+version: 1
+display_name: VCFJ-9X-000127 - The VMware Cloud Foundation Operations HCX Apache HTTP service must enable Content Security Policy.
+global_description: |-
+  A Content Security Policy (CSP) requires careful tuning and precise definition of the policy. If enabled, CSP has significant impact on the way browsers render pages (e.g., inline JavaScript is disabled by default and must be explicitly allowed in the policy). CSP prevents a wide range of attacks, including cross-site scripting and other cross-site injections.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFJ-9X-000127
+  srg:
+    - SRG-APP-000516-WSR-000174
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_operations_hcx_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations HCX Apache HTTP service must enable Content Security Policy.
+    control_id: VCFJ-9X-000127
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify a header is configured to set Content-Security-Policy.
+
+      At the command prompt, run the following:
+
+      # cat /opt/vmware/config/apache-httpd/hcx-virtual-hosts.conf | sed -n "/^<VirtualHost\s\*:443>/,/<\/VirtualHost>/p" | awk '/<Location/,/<\/Location>/{next} 1' | grep -i "Header" | grep -i "Content-Security-Policy"
+
+      Example output:
+
+      Header set Content-Security-Policy "style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; frame-ancestors 'none';"
+
+      If a header directive is not present to configure "Content-Security-Policy" as shown in the example, this is a finding.
+    rationale: |-
+      A Content Security Policy (CSP) requires careful tuning and precise definition of the policy. If enabled, CSP has significant impact on the way browsers render pages (e.g., inline JavaScript is disabled by default and must be explicitly allowed in the policy). CSP prevents a wide range of attacks, including cross-site scripting and other cross-site injections.
+    remediation: |-
+      Navigate to and open:
+
+      /opt/vmware/config/apache-httpd/hcx-virtual-hosts.conf
+
+      Find the "VirtualHost" section listening on port 443 and add or update the following line:
+
+      Header set Content-Security-Policy "style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data:; frame-ancestors 'none';"
+
+      Reload the configuration by running the following command:
+
+      # systemctl reload httpd

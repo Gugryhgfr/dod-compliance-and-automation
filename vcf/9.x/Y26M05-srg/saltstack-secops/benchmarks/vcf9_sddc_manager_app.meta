@@ -1,0 +1,12 @@
+name: vcf9_sddc_manager_app
+display_name: VMware Cloud Foundation 9.x - SDDC Manager (Application)
+desc: Custom benchmark ported from the VMware Cloud Foundation 9.x STIG Readiness Guide.
+version: '1'
+authority: custom
+reference: VMware Cloud Foundation 9.x STIG Readiness Guide (Y26M05)
+ids:
+  - VCFA-9X-000354
+  - VCFA-9X-000355
+  - VCFA-9X-000356
+  - VCFA-9X-000364
+  - VCFA-9X-000372

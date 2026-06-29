@@ -1,0 +1,24 @@
+name: vcf9_sddc_manager_postgresql
+display_name: VMware Cloud Foundation 9.x - SDDC Manager PostgreSQL
+desc: Custom benchmark ported from the VMware Cloud Foundation 9.x STIG Readiness Guide.
+version: '1'
+authority: custom
+reference: VMware Cloud Foundation 9.x STIG Readiness Guide (Y26M05)
+ids:
+  - VCFC-9X-000001
+  - VCFC-9X-000005
+  - VCFC-9X-000006
+  - VCFC-9X-000007
+  - VCFC-9X-000009
+  - VCFC-9X-000010
+  - VCFC-9X-000020
+  - VCFC-9X-000032
+  - VCFC-9X-000035
+  - VCFC-9X-000038
+  - VCFC-9X-000051
+  - VCFC-9X-000060
+  - VCFC-9X-000073
+  - VCFC-9X-000109
+  - VCFC-9X-000113
+  - VCFC-9X-000121
+  - VCFC-9X-000144

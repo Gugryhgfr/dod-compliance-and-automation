@@ -1,0 +1,57 @@
+version: 1
+display_name: VCFN-9X-000007 - The VMware Cloud Foundation NSX Manager must configure logging levels for services to ensure audit records are generated.
+global_description: |-
+  Without generating audit records specific to the security and mission needs of the organization, it would be difficult to establish, correlate, and investigate the events relating to an incident or identify those responsible for one.
+
+  Audit records can be generated from various components within the network device (e.g., module or policy filter).
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFN-9X-000007
+  srg:
+    - SRG-APP-000027-NDM-000209
+  cci:
+    - CCI-000169
+    - CCI-000172
+    - CCI-000366
+    - CCI-001403
+    - CCI-001404
+  nist:
+    - AC-2 (4)
+    - AU-12 a
+    - AU-12 c
+    - CM-6 b
+benchmark_id:
+  vcf9_nsx_manager:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Manager must configure logging levels for services to ensure audit records are generated.
+    control_id: VCFN-9X-000007
+    scored: true
+    profile:
+      - default
+    information: |-
+      From an NSX Manager shell, run the following NSX CLI commands:
+
+      > get service async_replicator | find Logging
+      > get service auth | find Logging
+      > get service http | find Logging
+      > get service manager | find Logging
+      > get service telemetry | find Logging
+
+      Example result:
+
+      Logging level: info
+
+      If any service listed does not have logging level configured to "info", this is a finding.
+    rationale: |-
+      Without generating audit records specific to the security and mission needs of the organization, it would be difficult to establish, correlate, and investigate the events relating to an incident or identify those responsible for one.
+
+      Audit records can be generated from various components within the network device (e.g., module or policy filter).
+    remediation: |-
+      From an NSX Manager shell, run the following NSX CLI commands:
+
+      > set service async_replicator logging-level info
+      > set service auth logging-level info
+      > set service http logging-level info
+      > set service manager logging-level info
+      > set service telemetry logging-level info

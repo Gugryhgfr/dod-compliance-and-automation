@@ -1,0 +1,60 @@
+version: 1
+display_name: VCFB-9X-000104 - The VMware Cloud Foundation SDDC Manager NGINX server must protect against MIME sniffing.
+global_description: |-
+  MIME sniffing was, and still is, a technique used by some web browsers to examine the content of a particular asset. This is done for the purpose of determining an asset's file format. This technique is useful in the event that there is not enough metadata information present for a particular asset, thus leaving the possibility that the browser interprets the asset incorrectly.
+
+  Although MIME sniffing can be useful to determine an asset's correct file format, it can also cause a security vulnerability. This vulnerability can be quite dangerous both for site owners as well as site visitors. This is because an attacker can leverage MIME sniffing to send an XSS (Cross Site Scripting) attack.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFB-9X-000104
+  srg:
+    - SRG-APP-000516-WSR-000174
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_sddc_manager_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation SDDC Manager NGINX server must protect against MIME sniffing.
+    control_id: VCFB-9X-000104
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify a header is configured to set X-Content-Type-Options.
+
+      View the running configuration by running the following command:
+
+      # nginx -T 2>&1 | sed -n "/^.*server\s{/,/.*location\s.*{/p" | grep "add_header X-Content-Type-Options"
+
+      Example result:
+
+      add_header X-Content-Type-Options nosniff;
+      add_header X-Content-Type-Options nosniff;
+
+      There should be one result for each server defined in NGINX.
+
+      If the "X-Content-Type-Options" header is not configured to "nosniff", this is a finding.
+
+      Note: There can be several add_header directives. These directives are inherited from the previous configuration level if and only if there are no add_header directives defined on the current level so care must be taken if add_header is defined at multiple levels to include headers configured at a higher level.
+    rationale: |-
+      MIME sniffing was, and still is, a technique used by some web browsers to examine the content of a particular asset. This is done for the purpose of determining an asset's file format. This technique is useful in the event that there is not enough metadata information present for a particular asset, thus leaving the possibility that the browser interprets the asset incorrectly.
+
+      Although MIME sniffing can be useful to determine an asset's correct file format, it can also cause a security vulnerability. This vulnerability can be quite dangerous both for site owners as well as site visitors. This is because an attacker can leverage MIME sniffing to send an XSS (Cross Site Scripting) attack.
+    remediation: |-
+      Navigate to and open:
+
+      The nginx.conf (/etc/nginx/nginx.conf by default or the included file where the server is defined) file.
+
+      Add a add_header directive, for example:
+
+      add_header X-Content-Type-Options nosniff;
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload
+
+      Note: There can be several add_header directives. These directives are inherited from the previous configuration level if and only if there are no add_header directives defined on the current level so care must be taken if add_header is defined at multiple levels to include headers configured at a higher level.

@@ -1,0 +1,57 @@
+version: 1
+display_name: VCFB-9X-000100 - The VMware Cloud Foundation SDDC Manager NGINX server must not disable keep alive timeouts.
+global_description: |-
+  The keep alive timeout sets a timeout during which a keep-alive client connection will stay open on the server side.
+
+  Setting a keep alive timeout on the server side helps mitigate denial of service attacks that establish too many persistent connections, exhausting server resources.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFB-9X-000100
+  srg:
+    - SRG-APP-000516-WSR-000174
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_sddc_manager_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation SDDC Manager NGINX server must not disable keep alive timeouts.
+    control_id: VCFB-9X-000100
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify the keep alive timeout is not disabled.
+
+      View the running configuration by running the following command:
+
+      # nginx -T 2>&1 | grep "keepalive_timeout"
+
+      Example configuration:
+
+      http {
+      keepalive_timeout 60s;
+      }
+
+      If the directive "keepalive_timeout" is configured and set to 0 or more than the default of 75, this is a finding.
+
+      If the directive "keepalive_timeout" is not configured, this is NOT a finding.
+    rationale: |-
+      The keep alive timeout sets a timeout during which a keep-alive client connection will stay open on the server side.
+
+      Setting a keep alive timeout on the server side helps mitigate denial of service attacks that establish too many persistent connections, exhausting server resources.
+    remediation: |-
+      Navigate to and open:
+
+      The nginx.conf (/etc/nginx/nginx.conf by default or the included file where the directive was configured) file.
+
+      Remove or update the "keepalive_timeout" directive to a value > 0 and <= 75, for example:
+
+      keepalive_timeout 60s;
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload

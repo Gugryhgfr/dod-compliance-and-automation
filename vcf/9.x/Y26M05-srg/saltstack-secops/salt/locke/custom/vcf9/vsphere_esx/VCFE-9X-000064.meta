@@ -1,0 +1,58 @@
+version: 1
+display_name: VCFE-9X-000064 - The ESX host must disable Inter-Virtual Machine (VM) Transparent Page Sharing.
+global_description: |-
+  Transparent Page Sharing (TPS) is a method to reduce the memory footprint of virtual machines. Published academic papers have demonstrated that by forcing a flush and reload of cache memory, it is possible to measure memory timings to try to determine an Advanced Encryption Standard (AES) encryption key in use on another virtual machine running on the same physical processor of the host server if TPS is enabled between the two VMs. This technique works only under highly controlled conditions that can then be used to gain unauthorized access to data on neighboring virtual machines. VMware believes this would not be recreated in a production environment.
+
+  Although VMware believes information being disclosed in real-world conditions is unrealistic, out of an abundance of caution, ESX will no longer enable TPS between VMs by default (TPS will still be used within individual VMs) and should be audited to ensure the default remains in place.
+
+  The TPS behavior is controlled by the "Mem.ShareForceSalting" setting on ESX and the "sched.mem.pshare.salt" setting on VMs.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000064
+  srg:
+    - SRG-OS-000138-VMM-000670
+  cci:
+    - CCI-001090
+  nist:
+    - SC-4
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must disable Inter-Virtual Machine (VM) Transparent Page Sharing.
+    control_id: VCFE-9X-000064
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "Mem.ShareForceSalting" value and verify it is set to "2".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Mem.ShareForceSalting
+
+      If the "Mem.ShareForceSalting" setting is not set to 2, this is a finding.
+    rationale: |-
+      Transparent Page Sharing (TPS) is a method to reduce the memory footprint of virtual machines. Published academic papers have demonstrated that by forcing a flush and reload of cache memory, it is possible to measure memory timings to try to determine an Advanced Encryption Standard (AES) encryption key in use on another virtual machine running on the same physical processor of the host server if TPS is enabled between the two VMs. This technique works only under highly controlled conditions that can then be used to gain unauthorized access to data on neighboring virtual machines. VMware believes this would not be recreated in a production environment.
+
+      Although VMware believes information being disclosed in real-world conditions is unrealistic, out of an abundance of caution, ESX will no longer enable TPS between VMs by default (TPS will still be used within individual VMs) and should be audited to ensure the default remains in place.
+
+      The TPS behavior is controlled by the "Mem.ShareForceSalting" setting on ESX and the "sched.mem.pshare.salt" setting on VMs.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Mem.ShareForceSalting" value and set it to "2".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Mem.ShareForceSalting | Set-AdvancedSetting -Value 2

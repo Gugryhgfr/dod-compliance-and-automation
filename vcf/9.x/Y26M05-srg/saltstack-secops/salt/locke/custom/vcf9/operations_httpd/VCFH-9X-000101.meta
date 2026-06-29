@@ -1,0 +1,55 @@
+version: 1
+display_name: VCFH-9X-000101 - The VMware Cloud Foundation Operations Apache HTTP service must implement HTTP Strict Transport Security (HSTS) to protect the integrity of remote sessions.
+global_description: |-
+  HTTP Strict Transport Security (HSTS) instructs web browsers to only use secure connections for all future requests when communicating with a web site. Doing so helps prevent SSL protocol attacks, SSL stripping, cookie hijacking, and other attempts to circumvent SSL protection.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFH-9X-000101
+  srg:
+    - SRG-APP-000516-WSR-000174
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_operations_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations Apache HTTP service must implement HTTP Strict Transport Security (HSTS) to protect the integrity of remote sessions.
+    control_id: VCFH-9X-000101
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify a header is present to configure HSTS.
+
+      Note: any Header set at the "<VirtualHost>" level will override any root level setting.
+
+      At the command prompt, run the following command to check for a root level setting:
+
+      # awk '/^<[^\/]/ { depth++; next } /^<\// { depth--; next } depth == 0 { print }' /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf | grep -i 'Strict-Transport-Security'
+
+      At the command prompt, run the following command to check for a "<VirtualHost *:443>" level setting:
+
+      # sed -n "/<VirtualHost\s\*:443>/,/<\/VirtualHost>/p" /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf | grep -i 'Strict-Transport-Security'
+
+      Example output:
+
+      Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+      If a header directive is not present at either the root level or the "<VirtualHost *:443>" level to configure "Strict-Transport-Security", this is a finding.
+    rationale: |-
+      HTTP Strict Transport Security (HSTS) instructs web browsers to only use secure connections for all future requests when communicating with a web site. Doing so helps prevent SSL protocol attacks, SSL stripping, cookie hijacking, and other attempts to circumvent SSL protection.
+    remediation: |-
+      Navigate to and open:
+
+      /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf
+
+      Add or update the following line before the <Location "/ui"> block, ensuring the entry is at the root level and not contained within any blocks.
+
+      Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+      Reload the configuration by running the following command:
+
+      # systemctl reload httpd

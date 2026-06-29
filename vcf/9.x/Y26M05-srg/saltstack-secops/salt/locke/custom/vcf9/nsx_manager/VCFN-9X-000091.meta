@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFN-9X-000091 - The VMware Cloud Foundation NSX Manager must be configured to conduct backups on an organizationally defined schedule.
+global_description: |-
+  Information system backup is a critical step in maintaining data assurance and availability. Information system and security-related documentation contains information pertaining to system configuration and security settings. If this information were not backed up, and a system failure were to occur, the security settings would be difficult to reconfigure quickly and accurately. Maintaining a backup of information system and security-related documentation provides for a quicker recovery time when system outages occur.
+
+  This control requires the network device to support the organizational central backup process for user account information associated with the network device. This function may be provided by the network device itself; however, the preferred best practice is a centralized backup rather than each network device performing discrete backups.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFN-9X-000091
+  srg:
+    - SRG-APP-000516-NDM-000341
+  cci:
+    - CCI-000366
+    - CCI-000537
+    - CCI-000539
+  nist:
+    - CM-6 b
+    - CP-9 (b)
+    - CP-9 (c)
+benchmark_id:
+  vcf9_nsx_manager:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Manager must be configured to conduct backups on an organizationally defined schedule.
+    control_id: VCFN-9X-000091
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the NSX Manager web interface, go to System >> Lifecycle Management >> Backup and Restore to view the backup configuration.
+
+      If backup is not configured and scheduled on a recurring frequency, this is a finding.
+    rationale: |-
+      Information system backup is a critical step in maintaining data assurance and availability. Information system and security-related documentation contains information pertaining to system configuration and security settings. If this information were not backed up, and a system failure were to occur, the security settings would be difficult to reconfigure quickly and accurately. Maintaining a backup of information system and security-related documentation provides for a quicker recovery time when system outages occur.
+
+      This control requires the network device to support the organizational central backup process for user account information associated with the network device. This function may be provided by the network device itself; however, the preferred best practice is a centralized backup rather than each network device performing discrete backups.
+    remediation: |-
+      To configure a backup destination, do the following:
+
+      From the NSX Manager web interface, go to System >> Lifecycle Management >> Backup and Restore, and then click "Edit" next to SFTP Server.
+
+      Enter the target SFTP server, Directory Path, Username, Password, SSH Fingerprint, and Passphrase, and then click "Save".
+
+      To configure a backup schedule, do the following:
+
+      From the NSX Manager web interface, go to System >> Lifecycle Management >> Backup and Restore, and then click "Edit" next to Schedule.
+
+      Click the "Recurring Backup" toggle and configure an interval between backups.
+
+      Enable "Detect NSX configuration change" to trigger backups on detection of configuration changes and specify an interval for detecting changes. Click "Save".

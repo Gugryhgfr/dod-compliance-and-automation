@@ -1,0 +1,53 @@
+version: 1
+display_name: VCFV-9X-000212 - Virtual machines (VMs) must enable logging.
+global_description: |-
+  The ESX hypervisor maintains logs for each individual VM by default. These logs contain information including, but not limited to, power events, system failure information, tools status and activity, time sync, virtual hardware changes, vMotion migrations, and machine clones. Due to the value these logs provide for the continued availability of each VM and potential security incidents, these logs must be enabled.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFV-9X-000212
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vm:
+    type: custom
+    desc: Virtual machines (VMs) must enable logging.
+    control_id: VCFV-9X-000212
+    scored: true
+    profile:
+      - default
+    information: |-
+      For each virtual machine do the following:
+
+      From the vSphere Client, right-click the Virtual Machine and go to Edit Settings >> VM Options >> Advanced.
+
+      Ensure that the checkbox next to "Enable logging" is checked.
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host or vCenter server, run the following command:
+
+      Get-VM | Where {$_.ExtensionData.Config.Flags.EnableLogging -ne "True"}
+
+      If logging is not enabled, this is a finding.
+    rationale: |-
+      The ESX hypervisor maintains logs for each individual VM by default. These logs contain information including, but not limited to, power events, system failure information, tools status and activity, time sync, virtual hardware changes, vMotion migrations, and machine clones. Due to the value these logs provide for the continued availability of each VM and potential security incidents, these logs must be enabled.
+    remediation: |-
+      For each virtual machine do the following:
+
+      From the vSphere Client, right-click the Virtual Machine and go to Edit Settings >> VM Options >> Advanced.
+
+      Click the checkbox next to "Enable logging". Click "OK".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host or vCenter server, run the following commands:
+
+      $spec = New-Object VMware.Vim.VirtualMachineConfigSpec
+      $spec.Flags = New-Object VMware.Vim.VirtualMachineFlagInfo
+      $spec.Flags.enableLogging = $true
+      (Get-VM -Name <vmname>).ExtensionData.ReconfigVM($spec)

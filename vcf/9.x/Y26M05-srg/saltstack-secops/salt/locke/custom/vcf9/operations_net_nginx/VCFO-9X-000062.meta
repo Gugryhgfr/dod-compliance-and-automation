@@ -1,0 +1,47 @@
+version: 1
+display_name: VCFO-9X-000062 - The VMware Cloud Foundation Operations for Networks Platform NGINX server must disable directory listings.
+global_description: |-
+  The goal is to completely control the web user's experience in navigating any portion of the web document root directories. Ensuring all web content directories have at least the equivalent of an index.html file is a significant factor to accomplish this end.
+
+  Enumeration techniques, such as URL parameter manipulation, rely upon being able to obtain information about the web server's directory structure by locating directories without default pages. In the scenario, the web server will display to the user a listing of the files in the directory being accessed. By having a default hosted application web page, the anonymous web user will not obtain directory browsing information or an error message that reveals the server type and version.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFO-9X-000062
+  srg:
+    - SRG-APP-000266-WSR-000142
+  cci:
+    - CCI-001312
+  nist:
+    - SI-11 a
+benchmark_id:
+  vcf9_operations_net_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation Operations for Networks Platform NGINX server must disable directory listings.
+    control_id: VCFO-9X-000062
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify that no "autoindex" directives have been defined.
+
+      At the command line, run the following:
+
+      # nginx -T 2>&1 | grep "autoindex"
+
+      If the output includes any statements setting "autoindex" to "on", this is a finding.
+    rationale: |-
+      The goal is to completely control the web user's experience in navigating any portion of the web document root directories. Ensuring all web content directories have at least the equivalent of an index.html file is a significant factor to accomplish this end.
+
+      Enumeration techniques, such as URL parameter manipulation, rely upon being able to obtain information about the web server's directory structure by locating directories without default pages. In the scenario, the web server will display to the user a listing of the files in the directory being accessed. By having a default hosted application web page, the anonymous web user will not obtain directory browsing information or an error message that reveals the server type and version.
+    remediation: |-
+      Navigate to and open:
+
+      The nginx.conf (/etc/nginx/nginx.conf by default) file.
+
+      Remove any "autoindex" directives.
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload

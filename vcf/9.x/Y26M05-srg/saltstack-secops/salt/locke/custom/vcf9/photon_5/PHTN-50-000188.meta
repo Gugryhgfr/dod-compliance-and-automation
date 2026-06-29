@@ -1,0 +1,47 @@
+version: 1
+display_name: PHTN-50-000188 - The Photon operating system must configure Secure Shell (SSH) to disallow HostbasedAuthentication.
+global_description: |-
+  SSH trust relationships enable trivial lateral spread after a host compromise and therefore must be explicitly disabled.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000188
+  srg:
+    - SRG-OS-000480-GPOS-00229
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must configure Secure Shell (SSH) to disallow HostbasedAuthentication.
+    control_id: PHTN-50-000188
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify the running configuration of sshd:
+
+      # sshd -T|&grep -i HostbasedAuthentication
+
+      Example result:
+
+      hostbasedauthentication no
+
+      If "HostbasedAuthentication" is not set to "no", this is a finding.
+    rationale: |-
+      SSH trust relationships enable trivial lateral spread after a host compromise and therefore must be explicitly disabled.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/ssh/sshd_config
+
+      Ensure the "HostbasedAuthentication" line is uncommented and set to the following:
+
+      HostbasedAuthentication no
+
+      At the command line, run the following command:
+
+      # systemctl restart sshd.service

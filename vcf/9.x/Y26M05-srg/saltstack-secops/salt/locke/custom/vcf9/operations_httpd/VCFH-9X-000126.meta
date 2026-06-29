@@ -1,0 +1,59 @@
+version: 1
+display_name: VCFH-9X-000126 - The VMware Cloud Foundation Operations Apache HTTP service must protect against MIME sniffing.
+global_description: |-
+  MIME sniffing was, and still is, a technique used by some web browsers to examine the content of a particular asset. This is done for the purpose of determining an asset's file format. This technique is useful in the event that there is not enough metadata information present for a particular asset, thus leaving the possibility that the browser interprets the asset incorrectly.
+
+  Although MIME sniffing can be useful to determine an asset's correct file format, it can also cause a security vulnerability. This vulnerability can be quite dangerous both for site owners as well as site visitors. This is because an attacker can leverage MIME sniffing to send an XSS (Cross Site Scripting) attack.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFH-9X-000126
+  srg:
+    - SRG-APP-000516-WSR-000174
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_operations_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations Apache HTTP service must protect against MIME sniffing.
+    control_id: VCFH-9X-000126
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify a header is present to set X-Content-Type-Options.
+
+      Note: any Header set at the "<VirtualHost>" level will override any root level setting.
+
+      At the command prompt, run the following command to check for a root level setting:
+
+      # awk '/^<[^\/]/ { depth++; next } /^<\// { depth--; next } depth == 0 { print }' /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf | grep -i 'X-Content-Type-Options'
+
+      At the command prompt, run the following command to check for a "<VirtualHost *:443>" level setting:
+
+      # sed -n "/<VirtualHost\s\*:443>/,/<\/VirtualHost>/p" /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf | grep -i 'X-Content-Type-Options'
+
+      Example output:
+
+      Header set X-Content-Type-Options "nosniff"
+
+      If a header directive is not present at either the root level or the "<VirtualHost *:443>" level to configure "X-Content-Type-Options", this is a finding.
+    rationale: |-
+      MIME sniffing was, and still is, a technique used by some web browsers to examine the content of a particular asset. This is done for the purpose of determining an asset's file format. This technique is useful in the event that there is not enough metadata information present for a particular asset, thus leaving the possibility that the browser interprets the asset incorrectly.
+
+      Although MIME sniffing can be useful to determine an asset's correct file format, it can also cause a security vulnerability. This vulnerability can be quite dangerous both for site owners as well as site visitors. This is because an attacker can leverage MIME sniffing to send an XSS (Cross Site Scripting) attack.
+    remediation: |-
+      Navigate to and open:
+
+      /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf
+
+      Add or update the following line before the <Location "/ui"> block, ensuring the entry is at the root level and not contained within any blocks.
+
+      Header set X-Content-Type-Options "nosniff"
+
+      Reload the configuration by running the following command:
+
+      # systemctl reload httpd

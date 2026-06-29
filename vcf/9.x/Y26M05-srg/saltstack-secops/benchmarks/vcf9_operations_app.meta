@@ -1,0 +1,24 @@
+name: vcf9_operations_app
+display_name: VMware Cloud Foundation 9.x - Operations (Application)
+desc: Custom benchmark ported from the VMware Cloud Foundation 9.x STIG Readiness Guide.
+version: '1'
+authority: custom
+reference: VMware Cloud Foundation 9.x STIG Readiness Guide (Y26M05)
+ids:
+  - VCFA-9X-000001
+  - VCFA-9X-000054
+  - VCFA-9X-000141
+  - VCFA-9X-000190
+  - VCFA-9X-000196
+  - VCFA-9X-000262
+  - VCFA-9X-000292
+  - VCFA-9X-000346
+  - VCFA-9X-000347
+  - VCFA-9X-000348
+  - VCFA-9X-000349
+  - VCFA-9X-000350
+  - VCFA-9X-000351
+  - VCFA-9X-000353
+  - VCFA-9X-000361
+  - VCFA-9X-000363
+  - VCFA-9X-000366

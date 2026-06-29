@@ -1,0 +1,61 @@
+version: 1
+display_name: VCFJ-9X-000040 - The VMware Cloud Foundation Operations HCX Apache HTTP service must use FIPS validated cryptographic modules.
+global_description: |-
+  Encryption is only as good as the encryption modules utilized.  Unapproved cryptographic module algorithms cannot be verified, and cannot be relied upon to provide confidentiality or integrity, and DoD data may be compromised due to weak algorithms.
+
+  FIPS 140-2 is the current standard for validating cryptographic modules and NSA Type-X (where X=1, 2, 3, 4) products are NSA-certified, hardware-based encryption modules.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFJ-9X-000040
+  srg:
+    - SRG-APP-000179-WSR-000110
+  cci:
+    - CCI-000803
+    - CCI-001188
+    - CCI-002418
+    - CCI-002450
+  nist:
+    - IA-7
+    - SC-13 b
+    - SC-23 (3)
+    - SC-8
+benchmark_id:
+  vcf9_operations_hcx_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations HCX Apache HTTP service must use FIPS validated cryptographic modules.
+    control_id: VCFJ-9X-000040
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify the "SSLFIPS" setting is enabled.
+
+      At the command prompt, run the following:
+
+      # grep -i "SSLFIPS" /etc/httpd/conf/httpd.conf /opt/vmware/config/apache-httpd/hcx-ssl.conf /opt/vmware/config/apache-httpd/hcx-virtual-hosts.conf /etc/httpd/conf/fips.conf
+
+      Example output:
+
+      SSLFIPS ON
+
+      If the value of "SSLFIPS" is set to "off", this is a finding.
+    rationale: |-
+      Encryption is only as good as the encryption modules utilized.  Unapproved cryptographic module algorithms cannot be verified, and cannot be relied upon to provide confidentiality or integrity, and DoD data may be compromised due to weak algorithms.
+
+      FIPS 140-2 is the current standard for validating cryptographic modules and NSA Type-X (where X=1, 2, 3, 4) products are NSA-certified, hardware-based encryption modules.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/httpd/conf/fips.conf
+
+      Note: If the offending configuration was found in a different file edit that instead.
+
+      Add or update the following lines:
+
+      SSLFIPS ON
+
+      Restart the service by running the following command:
+
+      # systemctl restart httpd

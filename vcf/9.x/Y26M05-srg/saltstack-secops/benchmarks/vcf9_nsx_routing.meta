@@ -1,0 +1,24 @@
+name: vcf9_nsx_routing
+display_name: VMware Cloud Foundation 9.x - NSX Routing (Tier-0/Tier-1)
+desc: Custom benchmark ported from the VMware Cloud Foundation 9.x STIG Readiness Guide.
+version: '1'
+authority: custom
+reference: VMware Cloud Foundation 9.x STIG Readiness Guide (Y26M05)
+ids:
+  - VCFR-9X-000013
+  - VCFR-9X-000016
+  - VCFR-9X-000027
+  - VCFR-9X-000028
+  - VCFR-9X-000029
+  - VCFR-9X-000051
+  - VCFR-9X-000055
+  - VCFR-9X-000067
+  - VCFR-9X-000091
+  - VCFR-9X-000102
+  - VCFR-9X-000109
+  - VCFR-9X-000110
+  - VCFR-9X-000111
+  - VCFR-9X-000112
+  - VCFR-9X-000113
+  - VCFR-9X-000114
+  - VCFR-9X-000115

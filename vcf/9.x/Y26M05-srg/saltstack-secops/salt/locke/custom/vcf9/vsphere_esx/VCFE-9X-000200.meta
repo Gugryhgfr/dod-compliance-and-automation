@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFE-9X-000200 - The ESX host must automatically stop shell services after ten minutes.
+global_description: |-
+  When the ESX Shell or Secure Shell (SSH) services are enabled on a host, they will run indefinitely. To avoid having these services left running, set the "ESXiShellTimeOut". The "ESXiShellTimeOut" defines a window of time after which the ESX Shell and SSH services will be stopped automatically.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000200
+  srg:
+    - SRG-OS-000163-VMM-000700
+  cci:
+    - CCI-001133
+  nist:
+    - SC-10
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must automatically stop shell services after ten minutes.
+    control_id: VCFE-9X-000200
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "UserVars.ESXiShellTimeOut" value and verify it is set to "600" or less and not "0".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name UserVars.ESXiShellTimeOut
+
+      If the "UserVars.ESXiShellTimeOut" setting is set to a value greater than "600" or "0", this is a finding.
+    rationale: |-
+      When the ESX Shell or Secure Shell (SSH) services are enabled on a host, they will run indefinitely. To avoid having these services left running, set the "ESXiShellTimeOut". The "ESXiShellTimeOut" defines a window of time after which the ESX Shell and SSH services will be stopped automatically.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "UserVars.ESXiShellTimeOut" value and configure it to "600".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name UserVars.ESXiShellTimeOut | Set-AdvancedSetting -Value 600

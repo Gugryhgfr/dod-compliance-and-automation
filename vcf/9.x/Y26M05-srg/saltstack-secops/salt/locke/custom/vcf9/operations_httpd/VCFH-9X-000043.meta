@@ -1,0 +1,40 @@
+version: 1
+display_name: VCFH-9X-000043 - The VMware Cloud Foundation Operations Apache HTTP service directory tree must only be accessible by authorized accounts.
+global_description: |-
+  As a rule, accounts on a web server are to be kept to a minimum. Only administrators, web managers, developers, auditors, and web authors require accounts on the machine hosting the web server. The resources to which these accounts have access must also be closely monitored and controlled. Only the system administrator needs access to all the system's capabilities, while the web administrator and associated staff require access and control of the web content and web server configuration files.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFH-9X-000043
+  srg:
+    - SRG-APP-000211-WSR-000030
+  cci:
+    - CCI-001082
+  nist:
+    - SC-2
+benchmark_id:
+  vcf9_operations_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations Apache HTTP service directory tree must only be accessible by authorized accounts.
+    control_id: VCFH-9X-000043
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify directory permissions are configured appropriately.
+
+      At the command line, run the following:
+
+      # find /storage/db/apache/proxy/web/ -xdev -type f -a '(' -perm -o+w -o -not -user root -o -not -group root ')' -exec ls -ld {} \;
+
+      If any files are returned, this is a finding.
+    rationale: |-
+      As a rule, accounts on a web server are to be kept to a minimum. Only administrators, web managers, developers, auditors, and web authors require accounts on the machine hosting the web server. The resources to which these accounts have access must also be closely monitored and controlled. Only the system administrator needs access to all the system's capabilities, while the web administrator and associated staff require access and control of the web content and web server configuration files.
+    remediation: |-
+      At the command prompt, run the following:
+
+      # chmod o-w <file>
+      # chown root:root <file>
+
+      Note: Substitute <file> with the listed file.

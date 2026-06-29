@@ -1,0 +1,40 @@
+version: 1
+display_name: VCFV-9X-000214 - Virtual machines (VMs) must remove unneeded floppy devices.
+global_description: |-
+  Ensure no device is connected to a virtual machine if it is not required. For example, floppy, serial, and parallel ports are rarely used for virtual machines in a data center environment, and CD/DVD drives are usually connected only temporarily during software installation.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFV-9X-000214
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vm:
+    type: custom
+    desc: Virtual machines (VMs) must remove unneeded floppy devices.
+    control_id: VCFV-9X-000214
+    scored: true
+    profile:
+      - default
+    information: |-
+      Floppy drives are no longer visible through the vSphere Client and must be configured via the Application Programming Interface (API) or PowerCLI.
+
+      From a PowerCLI command prompt while connected to the ESX host or vCenter server, run the following command:
+
+      Get-VM | Get-FloppyDrive | Select Parent, Name, ConnectionState
+
+      If a virtual machine has a floppy drive connected, this is a finding.
+    rationale: |-
+      Ensure no device is connected to a virtual machine if it is not required. For example, floppy, serial, and parallel ports are rarely used for virtual machines in a data center environment, and CD/DVD drives are usually connected only temporarily during software installation.
+    remediation: |-
+      Floppy drives are no longer visible through the vSphere Client and must be configured via the Application Programming Interface (API) or PowerCLI.
+
+      The VM must be powered off to remove a floppy drive.
+
+      From a PowerCLI command prompt while connected to the ESX host or vCenter server, run the following command:
+
+      Get-VM "VM Name" | Get-FloppyDrive | Remove-FloppyDrive

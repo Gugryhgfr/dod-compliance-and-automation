@@ -1,0 +1,53 @@
+version: 1
+display_name: PHTN-50-000086 - The Photon operating system must enforce password complexity by requiring that at least one special character be used.
+global_description: |-
+  Use of a complex password helps to increase the time and resources required to compromise the password. Password complexity or strength is a measure of the effectiveness of a password in resisting attempts at guessing and brute-force attacks.
+
+  Password complexity is one factor in determining how long it takes to crack a password. The more complex the password, the greater the number of possible combinations that need to be tested before the password is compromised.
+
+  Special characters are those characters that are not alphanumeric. Examples include: ~ ! @ # $ % ^ *.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000086
+  srg:
+    - SRG-OS-000266-GPOS-00101
+  cci:
+    - CCI-004066
+  nist:
+    - IA-5 (1) (h)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must enforce password complexity by requiring that at least one special character be used.
+    control_id: PHTN-50-000086
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify at least one special character be used:
+
+      # grep '^ocredit' /etc/security/pwquality.conf
+
+      Expected result:
+
+      ocredit = -1
+
+      If the "ocredit" option is not < 0, is missing or commented out, this is a finding.
+
+      Note: If pwquality.conf is not used to configure pam_pwquality.so, these options may be specified on the pwquality line in the system-password file.
+    rationale: |-
+      Use of a complex password helps to increase the time and resources required to compromise the password. Password complexity or strength is a measure of the effectiveness of a password in resisting attempts at guessing and brute-force attacks.
+
+      Password complexity is one factor in determining how long it takes to crack a password. The more complex the password, the greater the number of possible combinations that need to be tested before the password is compromised.
+
+      Special characters are those characters that are not alphanumeric. Examples include: ~ ! @ # $ % ^ *.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/security/pwquality.conf
+
+      Add or update the following lines:
+
+      ocredit = -1

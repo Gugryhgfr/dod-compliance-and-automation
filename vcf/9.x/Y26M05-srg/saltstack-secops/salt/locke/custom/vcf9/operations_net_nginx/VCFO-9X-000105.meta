@@ -1,0 +1,61 @@
+version: 1
+display_name: VCFO-9X-000105 - The VMware Cloud Foundation Operations for Networks Platform NGINX server must enable Content Security Policy.
+global_description: |-
+  A Content Security Policy (CSP) requires careful tuning and precise definition of the policy. If enabled, CSP has significant impact on the way browsers render pages (e.g., inline JavaScript is disabled by default and must be explicitly allowed in the policy). CSP prevents a wide range of attacks, including cross-site scripting and other cross-site injections.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFO-9X-000105
+  srg:
+    - SRG-APP-000516-WSR-000174
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_operations_net_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation Operations for Networks Platform NGINX server must enable Content Security Policy.
+    control_id: VCFO-9X-000105
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify a header is configured for Content Security Policy.
+
+      View the running configuration by running the following command:
+
+      # nginx -T 2>&1 | sed -n "/^http\s{/,/server\s{/p" | grep add_header
+
+      Example configuration:
+
+      server {
+      add_header Content-Security-Policy "default-src 'self'; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline';";
+      }
+
+      If a header is not configured to define a Content Security Policy header in the http, server, or location context, this is a finding.
+
+      Note: There can be several add_header directives. These directives are inherited from the previous configuration level if and only if there are no add_header directives defined on the current level so care must be taken if add_header is defined at multiple levels to include headers configured at a higher level.
+    rationale: |-
+      A Content Security Policy (CSP) requires careful tuning and precise definition of the policy. If enabled, CSP has significant impact on the way browsers render pages (e.g., inline JavaScript is disabled by default and must be explicitly allowed in the policy). CSP prevents a wide range of attacks, including cross-site scripting and other cross-site injections.
+    remediation: |-
+      Navigate to and open:
+
+      The /etc/nginx/sites-available/vnera file.
+
+      Add or update the "add_header Content-Security-Policy" directive for each of the server contexts, for example:
+
+      server {
+      listen 443 ssl http2;
+
+      add_header Content-Security-Policy "default-src 'self'; font-src 'self' data:; img-src 'self' data:; style-src 'self' 'unsafe-inline';";
+      }
+
+      Note: This can be customized to fit the web server or application requirements.
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload
+
+      Note: There can be several add_header directives. These directives are inherited from the previous configuration level if and only if there are no add_header directives defined on the current level so care must be taken if add_header is defined at multiple levels to include headers configured at a higher level.

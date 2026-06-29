@@ -1,0 +1,43 @@
+version: 1
+display_name: VCFA-9X-000377 - VMware Cloud Foundation Operations for Networks must disable automatic certificate validation for data sources.
+global_description: |-
+  A certificate's certification path is the path from the end entity certificate to a trusted root certification authority (CA). Certification path validation is necessary for a relying party to make an informed decision regarding acceptance of an end entity certificate.
+
+  Certification path validation includes checks such as certificate issuer trust, time validity, and revocation status for each certificate in the certification path. Revocation status information for CA and subject certificates in a certification path is commonly provided via certificate revocation lists (CRLs) or online certificate status protocol (OCSP) responses.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000377
+  srg:
+    - SRG-APP-000605
+  cci:
+    - CCI-000185
+  nist:
+    - IA-5 (2) (b) (1)
+benchmark_id:
+  vcf9_operations_net_app:
+    type: custom
+    desc: VMware Cloud Foundation Operations for Networks must disable automatic certificate validation for data sources.
+    control_id: VCFA-9X-000377
+    scored: true
+    profile:
+      - default
+    information: |-
+      If VCF Operations for Networks is not deployed, this is not applicable.
+
+      From VCF Operations for Networks, go to Settings >> System Configuration.
+
+      Review the value of the "Security Certificate Validation" setting.
+
+      If "Security Certificate Validation" is not set to manual acceptance, this is a finding.
+    rationale: |-
+      A certificate's certification path is the path from the end entity certificate to a trusted root certification authority (CA). Certification path validation is necessary for a relying party to make an informed decision regarding acceptance of an end entity certificate.
+
+      Certification path validation includes checks such as certificate issuer trust, time validity, and revocation status for each certificate in the certification path. Revocation status information for CA and subject certificates in a certification path is commonly provided via certificate revocation lists (CRLs) or online certificate status protocol (OCSP) responses.
+    remediation: |-
+      From VCF Operations for Networks, go to Settings >> System Configuration.
+
+      Click "Edit" next to "Security Certificate Validation" setting.
+
+      Select "Manual Acceptance" from the drop down menu and click "Save".

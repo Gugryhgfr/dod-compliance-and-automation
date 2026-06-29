@@ -1,0 +1,53 @@
+version: 1
+display_name: VCFJ-9X-000030 - The VMware Cloud Foundation Operations HCX Apache HTTP service must have Multipurpose Internet Mail Extensions (MIME) that invoke OS shell programs disabled.
+global_description: |-
+  Controlling what a user of a hosted application can access is part of the security posture of the web server. Any time a user can access more functionality than is needed for the operation of the hosted application poses a security issue. A user with too much access can view information that is not needed for the user's job role, or the user could use the function in an unintentional manner.
+
+  A MIME tells the web server what type of program various file types and extensions are and what external utilities or programs are needed to execute the file type.
+
+  A shell is a program that serves as the basic interface between the user and the operating system, so hosted application users must not have access to these programs. Shell programs may execute shell escapes and can then perform unauthorized activities that could damage the security posture of the web server.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFJ-9X-000030
+  srg:
+    - SRG-APP-000141-WSR-000081
+  cci:
+    - CCI-000381
+  nist:
+    - CM-7 a
+benchmark_id:
+  vcf9_operations_hcx_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations HCX Apache HTTP service must have Multipurpose Internet Mail Extensions (MIME) that invoke OS shell programs disabled.
+    control_id: VCFJ-9X-000030
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify that no shell file types are enabled.
+
+      At the command prompt, run the following:
+
+      # grep -i -E "Action|AddHandler" /etc/httpd/conf/httpd.conf /opt/vmware/config/apache-httpd/hcx-ssl.conf /opt/vmware/config/apache-httpd/hcx-virtual-hosts.conf
+
+      If "Action" or "AddHandler" exist and they configure .exe, .dll, .com, .bat, or .csh, this is a finding.
+    rationale: |-
+      Controlling what a user of a hosted application can access is part of the security posture of the web server. Any time a user can access more functionality than is needed for the operation of the hosted application poses a security issue. A user with too much access can view information that is not needed for the user's job role, or the user could use the function in an unintentional manner.
+
+      A MIME tells the web server what type of program various file types and extensions are and what external utilities or programs are needed to execute the file type.
+
+      A shell is a program that serves as the basic interface between the user and the operating system, so hosted application users must not have access to these programs. Shell programs may execute shell escapes and can then perform unauthorized activities that could damage the security posture of the web server.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/httpd/conf/httpd.conf
+
+      Note: If the offending configuration was found in a different file edit that file instead.
+
+      Remove or comment the target "Action" or "AddHandler" directive.
+
+      Reload the configuration by running the following command:
+
+      # systemctl reload httpd

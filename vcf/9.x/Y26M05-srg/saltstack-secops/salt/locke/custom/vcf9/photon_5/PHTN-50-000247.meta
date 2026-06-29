@@ -1,0 +1,37 @@
+version: 1
+display_name: PHTN-50-000247 - The Photon operating system must not allow empty passwords.
+global_description: |-
+  Accounts with empty or no passwords allow anyone to log on as that account without specifying a password or other forms of authentication. Allowing accounts with empty passwords puts the system at significant risk since only the username is required for access.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000247
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must not allow empty passwords.
+    control_id: PHTN-50-000247
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify empty passwords are not allowed:
+
+      # grep nullok /etc/pam.d/system-password /etc/pam.d/system-auth
+
+      If any results are returned indicating "nullok" is configured on the "pam_unix.so" module, this is a finding.
+    rationale: |-
+      Accounts with empty or no passwords allow anyone to log on as that account without specifying a password or other forms of authentication. Allowing accounts with empty passwords puts the system at significant risk since only the username is required for access.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/pam.d/system-password or /etc/pam.d/system-auth
+
+      Remove the "nullok" argument on the "pam_unix.so" module line.

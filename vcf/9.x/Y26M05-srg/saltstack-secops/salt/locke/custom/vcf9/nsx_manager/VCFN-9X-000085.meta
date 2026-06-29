@@ -1,0 +1,74 @@
+version: 1
+display_name: VCFN-9X-000085 - The VMware Cloud Foundation NSX Manager must be configured to send logs to a central log server.
+global_description: |-
+  Information stored in one location is vulnerable to accidental or incidental deletion or alteration.
+
+  Off-loading is a common process in information systems with limited audit storage capacity.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFN-9X-000085
+  srg:
+    - SRG-APP-000515-NDM-000325
+  cci:
+    - CCI-001849
+    - CCI-001851
+  nist:
+    - AU-4
+    - AU-4 (1)
+benchmark_id:
+  vcf9_nsx_manager:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Manager must be configured to send logs to a central log server.
+    control_id: VCFN-9X-000085
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the NSX Manager web interface, go to System >> Fabric >> Profiles >> Node Profiles.
+
+      Click "All NSX Nodes" and verify the Syslog servers listed.
+
+      or
+
+      From an NSX Manager shell, run the following command:
+
+      > get logging-servers
+
+      Note: This command must be run from each NSX Manager as they are configured individually.
+
+      If no logging severs are configured or unauthorized logging servers are configured, this is a finding.
+
+      If the log level is not set to INFO, this is a finding.
+    rationale: |-
+      Information stored in one location is vulnerable to accidental or incidental deletion or alteration.
+
+      Off-loading is a common process in information systems with limited audit storage capacity.
+    remediation: |-
+      To configure a profile to apply syslog servers to all NSX Manager nodes, do the following:
+
+      From the NSX Manager web interface, go to System >> Fabric >> Profiles >> Node Profiles.
+
+      Click "All NSX Nodes" and then under "Syslog Servers" click "Add".
+
+      Enter the syslog server details and choose "Information" for the log level and click "Add".
+
+      or
+
+      (Optional) From an NSX Manager shell, run the following command to clear any existing incorrect logging-servers:
+
+      > clear logging-servers
+
+      From an NSX Manager shell, run the following command to configure a udp/tcp syslog server:
+
+      > set logging-server <server-ip or server-name> proto <tcp or udp> level info
+
+      From an NSX Manager shell, run the following command to configure a TLS syslog server:
+
+      > set logging-server <server-ip or server-name> proto tls level info serverca ca.pem clientca ca.pem certificate cert.pem key key.pem
+
+      From an NSX Manager shell, run the following command to configure an LI-TLS syslog server:
+
+      > set logging-server <server-ip or server-name> proto li-tls level info serverca root-ca.crt
+
+      Note: If using the protocols TLS or LI-TLS to configure a secure connection to a log server, the server and client certificates must be stored in /image/vmware/nsx/file-store on each NSX-T Manager appliance.

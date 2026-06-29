@@ -1,0 +1,62 @@
+version: 1
+display_name: VCFE-9X-000204 - The ESX host must protect the confidentiality and integrity of transmitted information by isolating IP-based storage traffic.
+global_description: |-
+  Virtual machines (VMs) might share virtual switches and VLANs with the IP-based storage configurations. IP-based storage includes vSAN, iSCSI, and NFS. This configuration might expose IP-based storage traffic to unauthorized VM users. IP-based storage frequently is not encrypted. It can be viewed by anyone with access to this network.
+
+  To restrict unauthorized users from viewing the IP-based storage traffic, the IP-based storage network must be logically separated from any other traffic. Configuring the IP-based storage adapters on separate VLANs or network segments from other VMkernels and VMs will limit unauthorized users from viewing the traffic.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000204
+  srg:
+    - SRG-OS-000423-VMM-001700
+  cci:
+    - CCI-002418
+  nist:
+    - SC-8
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must protect the confidentiality and integrity of transmitted information by isolating IP-based storage traffic.
+    control_id: VCFE-9X-000204
+    scored: true
+    profile:
+      - default
+    information: |-
+      If IP-based storage is not used, this is not applicable.
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> Networking >> VMkernel adapters.
+
+      Review each VMkernel adapter that is used for IP-based storage traffic and view the "Enabled services".
+
+      Review the VLAN associated with each VMkernel that is used for IP-based storage traffic. Verify with the system administrator that they are dedicated for that purpose and are logically separated from other functions.
+
+      If any services are enabled on an NFS or iSCSI IP-based storage VMkernel adapter, this is a finding.
+
+      If any services are enabled on a vSAN VMkernel adapter other than vSAN, this is a finding.
+
+      If any IP-based storage networks are not isolated from other traffic types, this is a finding.
+    rationale: |-
+      Virtual machines (VMs) might share virtual switches and VLANs with the IP-based storage configurations. IP-based storage includes vSAN, iSCSI, and NFS. This configuration might expose IP-based storage traffic to unauthorized VM users. IP-based storage frequently is not encrypted. It can be viewed by anyone with access to this network.
+
+      To restrict unauthorized users from viewing the IP-based storage traffic, the IP-based storage network must be logically separated from any other traffic. Configuring the IP-based storage adapters on separate VLANs or network segments from other VMkernels and VMs will limit unauthorized users from viewing the traffic.
+    remediation: |-
+      Configuration of an IP-based VMkernel will be unique to each environment.
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> Networking >> VMkernel adapters.
+
+      Select the VMkernel used for IP-based storage and click "Edit". On the "Port" properties tab, uncheck all services. Click "OK".
+
+      Note: For VMkernels used for vSAN leave the vSAN service enabled and uncheck all others.
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> Networking >> Virtual switches.
+
+      Find the port group that is dedicated to IP-based storage and click the ellipse (...) button next to the name. Click "Edit Settings".
+
+      On the "Properties" tab, change the "VLAN ID" to one dedicated for IP-based storage traffic. Click "OK".

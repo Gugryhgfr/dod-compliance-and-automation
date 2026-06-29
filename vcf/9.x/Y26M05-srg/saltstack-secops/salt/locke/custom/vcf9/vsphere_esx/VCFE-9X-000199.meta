@@ -1,0 +1,61 @@
+version: 1
+display_name: VCFE-9X-000199 - The ESX host must be configured to disable nonessential capabilities by disabling the ESX shell.
+global_description: |-
+  The ESX Shell is an interactive command line environment available locally from the Direct Console User Interface (DCUI) or remotely via SSH. Activities performed from the ESX Shell bypass vCenter role-based access control (RBAC) and audit controls.
+
+  The ESX shell must only be turned on when needed to troubleshoot/resolve problems that cannot be fixed through the vSphere client.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000199
+  srg:
+    - SRG-OS-000095-VMM-000480
+  cci:
+    - CCI-000381
+  nist:
+    - CM-7 a
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must be configured to disable nonessential capabilities by disabling the ESX shell.
+    control_id: VCFE-9X-000199
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Services.
+
+      Under Services, locate the "ESXi Shell" service and verify it is "Stopped".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-VMHostService | Where {$_.Label -eq "ESXi Shell"}
+
+      If the "ESXi Shell" service does not have a "Policy" of "off" or is running, this is a finding.
+    rationale: |-
+      The ESX Shell is an interactive command line environment available locally from the Direct Console User Interface (DCUI) or remotely via SSH. Activities performed from the ESX Shell bypass vCenter role-based access control (RBAC) and audit controls.
+
+      The ESX shell must only be turned on when needed to troubleshoot/resolve problems that cannot be fixed through the vSphere client.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Services.
+
+      Under "Services", select the "ESXi Shell" service and click the "Stop" button.
+
+      Click the "Edit Startup policy..." button.
+
+      Select the "Start and stop manually" radio button.
+
+      Click "OK".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      Get-VMHost | Get-VMHostService | Where {$_.Label -eq "ESXi Shell"} | Set-VMHostService -Policy Off
+      Get-VMHost | Get-VMHostService | Where {$_.Label -eq "ESXi Shell"} | Stop-VMHostService

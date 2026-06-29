@@ -1,0 +1,48 @@
+name: vcf9_vsphere_vcenter
+display_name: VMware Cloud Foundation 9.x - vCenter Server
+desc: Custom benchmark ported from the VMware Cloud Foundation 9.x STIG Readiness Guide.
+version: '1'
+authority: custom
+reference: VMware Cloud Foundation 9.x STIG Readiness Guide (Y26M05)
+ids:
+  - VCFA-9X-000004
+  - VCFA-9X-000017
+  - VCFA-9X-000018
+  - VCFA-9X-000028
+  - VCFA-9X-000051
+  - VCFA-9X-000063
+  - VCFA-9X-000082
+  - VCFA-9X-000090
+  - VCFA-9X-000105
+  - VCFA-9X-000117
+  - VCFA-9X-000139
+  - VCFA-9X-000153
+  - VCFA-9X-000191
+  - VCFA-9X-000252
+  - VCFA-9X-000257
+  - VCFA-9X-000270
+  - VCFA-9X-000312
+  - VCFA-9X-000322
+  - VCFA-9X-000323
+  - VCFA-9X-000324
+  - VCFA-9X-000325
+  - VCFA-9X-000326
+  - VCFA-9X-000327
+  - VCFA-9X-000328
+  - VCFA-9X-000329
+  - VCFA-9X-000330
+  - VCFA-9X-000331
+  - VCFA-9X-000332
+  - VCFA-9X-000333
+  - VCFA-9X-000334
+  - VCFA-9X-000335
+  - VCFA-9X-000336
+  - VCFA-9X-000337
+  - VCFA-9X-000338
+  - VCFA-9X-000339
+  - VCFA-9X-000340
+  - VCFA-9X-000341
+  - VCFA-9X-000342
+  - VCFA-9X-000343
+  - VCFA-9X-000344
+  - VCFA-9X-000345

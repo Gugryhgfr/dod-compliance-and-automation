@@ -1,0 +1,48 @@
+version: 1
+display_name: VCFA-9X-000334 - The VMware Cloud Foundation vCenter server must have task and event retention set to at least 30 days.
+global_description: |-
+  vCenter tasks and events contain valuable historical actions, useful in troubleshooting availability issues and for incident forensics. While vCenter events are sent to central log servers in real time, it is important that administrators have quick access to this information when needed.
+
+  vCenter retains 30 days of tasks and events by default, and this is sufficient for most purposes. The vCenter disk partitions are also sized with this in mind. Decreasing is not recommended for operational reasons, while increasing is not recommended unless guided by VMware support due to the partition sizing concerns.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000334
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter server must have task and event retention set to at least 30 days.
+    control_id: VCFA-9X-000334
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select a vCenter Server >> Configure >> Settings >> General.
+
+      Click to expand the "Database" section.
+
+      Note the "Task retention" and "Event retention" values.
+
+      If either value is configured to less than "30" days, this is a finding.
+    rationale: |-
+      vCenter tasks and events contain valuable historical actions, useful in troubleshooting availability issues and for incident forensics. While vCenter events are sent to central log servers in real time, it is important that administrators have quick access to this information when needed.
+
+      vCenter retains 30 days of tasks and events by default, and this is sufficient for most purposes. The vCenter disk partitions are also sized with this in mind. Decreasing is not recommended for operational reasons, while increasing is not recommended unless guided by VMware support due to the partition sizing concerns.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select a vCenter Server >> Configure >> Settings >> General.
+
+      Click "Edit".
+
+      On the "Database" tab, set the value for both "Task retention" and "Event retention" to "30" days (default) or greater, as required by your site.
+
+      Click "Save".

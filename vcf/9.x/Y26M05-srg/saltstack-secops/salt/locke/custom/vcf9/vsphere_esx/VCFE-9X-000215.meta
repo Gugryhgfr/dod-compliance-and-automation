@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFE-9X-000215 - The ESX host must disable Simple Network Management Protocol (SNMP) v1 and v2c.
+global_description: |-
+  If SNMP is not being used, it must remain disabled. If it is being used, the proper trap destination must be configured. If SNMP is not properly configured, monitoring information can be sent to a malicious host that can use this information to plan an attack.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000215
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must disable Simple Network Management Protocol (SNMP) v1 and v2c.
+    control_id: VCFE-9X-000215
+    scored: true
+    profile:
+      - default
+    information: |-
+      From an ESX shell, run the following command:
+
+      # esxcli system snmp get
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHostSnmp | Select *
+
+      If SNMP is not in use and is enabled, this is a finding.
+
+      If SNMP is enabled and is not using v3 targets with authentication, this is a finding.
+
+      Note: SNMP v3 targets can only be viewed and configured via the "esxcli" command.
+    rationale: |-
+      If SNMP is not being used, it must remain disabled. If it is being used, the proper trap destination must be configured. If SNMP is not properly configured, monitoring information can be sent to a malicious host that can use this information to plan an attack.
+    remediation: |-
+      To disable SNMP from an ESX shell, run the following command:
+
+      # esxcli system snmp set -e no
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX Host:
+
+      Get-VMHostSnmp | Set-VMHostSnmp -Enabled $false

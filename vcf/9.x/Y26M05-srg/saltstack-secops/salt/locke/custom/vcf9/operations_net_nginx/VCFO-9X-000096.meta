@@ -1,0 +1,45 @@
+version: 1
+display_name: VCFO-9X-000096 - The VMware Cloud Foundation Operations for Networks Platform NGINX server must remove the default web site configuration.
+global_description: |-
+  After installation, an NGINX default website is configured to listen on port 80 and serves a generic page indicating that the NGINX server is working. This page contains information that reveals details about the server, is over an insecure connection, and must be removed.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFO-9X-000096
+  srg:
+    - SRG-APP-000516-WSR-000174
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_operations_net_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation Operations for Networks Platform NGINX server must remove the default web site configuration.
+    control_id: VCFO-9X-000096
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify the default NGINX web site configuration is not enabled.
+
+      At the command prompt, run the following:
+
+      # ls -la /etc/nginx/sites-enabled/
+
+      Example output:
+
+      lrwxrwxrwx 1 root root   34 Mar  1 15:18 default -> /etc/nginx/sites-enabled/default
+
+      If the output shows that the default web site is enabled, this is a finding.
+    rationale: |-
+      After installation, an NGINX default website is configured to listen on port 80 and serves a generic page indicating that the NGINX server is working. This page contains information that reveals details about the server, is over an insecure connection, and must be removed.
+    remediation: |-
+      At the command prompt, run the following:
+
+      # rm /etc/nginx/sites-enabled/default
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload

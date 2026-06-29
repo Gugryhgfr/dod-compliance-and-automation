@@ -1,0 +1,54 @@
+version: 1
+display_name: VCFA-9X-000339 - The VMware Cloud Foundation vCenter Server must disable CDP/LLDP on distributed switches.
+global_description: |-
+  The vSphere Distributed Virtual Switch can participate in Cisco Discovery Protocol (CDP) or Link Layer Discovery Protocol (LLDP) as a listener, advertiser, or both. The information is sensitive, including IP addresses, system names, software versions, and more. It can be used by an adversary to gain a better understanding of your environment, and to impersonate devices. It is also transmitted unencrypted on the network, and as such the recommendation is to disable it.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000339
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must disable CDP/LLDP on distributed switches.
+    control_id: VCFA-9X-000339
+    scored: true
+    profile:
+      - default
+    information: |-
+      If distributed switches are not used, this is not applicable.
+
+      From the vSphere Client, go to "Networking".
+
+      Select a distributed switch >> Configure >> Settings >> Properties.
+
+      Review the "Discovery Protocol" configuration.
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following command:
+
+      Get-VDSwitch | Select Name,LinkDiscoveryProtocolOperation
+
+      If any distributed switch does not have "Discovery Protocols" disabled, this is a finding.
+    rationale: |-
+      The vSphere Distributed Virtual Switch can participate in Cisco Discovery Protocol (CDP) or Link Layer Discovery Protocol (LLDP) as a listener, advertiser, or both. The information is sensitive, including IP addresses, system names, software versions, and more. It can be used by an adversary to gain a better understanding of your environment, and to impersonate devices. It is also transmitted unencrypted on the network, and as such the recommendation is to disable it.
+    remediation: |-
+      From the vSphere Client, go to "Networking".
+
+      Select a distributed switch >> Configure >> Settings >> Properties.
+
+      Click "Edit".
+
+      Select the advanced tab and update the "Type" under "Discovery Protocol" to disabled and click "OK".
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following command:
+
+      Get-VDSwitch -Name "DSwitch" | Set-VDSwitch -LinkDiscoveryProtocolOperation "Disabled"

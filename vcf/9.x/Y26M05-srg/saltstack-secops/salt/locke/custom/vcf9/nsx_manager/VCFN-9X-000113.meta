@@ -1,0 +1,34 @@
+version: 1
+display_name: VCFN-9X-000113 - The VMware Cloud Foundation NSX Manager must disable SNMP v2.
+global_description: |-
+  SNMPv3 supports commercial-grade security, including authentication, authorization, access control, and privacy. Previous versions of the protocol contained well-known security weaknesses that were easily exploited. As such, SNMPv1/2 receivers must be disabled.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFN-9X-000113
+  srg:
+    - SRG-APP-000516-NDM-000317
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_nsx_manager:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Manager must disable SNMP v2.
+    control_id: VCFN-9X-000113
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the NSX Manager web interface, go to the System >> Configuration >> Fabric >> Profiles >> Node Profiles.
+
+      Click "All NSX Nodes" and view the SNMP Polling and Traps configuration.
+
+      If SNMP v2c Polling or Traps are configured, this is a finding.
+    rationale: |-
+      SNMPv3 supports commercial-grade security, including authentication, authorization, access control, and privacy. Previous versions of the protocol contained well-known security weaknesses that were easily exploited. As such, SNMPv1/2 receivers must be disabled.
+    remediation: |-
+      From the NSX Manager web interface, go to the System >> Configuration >> Fabric >> Profiles >> Node Profiles.
+
+      Click on "All NSX Nodes" and delete any v2c Polling or Trap configurations.

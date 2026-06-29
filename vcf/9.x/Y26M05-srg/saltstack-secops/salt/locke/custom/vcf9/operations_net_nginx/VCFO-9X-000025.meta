@@ -1,0 +1,51 @@
+version: 1
+display_name: VCFO-9X-000025 - The VMware Cloud Foundation Operations for Networks Platform NGINX server must not perform user management for hosted applications.
+global_description: |-
+  User management and authentication can be an essential part of any application hosted by the web server. Along with authenticating users, the user management function must perform several other tasks like password complexity, locking users after a configurable number of failed logins, and management of temporary and emergency accounts; and all of this must be done enterprise-wide.
+
+  The web server contains a minimal user management function, but the web server user management function does not offer enterprise-wide user management, and user management is not the primary function of the web server. User management for the hosted applications should be done through a facility that is built for enterprise-wide user management, like LDAP and Active Directory.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFO-9X-000025
+  srg:
+    - SRG-APP-000141-WSR-000015
+  cci:
+    - CCI-000381
+  nist:
+    - CM-7 a
+benchmark_id:
+  vcf9_operations_net_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation Operations for Networks Platform NGINX server must not perform user management for hosted applications.
+    control_id: VCFO-9X-000025
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify basic authentication is not enabled.
+
+      View the running configuration by running the following command:
+
+      #  nginx -T 2>&1 | grep -E "^\s+auth_basic"
+
+      If any lines are returned indicating basic authentication is enabled, this is a finding.
+    rationale: |-
+      User management and authentication can be an essential part of any application hosted by the web server. Along with authenticating users, the user management function must perform several other tasks like password complexity, locking users after a configurable number of failed logins, and management of temporary and emergency accounts; and all of this must be done enterprise-wide.
+
+      The web server contains a minimal user management function, but the web server user management function does not offer enterprise-wide user management, and user management is not the primary function of the web server. User management for the hosted applications should be done through a facility that is built for enterprise-wide user management, like LDAP and Active Directory.
+    remediation: |-
+      Determine if the "auth_basic" and "auth_basic_user_file" directives are needed or can be safely removed.
+
+      If they can be safely removed navigate to and open:
+
+      The nginx.conf (/etc/nginx/nginx.conf by default or the included file where the server is defined) file.
+
+      Remove the auth_basic* directives where defined.
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload
+
+      If they cannot be safely removed without affecting the web site then a migration plan to a more suitable authentication strategy must be devised and implemented that offloads user management functionality to an enterprise-wide solution.

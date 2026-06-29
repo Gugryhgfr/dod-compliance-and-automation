@@ -1,0 +1,43 @@
+version: 1
+display_name: PHTN-50-000161 - The Photon operating system must remove all software components after updated versions have been installed.
+global_description: |-
+  Previous versions of software components that are not removed from the information system after updates have been installed may be exploited by adversaries. Some information technology products may remove older versions of software automatically from the information system.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000161
+  srg:
+    - SRG-OS-000437-GPOS-00194
+  cci:
+    - CCI-002617
+  nist:
+    - SI-2 (6)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must remove all software components after updated versions have been installed.
+    control_id: PHTN-50-000161
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command:
+
+      # grep -i '^clean_requirements_on_remove' /etc/tdnf/tdnf.conf
+
+      Example result:
+
+      clean_requirements_on_remove=1
+
+      If "clean_requirements_on_remove" is not set to "true", "1", or "yes", this is a finding.
+    rationale: |-
+      Previous versions of software components that are not removed from the information system after updates have been installed may be exploited by adversaries. Some information technology products may remove older versions of software automatically from the information system.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/tdnf/tdnf.conf
+
+      Add or update the following line:
+
+      clean_requirements_on_remove=1

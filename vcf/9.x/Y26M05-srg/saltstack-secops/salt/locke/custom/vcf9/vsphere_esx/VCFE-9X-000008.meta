@@ -1,0 +1,61 @@
+version: 1
+display_name: VCFE-9X-000008 - The ESX host must enable lockdown mode.
+global_description: |-
+  Enabling Lockdown Mode disables direct access to an ESX host, requiring the host to be managed remotely from vCenter Server. This is done to ensure the roles and access controls implemented in vCenter are always enforced and users cannot bypass them by logging on to a host directly.
+
+  By forcing all interaction to occur through vCenter Server, the risk of someone inadvertently attaining elevated privileges or performing tasks that are not properly audited is greatly reduced.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000008
+  srg:
+    - SRG-OS-000027-VMM-000080
+  cci:
+    - CCI-000054
+  nist:
+    - AC-10
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must enable lockdown mode.
+    control_id: VCFE-9X-000008
+    scored: true
+    profile:
+      - default
+    information: |-
+      For environments that do not use vCenter server to manage ESX, this is not applicable.
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Security Profile.
+
+      Scroll down to "Lockdown Mode" and verify it is set to "Enabled" (Normal or Strict).
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Select Name,@{N="Lockdown";E={$_.Extensiondata.Config.LockdownMode}}
+
+      If "Lockdown Mode" is disabled, this is a finding.
+    rationale: |-
+      Enabling Lockdown Mode disables direct access to an ESX host, requiring the host to be managed remotely from vCenter Server. This is done to ensure the roles and access controls implemented in vCenter are always enforced and users cannot bypass them by logging on to a host directly.
+
+      By forcing all interaction to occur through vCenter Server, the risk of someone inadvertently attaining elevated privileges or performing tasks that are not properly audited is greatly reduced.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Security Profile >> Lockdown Mode.
+
+      Click edit and select either the "Normal" or "Strict" radio buttons.
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $level = "lockdownNormal" OR "lockdownStrict"
+      $vmhost = Get-VMHost -Name <hostname> | Get-View
+      $lockdown = Get-View $vmhost.ConfigManager.HostAccessManager
+      $lockdown.ChangeLockdownMode($level)
+
+      Note: In strict lockdown mode, the Direct Console User Interface (DCUI) service is stopped. If the connection to vCenter Server is lost and the vSphere Client is no longer available, the ESX host becomes inaccessible.

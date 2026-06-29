@@ -1,0 +1,43 @@
+version: 1
+display_name: VCFA-9X-000292 - VMware Cloud Foundation Operations must disable unsigned management pack installation.
+global_description: |-
+  Software and firmware components prevented from installation unless signed with recognized and approved certificates include software and firmware version updates, patches, service packs, device drivers, and basic input/output system updates.
+
+  This option permits the installation of PAK files without signature verification. Enabling it may pose security risks, as unsigned files could contain untrusted content.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000292
+  srg:
+    - SRG-APP-000810
+  cci:
+    - CCI-003992
+  nist:
+    - CM-14
+benchmark_id:
+  vcf9_operations_app:
+    type: custom
+    desc: VMware Cloud Foundation Operations must disable unsigned management pack installation.
+    control_id: VCFA-9X-000292
+    scored: true
+    profile:
+      - default
+    information: |-
+      Login to the admin portal (/admin/) as an administrator.
+
+      Go to Administrator Settings >> Security Settings.
+
+      View the status of "Allow unsigned PAK installation".
+
+      If "Allow unsigned PAK installation" is enabled, this is a finding.
+    rationale: |-
+      Software and firmware components prevented from installation unless signed with recognized and approved certificates include software and firmware version updates, patches, service packs, device drivers, and basic input/output system updates.
+
+      This option permits the installation of PAK files without signature verification. Enabling it may pose security risks, as unsigned files could contain untrusted content.
+    remediation: |-
+      Disabling unsigned PAK installation must be done from the admin portal. Login to the admin portal (/admin/) as an administrator.
+
+      Go to Administrator Settings >> Security Settings.
+
+      Click the "Deactivate Unsigned PAK Installation" button.

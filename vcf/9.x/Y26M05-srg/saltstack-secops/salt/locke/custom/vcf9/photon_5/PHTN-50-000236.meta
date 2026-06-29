@@ -1,0 +1,45 @@
+version: 1
+display_name: PHTN-50-000236 - The Photon operating system must disable systemd fallback DNS.
+global_description: |-
+  Systemd contains an ability to set fallback DNS servers which is used for DNS lookups in the event no system level DNS servers are configured or other DNS servers are specified in the Systemd resolved.conf file. If uncommented this configuration contains Google DNS servers by default and could result in DNS leaking info unknowingly in the event DNS is absent or misconfigured at the system level.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000236
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must disable systemd fallback DNS.
+    control_id: PHTN-50-000236
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify systemd fallback DNS is disabled:
+
+      # resolvectl status | grep '^Fallback DNS'
+
+      If the output indicates that Fallback DNS servers are configured, this is a finding.
+    rationale: |-
+      Systemd contains an ability to set fallback DNS servers which is used for DNS lookups in the event no system level DNS servers are configured or other DNS servers are specified in the Systemd resolved.conf file. If uncommented this configuration contains Google DNS servers by default and could result in DNS leaking info unknowingly in the event DNS is absent or misconfigured at the system level.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/systemd/resolved.conf
+
+      Add or update the "FallbackDNS" entry to the following:
+
+      FallbackDNS=
+
+      Restart the Systemd resolved service by running the following command:
+
+      # systemctl restart systemd-resolved
+
+      Note: If this option is not given, a compiled-in list of DNS servers is used instead which is undesirable.

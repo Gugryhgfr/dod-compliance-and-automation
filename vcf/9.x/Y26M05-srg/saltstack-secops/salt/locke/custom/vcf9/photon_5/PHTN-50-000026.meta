@@ -1,0 +1,60 @@
+version: 1
+display_name: PHTN-50-000026 - The Photon operating system must protect audit logs from unauthorized access.
+global_description: |-
+  Unauthorized disclosure of audit records can reveal system and configuration data to attackers, thus compromising its confidentiality.
+
+  Audit information includes all information (e.g., audit records, audit settings, audit reports) needed to successfully audit operating system activity.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000026
+  srg:
+    - SRG-OS-000057-GPOS-00027
+  cci:
+    - CCI-000162
+    - CCI-000163
+    - CCI-000164
+  nist:
+    - AU-9 a
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must protect audit logs from unauthorized access.
+    control_id: PHTN-50-000026
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to find the current auditd log location:
+
+      # grep -iw log_file /etc/audit/auditd.conf
+
+      Example result:
+
+      log_file = /var/log/audit/audit.log
+
+      At the command line, run the following command using the file found in the previous step to verify auditd logs are protected from authorized access:
+
+      # stat -c "%n %U:%G %a" /var/log/audit/audit.log
+
+      Example result:
+
+      /var/log/audit/audit.log root:root 600
+
+      If the audit log file does not have permissions set to "0600", this is a finding.
+      If the audit log file is not owned by root, this is a finding.
+      If the audit log file is not group owned by root, this is a finding.
+    rationale: |-
+      Unauthorized disclosure of audit records can reveal system and configuration data to attackers, thus compromising its confidentiality.
+
+      Audit information includes all information (e.g., audit records, audit settings, audit reports) needed to successfully audit operating system activity.
+    remediation: |-
+      At the command line, run the following commands:
+
+      #  chmod 0600 <audit log file>
+      #  chown root:root <audit log file>
+
+      Replace <audit log file> with the target log file.
+
+      Note: If "log_group" is configured in the auditd.conf file and set to something other than "root", the permissions changes will not be persistent.

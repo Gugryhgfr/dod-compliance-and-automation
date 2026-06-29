@@ -1,0 +1,43 @@
+version: 1
+display_name: VCFI-9X-000144 - The VMware Cloud Foundation Operations PostgreSQL service must have log collection enabled.
+global_description: |-
+  Session auditing is for use when a user's activities are under investigation. To be sure of capturing all activity during those periods when session auditing is in use, it needs to be in operation for the whole time the PostgreSQL is running.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFI-9X-000144
+  srg:
+    - SRG-APP-000092-DB-000208
+  cci:
+    - CCI-001464
+  nist:
+    - AU-14 (1)
+benchmark_id:
+  vcf9_operations_postgresql:
+    type: custom
+    desc: The VMware Cloud Foundation Operations PostgreSQL service must have log collection enabled.
+    control_id: VCFI-9X-000144
+    scored: true
+    profile:
+      - default
+    information: |-
+      As a database administrator, perform the following at the command prompt:
+
+      # su - postgres -c "/opt/vmware/vpostgres/current/bin/psql -p 5433 -A -t -c 'SHOW logging_collector;'"
+
+      Example result:
+
+      on
+
+      If the "logging_collector" setting is not configured to "on", this is a finding.
+    rationale: |-
+      Session auditing is for use when a user's activities are under investigation. To be sure of capturing all activity during those periods when session auditing is in use, it needs to be in operation for the whole time the PostgreSQL is running.
+    remediation: |-
+      As a database administrator, perform the following at the command prompt:
+
+      # su - postgres -c "/opt/vmware/vpostgres/current/bin/psql -p 5433 -A -t -c \"ALTER SYSTEM SET logging_collector TO 'on';\""
+
+      Reload the PostgreSQL service by running the following command:
+
+      # systemctl restart vpostgres-repl.service

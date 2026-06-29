@@ -1,0 +1,52 @@
+version: 1
+display_name: VCFR-9X-000029 - The VMware Cloud Foundation NSX Tier-0 Gateway router must be configured to use encryption for OSPF routing protocol authentication.
+global_description: |-
+  A rogue router could send a fictitious routing update to convince a site's perimeter router to send traffic to an incorrect or even a rogue destination. This diverted traffic could be analyzed to learn confidential information about the site's network or used to disrupt the network's ability to communicate with other networks. This is known as a "traffic attraction attack" and is prevented by configuring neighbor router authentication for routing updates. However, using clear-text authentication provides little benefit since an attacker can intercept traffic and view the authentication key. This would allow the attacker to use the authentication key in an attack.
+
+  This requirement applies to all IPv4 and IPv6 protocols that are used to exchange routing or packet forwarding information; this includes all Interior Gateway Protocols (such as OSPF, EIGRP, and IS-IS) and Exterior Gateway Protocols (such as BGP), MPLS-related protocols (such as LDP), and multicast-related protocols.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFR-9X-000029
+  srg:
+    - SRG-NET-000168-RTR-000077
+  cci:
+    - CCI-000803
+    - CCI-001184
+  nist:
+    - IA-7
+    - SC-23
+benchmark_id:
+  vcf9_nsx_routing:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Tier-0 Gateway router must be configured to use encryption for OSPF routing protocol authentication.
+    control_id: VCFR-9X-000029
+    scored: true
+    profile:
+      - default
+    information: |-
+      If the Tier-0 Gateway is not using OSPF, this is Not Applicable.
+
+      To verify OSPF areas are using authentication with encryption do the following:
+
+      From the NSX Manager web interface, go to Networking >> Connectivity >> Tier-0 Gateways.
+
+      For every Tier-0 Gateway expand the "Tier-0 Gateway".
+
+      Expand "OSPF", click the number next to Area Definition, and view the Authentication field for each area.
+
+      If OSPF area definitions do not have the "Authentication" field set to "MD5" and a "Key ID" and "Password" configured, this is a finding.
+    rationale: |-
+      A rogue router could send a fictitious routing update to convince a site's perimeter router to send traffic to an incorrect or even a rogue destination. This diverted traffic could be analyzed to learn confidential information about the site's network or used to disrupt the network's ability to communicate with other networks. This is known as a "traffic attraction attack" and is prevented by configuring neighbor router authentication for routing updates. However, using clear-text authentication provides little benefit since an attacker can intercept traffic and view the authentication key. This would allow the attacker to use the authentication key in an attack.
+
+      This requirement applies to all IPv4 and IPv6 protocols that are used to exchange routing or packet forwarding information; this includes all Interior Gateway Protocols (such as OSPF, EIGRP, and IS-IS) and Exterior Gateway Protocols (such as BGP), MPLS-related protocols (such as LDP), and multicast-related protocols.
+    remediation: |-
+      To set authentication for OSPF Area definitions do the following:
+
+      From the NSX Manager web interface, go to Networking >> Connectivity >> Tier-0 Gateways, and expand the target Tier-0 gateway.
+
+      Expand "OSPF", click the number next to Area Definition. Select "Edit" on the target OSPF Area Definition.
+
+      Change the Authentication drop-down to MD5, enter a Key ID and Password, and then click "Save".
+
+      Note: The MD5 password can have a maximum of 16 characters.

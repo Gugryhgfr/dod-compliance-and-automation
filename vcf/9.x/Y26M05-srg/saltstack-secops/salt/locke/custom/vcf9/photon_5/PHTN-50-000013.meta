@@ -1,0 +1,51 @@
+version: 1
+display_name: PHTN-50-000013 - The Photon operating system must have the OpenSSL FIPS provider installed to protect the confidentiality of remote access sessions.
+global_description: |-
+  Without confidentiality protection mechanisms, unauthorized individuals may gain access to sensitive information via a remote access session.
+
+  OpenSSH on the Photon operating system when configured appropriately can utilize a FIPS validated OpenSSL for cryptographic operations.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000013
+  srg:
+    - SRG-OS-000033-GPOS-00014
+  cci:
+    - CCI-000068
+    - CCI-002418
+    - CCI-002420
+    - CCI-002422
+    - CCI-002890
+    - CCI-003123
+  nist:
+    - AC-17 (2)
+    - MA-4 (6)
+    - SC-8
+    - SC-8 (2)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must have the OpenSSL FIPS provider installed to protect the confidentiality of remote access sessions.
+    control_id: PHTN-50-000013
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify the OpenSSL FIPS provider is installed:
+
+      # rpm -qa | grep openssl-fips
+
+      Example result:
+
+      openssl-fips-provider-3.0.8-2.ph5.x86_64
+
+      If there is no output indicating that the OpenSSL FIPS provider is installed, this is a finding.
+    rationale: |-
+      Without confidentiality protection mechanisms, unauthorized individuals may gain access to sensitive information via a remote access session.
+
+      OpenSSH on the Photon operating system when configured appropriately can utilize a FIPS validated OpenSSL for cryptographic operations.
+    remediation: |-
+      At the command line, run the following command:
+
+      # tdnf install openssl-fips-provider

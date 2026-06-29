@@ -1,0 +1,57 @@
+version: 1
+display_name: VCFV-9X-000217 - Virtual machines (VMs) must remove unneeded serial devices.
+global_description: |-
+  Ensure no device is connected to a virtual machine if it is not required. For example, floppy, serial, and parallel ports are rarely used for virtual machines in a data center environment, and CD/DVD drives are usually connected only temporarily during software installation.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFV-9X-000217
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vm:
+    type: custom
+    desc: Virtual machines (VMs) must remove unneeded serial devices.
+    control_id: VCFV-9X-000217
+    scored: true
+    profile:
+      - default
+    information: |-
+      For each virtual machine do the following:
+
+      From the vSphere Client, right-click the Virtual Machine and go to "Edit Settings".
+
+      Review the VM's hardware and verify no serial devices exist.
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host or vCenter server, run the following command:
+
+      Get-VM | Where {$_.ExtensionData.Config.Hardware.Device.DeviceInfo.Label -match "serial"}
+
+      If a virtual machine has a serial device present, this is a finding.
+    rationale: |-
+      Ensure no device is connected to a virtual machine if it is not required. For example, floppy, serial, and parallel ports are rarely used for virtual machines in a data center environment, and CD/DVD drives are usually connected only temporarily during software installation.
+    remediation: |-
+      The VM must be powered off to remove a serial device.
+
+      For each virtual machine do the following:
+
+      From the vSphere Client, right-click the Virtual Machine and go to "Edit Settings".
+
+      Select the serial device, click the circled "X" to remove it, and click "OK".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host or vCenter server, run the following commands:
+
+      $sport = (Get-VM -Name <vmname>).ExtensionData.Config.Hardware.Device | Where {$_.DeviceInfo.Label -match "Serial"}
+      $spec = New-Object VMware.Vim.VirtualMachineConfigSpec
+      $spec.DeviceChange += New-Object VMware.Vim.VirtualDeviceConfigSpec
+      $spec.DeviceChange[-1].device = $sport
+      $spec.DeviceChange[-1].operation = "remove"
+      (Get-VM -Name <vmname>).ExtensionData.ReconfigVM($spec)

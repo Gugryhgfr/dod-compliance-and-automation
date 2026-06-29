@@ -1,0 +1,64 @@
+version: 1
+display_name: VCFI-9X-000020 - The VMware Cloud Foundation Operations PostgreSQL service must be configured to protect log files from unauthorized access.
+global_description: |-
+  If audit data were to become compromised, then competent forensic analysis and discovery of the true source of potentially malicious system activity is difficult, if not impossible, to achieve. In addition, access to audit records provides information an attacker could potentially use to his or her advantage.
+
+  To ensure the veracity of audit data, the information system and/or the application must protect audit information from any and all unauthorized access. This includes read, write, copy, etc.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFI-9X-000020
+  srg:
+    - SRG-APP-000118-DB-000059
+  cci:
+    - CCI-000162
+    - CCI-000163
+    - CCI-000164
+  nist:
+    - AU-9 a
+benchmark_id:
+  vcf9_operations_postgresql:
+    type: custom
+    desc: The VMware Cloud Foundation Operations PostgreSQL service must be configured to protect log files from unauthorized access.
+    control_id: VCFI-9X-000020
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify the default log file permissions and permissions on existing log files.
+
+      As a database administrator, perform the following at the command prompt:
+
+      # su - postgres -c "/opt/vmware/vpostgres/current/bin/psql -p 5433 -A -t -c 'SHOW log_file_mode;'"
+
+      Example result:
+
+      0600
+
+      If the "log_file_mode" setting is not configured to "0600", this is a finding.
+
+      As a database administrator, perform the following at the command prompt:
+
+      # find /storage/log/postgres/repl/* -xdev -type f -a '(' -not -perm 600 -o -not -user postgres -o -not -group users ')' -exec ls -ld {} \;
+
+      If any files are returned, this is a finding.
+    rationale: |-
+      If audit data were to become compromised, then competent forensic analysis and discovery of the true source of potentially malicious system activity is difficult, if not impossible, to achieve. In addition, access to audit records provides information an attacker could potentially use to his or her advantage.
+
+      To ensure the veracity of audit data, the information system and/or the application must protect audit information from any and all unauthorized access. This includes read, write, copy, etc.
+    remediation: |-
+      As a database administrator, perform the following at the command prompt:
+
+      # su - postgres -c "/opt/vmware/vpostgres/current/bin/psql -p 5433 -A -t -c \"ALTER SYSTEM SET log_file_mode = '0600';\""
+
+      Reload the PostgreSQL service by running the following command:
+
+      # systemctl restart vpostgres-repl.service
+
+      At the command prompt, enter the following commands:
+
+      # chmod 600 <file>
+      # chown postgres:users <file>
+
+      Note: Replace <file> with the file with incorrect permissions.

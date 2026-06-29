@@ -1,0 +1,32 @@
+name: vcf9_vsphere_vm
+display_name: VMware Cloud Foundation 9.x - vSphere Virtual Machine
+desc: Custom benchmark ported from the VMware Cloud Foundation 9.x STIG Readiness Guide.
+version: '1'
+authority: custom
+reference: VMware Cloud Foundation 9.x STIG Readiness Guide (Y26M05)
+ids:
+  - VCFV-9X-000181
+  - VCFV-9X-000196
+  - VCFV-9X-000197
+  - VCFV-9X-000198
+  - VCFV-9X-000199
+  - VCFV-9X-000200
+  - VCFV-9X-000201
+  - VCFV-9X-000202
+  - VCFV-9X-000203
+  - VCFV-9X-000204
+  - VCFV-9X-000205
+  - VCFV-9X-000206
+  - VCFV-9X-000207
+  - VCFV-9X-000208
+  - VCFV-9X-000209
+  - VCFV-9X-000210
+  - VCFV-9X-000211
+  - VCFV-9X-000212
+  - VCFV-9X-000213
+  - VCFV-9X-000214
+  - VCFV-9X-000215
+  - VCFV-9X-000216
+  - VCFV-9X-000217
+  - VCFV-9X-000218
+  - VCFV-9X-000219

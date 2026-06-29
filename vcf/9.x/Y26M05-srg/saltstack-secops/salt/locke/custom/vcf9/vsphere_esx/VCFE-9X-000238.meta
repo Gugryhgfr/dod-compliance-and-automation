@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFE-9X-000238 - The ESX host must disable virtual hardware management network interfaces.
+global_description: |-
+  Hardware management controllers often present virtual or USB NICs to the ESX host. These can be used as backdoors and should be deactivated both in the hardware configuration and in ESX.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000238
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must disable virtual hardware management network interfaces.
+    control_id: VCFE-9X-000238
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "Net.BMCNetworkEnable" value and verify it is set to "0".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Net.BMCNetworkEnable
+
+      If the "Net.BMCNetworkEnable" setting is not set to "0", this is a finding.
+    rationale: |-
+      Hardware management controllers often present virtual or USB NICs to the ESX host. These can be used as backdoors and should be deactivated both in the hardware configuration and in ESX.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Net.BMCNetworkEnable" value and configure it to "0".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Net.BMCNetworkEnable | Set-AdvancedSetting -Value 0

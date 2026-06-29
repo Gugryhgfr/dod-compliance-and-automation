@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFE-9X-000091 - The ESX host must enable Secure Boot.
+global_description: |-
+  Secure Boot is part of the Unified Extensible Firmware Interface (UEFI) firmware standard. With UEFI Secure Boot enabled, a host refuses to load any UEFI driver or app unless the operating system bootloader has a valid digital signature. Secure Boot for ESX requires support from the firmware and requires that all ESX kernel modules, drivers, and vSphere Installation Bundles (VIBs) be signed by VMware or a partner subordinate.
+
+  Secure Boot is enabled in the BIOS of the ESX physical server and supported by the hypervisor boot loader. There is no ESX control to "turn on" Secure Boot. Requiring Secure Boot (failing to boot without it present) is accomplished in another control.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000091
+  srg:
+    - SRG-OS-000278-VMM-001000
+  cci:
+    - CCI-001496
+  nist:
+    - AU-9 (3)
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must enable Secure Boot.
+    control_id: VCFE-9X-000091
+    scored: true
+    profile:
+      - default
+    information: |-
+      From an ESX shell, run the following command:
+
+      # /usr/lib/vmware/secureboot/bin/secureBoot.py -s
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      ((Get-VMHost).ExtensionData.Capability).UefiSecureBoot
+
+      If Secure Boot is not enabled, this is a finding.
+    rationale: |-
+      Secure Boot is part of the Unified Extensible Firmware Interface (UEFI) firmware standard. With UEFI Secure Boot enabled, a host refuses to load any UEFI driver or app unless the operating system bootloader has a valid digital signature. Secure Boot for ESX requires support from the firmware and requires that all ESX kernel modules, drivers, and vSphere Installation Bundles (VIBs) be signed by VMware or a partner subordinate.
+
+      Secure Boot is enabled in the BIOS of the ESX physical server and supported by the hypervisor boot loader. There is no ESX control to "turn on" Secure Boot. Requiring Secure Boot (failing to boot without it present) is accomplished in another control.
+    remediation: |-
+      From an ESX shell, run the following command:
+
+      # /usr/lib/vmware/secureboot/bin/secureBoot.py -c
+
+      If the output indicates that Secure Boot cannot be enabled, correct the discrepancies and try again.
+
+      Once all discrepancies are resolved, the server ESX is installed on can be updated to enable Secure Boot in the firmware.
+
+      To enable Secure Boot in the server's firmware follow the instructions for the specific manufacturer.

@@ -1,0 +1,41 @@
+version: 1
+display_name: VCFA-9X-000354 - VMware Cloud Foundation SDDC Manager assigned roles and permissions must be verified.
+global_description: |-
+  Users and service accounts must only be assigned privileges they require. Least privilege requires that these privileges must only be assigned if needed to reduce risk of confidentiality, availability, or integrity loss.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000354
+  srg:
+    - SRG-APP-000211
+  cci:
+    - CCI-001082
+  nist:
+    - SC-2
+benchmark_id:
+  vcf9_sddc_manager_app:
+    type: custom
+    desc: VMware Cloud Foundation SDDC Manager assigned roles and permissions must be verified.
+    control_id: VCFA-9X-000354
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the SDDC Manager UI, go to Administration >> Single Sign On.
+
+      Review the Users and Groups assigned a role in SDDC Manager and verify the appropriate roles are assigned.
+
+      If any users or groups are assigned a role that includes more access than needed, this is a finding.
+    rationale: |-
+      Users and service accounts must only be assigned privileges they require. Least privilege requires that these privileges must only be assigned if needed to reduce risk of confidentiality, availability, or integrity loss.
+    remediation: |-
+      To remove a user or group, do the following:
+
+      From the SDDC Manager UI, go to Administration >> Single Sign On.
+
+      Select the user or group in question and click "Remove".
+
+      Click "Delete" to confirm the removal.
+
+      Note: To update a user's or group's role they must first be removed then added back to the system.

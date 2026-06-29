@@ -1,0 +1,54 @@
+version: 1
+display_name: VCFE-9X-000035 - The ESX host must enforce password complexity by configuring a password quality policy.
+global_description: |-
+  To enforce the use of complex passwords, minimum numbers of characters of different classes are mandated.
+
+  The use of complex passwords reduces the ability of attackers to successfully obtain valid passwords using guessing or exhaustive search techniques. Complexity requirements increase the password search space by requiring users to construct passwords from a larger character set than they may otherwise use.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000035
+  srg:
+    - SRG-OS-000069-VMM-000360
+  cci:
+    - CCI-004066
+  nist:
+    - IA-5 (1) (h)
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must enforce password complexity by configuring a password quality policy.
+    control_id: VCFE-9X-000035
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "Security.PasswordQualityControl" value and verify it is set to "random=0 similar=deny retry=3 min=disabled,disabled,disabled,disabled,15".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Security.PasswordQualityControl
+
+      If the "Security.PasswordQualityControl" setting is set to a value other than "random=0 similar=deny retry=3 min=disabled,disabled,disabled,disabled,15", this is a finding.
+    rationale: |-
+      To enforce the use of complex passwords, minimum numbers of characters of different classes are mandated.
+
+      The use of complex passwords reduces the ability of attackers to successfully obtain valid passwords using guessing or exhaustive search techniques. Complexity requirements increase the password search space by requiring users to construct passwords from a larger character set than they may otherwise use.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Security.PasswordQualityControl" value and configure it to "random=0 similar=deny retry=3 min=disabled,disabled,disabled,disabled,15".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Security.PasswordQualityControl | Set-AdvancedSetting -Value "random=0 similar=deny retry=3 min=disabled,disabled,disabled,disabled,15"

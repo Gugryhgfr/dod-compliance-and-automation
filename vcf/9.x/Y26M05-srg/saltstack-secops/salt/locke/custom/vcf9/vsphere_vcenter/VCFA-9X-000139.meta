@@ -1,0 +1,38 @@
+version: 1
+display_name: VCFA-9X-000139 - The VMware Cloud Foundation vCenter Server must automatically lock the account until the locked account is released by an administrator when three unsuccessful login attempts in 15 minutes are exceeded.
+global_description: |-
+  By limiting the number of failed login attempts, the risk of unauthorized system access via user password guessing, otherwise known as brute forcing, is reduced. Limits are imposed by locking the account.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000139
+  srg:
+    - SRG-APP-000345
+  cci:
+    - CCI-002238
+  nist:
+    - AC-7 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must automatically lock the account until the locked account is released by an administrator when three unsuccessful login attempts in 15 minutes are exceeded.
+    control_id: VCFA-9X-000139
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Administration >> Single Sign On >> Configuration >> Local Accounts >> Lockout Policy.
+
+      View the value of the "Unlock time" setting.
+
+      Unlock time: 0 seconds
+
+      If the lockout policy is not configured with "Unlock time" policy of "0", this is a finding.
+    rationale: |-
+      By limiting the number of failed login attempts, the risk of unauthorized system access via user password guessing, otherwise known as brute forcing, is reduced. Limits are imposed by locking the account.
+    remediation: |-
+      From the vSphere Client, go to Administration >> Single Sign On >> Configuration >> Local Accounts >> Lockout Policy.
+
+      Click "Edit".
+
+      Set the "Unlock time" to "0" and click "Save".

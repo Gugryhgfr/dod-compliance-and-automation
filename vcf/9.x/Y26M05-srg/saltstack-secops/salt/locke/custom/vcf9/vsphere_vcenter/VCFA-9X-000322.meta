@@ -1,0 +1,42 @@
+version: 1
+display_name: VCFA-9X-000322 - The VMware Cloud Foundation vCenter Server must disable SNMPv1/2 receivers.
+global_description: |-
+  SNMPv3 supports commercial-grade security, including authentication, authorization, access control, and privacy. Previous versions of the protocol contained well-known security weaknesses that were easily exploited. Therefore, SNMPv1/2 receivers must be disabled, while SNMPv3 is configured in another control. vCenter exposes SNMP v1/2 in the UI and SNMPv3 in the CLI.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000322
+  srg:
+    - SRG-APP-000575
+  cci:
+    - CCI-001967
+  nist:
+    - IA-3 (1)
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must disable SNMPv1/2 receivers.
+    control_id: VCFA-9X-000322
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select a vCenter Server >> Configure >> Settings >> General.
+
+      Click "Edit".
+
+      On the "SNMP receivers" tab, note the presence of any enabled receiver.
+
+      If there are any enabled receivers, this is a finding.
+    rationale: |-
+      SNMPv3 supports commercial-grade security, including authentication, authorization, access control, and privacy. Previous versions of the protocol contained well-known security weaknesses that were easily exploited. Therefore, SNMPv1/2 receivers must be disabled, while SNMPv3 is configured in another control. vCenter exposes SNMP v1/2 in the UI and SNMPv3 in the CLI.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select a vCenter Server >> Configure >> Settings >> General.
+
+      Click "Edit".
+
+      On the "SNMP receivers" tab, ensure all receivers are disabled.

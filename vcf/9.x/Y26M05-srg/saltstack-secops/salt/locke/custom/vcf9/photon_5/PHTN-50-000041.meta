@@ -1,0 +1,39 @@
+version: 1
+display_name: PHTN-50-000041 - The Photon operating system must enforce one day as the minimum password lifetime.
+global_description: |-
+  Enforcing a minimum password lifetime helps to prevent repeated password changes to defeat the password reuse or history enforcement requirement. If users are allowed to immediately and continually change their password, then the password could be repeatedly changed in a short period of time to defeat the organization's policy regarding password reuse.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000041
+  srg:
+    - SRG-OS-000075-GPOS-00043
+  cci:
+    - CCI-004066
+  nist:
+    - IA-5 (1) (h)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must enforce one day as the minimum password lifetime.
+    control_id: PHTN-50-000041
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify one day as the minimum password lifetime:
+
+      # grep '^PASS_MIN_DAYS' /etc/login.defs
+
+      If "PASS_MIN_DAYS" is not set to 1, is missing or commented out, this is a finding.
+    rationale: |-
+      Enforcing a minimum password lifetime helps to prevent repeated password changes to defeat the password reuse or history enforcement requirement. If users are allowed to immediately and continually change their password, then the password could be repeatedly changed in a short period of time to defeat the organization's policy regarding password reuse.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/login.defs
+
+      Add or update the following line:
+
+      PASS_MIN_DAYS 1

@@ -1,0 +1,38 @@
+version: 1
+display_name: VCFR-9X-000028 - The router must not be configured to have any feature enabled that calls home to the vendor.
+global_description: |-
+  Call home services will routinely send data such as configuration and diagnostic information to the vendor for routine or emergency analysis and troubleshooting. There is a risk that transmission of sensitive data sent to unauthorized persons could result in data loss or downtime due to an attack.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFR-9X-000028
+  srg:
+    - SRG-NET-000131-RTR-000083
+  cci:
+    - CCI-002403
+  nist:
+    - SC-7 (11)
+benchmark_id:
+  vcf9_nsx_routing:
+    type: custom
+    desc: The router must not be configured to have any feature enabled that calls home to the vendor.
+    control_id: VCFR-9X-000028
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the NSX Manager web interface, go to System >> Settings >> General Settings >> Customer Program.
+
+      Next to Customer Experience Improvement Program, select "Edit".
+
+      If "Join the VMware Customer Experience Improvement Program" is checked, this is a finding.
+
+      If Schedule is enabled, this is finding.
+    rationale: |-
+      Call home services will routinely send data such as configuration and diagnostic information to the vendor for routine or emergency analysis and troubleshooting. There is a risk that transmission of sensitive data sent to unauthorized persons could result in data loss or downtime due to an attack.
+    remediation: |-
+      From the NSX Manager web interface, go to System >> Settings >> General Settings >> Customer Program.
+
+      Next to Customer Experience Improvement Program, select "Edit".
+
+      Uncheck "Join the VMware Customer Experience Improvement Program", set "Schedule" to disabled, and then click "Save".

@@ -1,0 +1,47 @@
+version: 1
+display_name: VCFA-9X-000380 - VMware Cloud Foundation Operations for Networks assigned roles and permissions must be verified.
+global_description: |-
+  Users and service accounts must only be assigned privileges they require. Least privilege requires that these privileges must only be assigned if needed to reduce risk of confidentiality, availability, or integrity loss.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000380
+  srg:
+    - SRG-APP-000211
+  cci:
+    - CCI-001082
+  nist:
+    - SC-2
+benchmark_id:
+  vcf9_operations_net_app:
+    type: custom
+    desc: VMware Cloud Foundation Operations for Networks assigned roles and permissions must be verified.
+    control_id: VCFA-9X-000380
+    scored: true
+    profile:
+      - default
+    information: |-
+      If VCF Operations for Networks is not deployed, this is not applicable.
+
+      From VCF Operations for Networks, go to Settings >> Identity and Access Management >> User Management.
+
+      Review each user's assigned role.
+
+      If any user or service account has more privileges than required, this is a finding.
+    rationale: |-
+      Users and service accounts must only be assigned privileges they require. Least privilege requires that these privileges must only be assigned if needed to reduce risk of confidentiality, availability, or integrity loss.
+    remediation: |-
+      To update a user's or group's permissions to a role with reduced permissions, do the following:
+
+      From VCF Operations for Networks, go to Settings >> Identity and Access Management >> User Management.
+
+      For the target the user or group, click the pencil button to edit the role.
+
+      Select the new role from the "Role" drop down menu and click "Submit".
+
+      To delete a user or group that does not need access, do the following:
+
+      From VCF Operations for Networks, go to Settings >> Identity and Access Management >> User Management.
+
+      For the target the user or group, click the delete icon and click "Continue" to delete.

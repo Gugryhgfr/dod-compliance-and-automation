@@ -1,0 +1,44 @@
+version: 1
+display_name: VCFA-9X-000270 - The vCenter Server must disable accounts used for Integrated Windows Authentication (IWA).
+global_description: |-
+  Disabling expired, inactive, or otherwise anomalous accounts supports the concepts of least privilege and least functionality which reduce the attack surface of the system.
+
+  If not used for their intended purpose, default accounts must be disabled. vCenter ships with several default accounts, two of which are specific to IWA and SASL/Kerberos authentication. If other methods of authentication are used, these accounts are not needed and must be disabled.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000270
+  srg:
+    - SRG-APP-000700
+  cci:
+    - CCI-003627
+  nist:
+    - AC-2 (3) (a)
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The vCenter Server must disable accounts used for Integrated Windows Authentication (IWA).
+    control_id: VCFA-9X-000270
+    scored: true
+    profile:
+      - default
+    information: |-
+      If IWA is used for vCenter authentication, this is not applicable.
+
+      From the vSphere Client, go to Administration >> Single Sign On >> Users and Groups >> Users.
+
+      Change the domain to "vsphere.local" and review the "K/M" and "krbtgt/VSPHERE.LOCAL" accounts.
+
+      If the "K/M" and "krbtgt/VSPHERE.LOCAL" accounts are not disabled, this is a finding.
+
+      Note: If an alternate SSO domain name was specified then substitute that for "VSPHERE.LOCAL".
+    rationale: |-
+      Disabling expired, inactive, or otherwise anomalous accounts supports the concepts of least privilege and least functionality which reduce the attack surface of the system.
+
+      If not used for their intended purpose, default accounts must be disabled. vCenter ships with several default accounts, two of which are specific to IWA and SASL/Kerberos authentication. If other methods of authentication are used, these accounts are not needed and must be disabled.
+    remediation: |-
+      From the vSphere Client, go to Administration >> Single Sign On >> Users and Groups >> Users.
+
+      Select the "K/M" or "krbtgt/VSPHERE.LOCAL" and click "More" then select "Disable".
+
+      Click "Ok" to disable the user account.

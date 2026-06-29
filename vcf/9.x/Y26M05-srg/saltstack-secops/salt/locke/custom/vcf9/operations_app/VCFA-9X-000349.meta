@@ -1,0 +1,39 @@
+version: 1
+display_name: VCFA-9X-000349 - VMware Cloud Foundation Operations must terminate sessions after 15 minutes of inactivity.
+global_description: |-
+  Terminating an idle session within a short time period reduces the window of opportunity for unauthorized personnel to take control of a management session enabled on the console or console port that has been left unattended. In addition, quickly terminating an idle session will also free up resources committed by the managed network element.
+
+  Terminating network connections associated with communications sessions includes, for example, de-allocating associated TCP/IP address/port pairs at the operating system level, or de-allocating networking assignments at the application level if multiple application sessions are using a single, operating system level network connection. This does not mean that the application terminates all sessions or network access; it only ends the inactive session and releases the resources associated with that session.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000349
+  srg:
+    - SRG-APP-000190
+  cci:
+    - CCI-001133
+  nist:
+    - SC-10
+benchmark_id:
+  vcf9_operations_app:
+    type: custom
+    desc: VMware Cloud Foundation Operations must terminate sessions after 15 minutes of inactivity.
+    control_id: VCFA-9X-000349
+    scored: true
+    profile:
+      - default
+    information: |-
+      From VCF Operations, go to Administration >> Global Settings >> System Settings.
+
+      View the value of the "Session Inactivity Timeout" setting.
+
+      If the "Session Inactivity Timeout" is not set to 15 minutes or less, this is a finding.
+    rationale: |-
+      Terminating an idle session within a short time period reduces the window of opportunity for unauthorized personnel to take control of a management session enabled on the console or console port that has been left unattended. In addition, quickly terminating an idle session will also free up resources committed by the managed network element.
+
+      Terminating network connections associated with communications sessions includes, for example, de-allocating associated TCP/IP address/port pairs at the operating system level, or de-allocating networking assignments at the application level if multiple application sessions are using a single, operating system level network connection. This does not mean that the application terminates all sessions or network access; it only ends the inactive session and releases the resources associated with that session.
+    remediation: |-
+      From VCF Operations, go to Administration >> Global Settings >> System Settings.
+
+      Update the value for the "Session Inactivity Timeout" setting to 15 and click Save.

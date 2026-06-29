@@ -1,0 +1,11 @@
+name: vcf9_vcenter_envoy
+display_name: VMware Cloud Foundation 9.x - vCenter Envoy
+desc: Custom benchmark ported from the VMware Cloud Foundation 9.x STIG Readiness Guide.
+version: '1'
+authority: custom
+reference: VMware Cloud Foundation 9.x STIG Readiness Guide (Y26M05)
+ids:
+  - VCFK-9X-000018
+  - VCFK-9X-000039
+  - VCFK-9X-000043
+  - VCFK-9X-000075

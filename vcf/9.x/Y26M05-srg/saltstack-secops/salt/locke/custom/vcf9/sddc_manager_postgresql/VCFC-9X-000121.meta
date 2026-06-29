@@ -1,0 +1,73 @@
+version: 1
+display_name: VCFC-9X-000121 - The VMware Cloud Foundation SDDC Manager PostgreSQL service must off-load audit data to a separate log management facility.
+global_description: |-
+  Information stored in one location is vulnerable to accidental or incidental deletion or alteration.
+
+  Off-loading is a common process in information systems with limited audit storage capacity.
+
+  The database management system (DBMS) may write audit records to database tables, to files in the file system, to other kinds of local repository, or directly to a centralized log management system. Whatever the method used, it must be compatible with off-loading the records to the centralized system.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFC-9X-000121
+  srg:
+    - SRG-APP-000515-DB-000318
+  cci:
+    - CCI-001851
+    - CCI-003821
+    - CCI-003831
+  nist:
+    - AU-4 (1)
+    - AU-6 (4)
+    - AU-9 b
+benchmark_id:
+  vcf9_sddc_manager_postgresql:
+    type: custom
+    desc: The VMware Cloud Foundation SDDC Manager PostgreSQL service must off-load audit data to a separate log management facility.
+    control_id: VCFC-9X-000121
+    scored: true
+    profile:
+      - default
+    information: |-
+      As a database administrator, perform the following at the command prompt:
+
+      # grep -v "^#" /etc/rsyslog.d/stig-services-postgres.conf
+
+      Expected result:
+
+      module(load="imfile" mode="inotify")
+      input(type="imfile"
+      File="/var/log/postgres/*.log"
+      Tag="vcf-postgres-runtime"
+      Severity="info"
+      Facility="local0")
+
+      If the file does not exist, this is a finding.
+
+      If the output of the command does not match the expected result above, this is a finding.
+    rationale: |-
+      Information stored in one location is vulnerable to accidental or incidental deletion or alteration.
+
+      Off-loading is a common process in information systems with limited audit storage capacity.
+
+      The database management system (DBMS) may write audit records to database tables, to files in the file system, to other kinds of local repository, or directly to a centralized log management system. Whatever the method used, it must be compatible with off-loading the records to the centralized system.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/rsyslog.d/stig-services-postgres.conf
+
+      Create the file if it does not exist.
+
+      Set the contents of the file as follows:
+
+      module(load="imfile" mode="inotify")
+      input(type="imfile"
+      File="/var/log/postgres/*.log"
+      Tag="vcf-postgres-runtime"
+      Severity="info"
+      Facility="local0")
+
+      At the command prompt, run the following command:
+
+      # systemctl restart rsyslog

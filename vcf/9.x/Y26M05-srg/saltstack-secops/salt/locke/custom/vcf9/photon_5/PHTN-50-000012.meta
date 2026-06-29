@@ -1,0 +1,51 @@
+version: 1
+display_name: PHTN-50-000012 - The Photon operating system must monitor remote access logins.
+global_description: |-
+  Remote access services, such as those providing remote access to network devices and information systems, which lack automated monitoring capabilities, increase risk and make remote user access management difficult at best. Remote access is access to DOD nonpublic information systems by an authorized user (or an information system) communicating through an external, nonorganization-controlled network. Remote access methods include, for example, dial-up, broadband, and wireless. Automated monitoring of remote access sessions allows organizations to detect cyber attacks and also ensure ongoing compliance with remote access policies by auditing connection activities of remote access capabilities, such as Remote Desktop Protocol (RDP), on a variety of information system components (e.g., servers, workstations, notebook computers, smartphones, and tablets).
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000012
+  srg:
+    - SRG-OS-000032-GPOS-00013
+  cci:
+    - CCI-000067
+  nist:
+    - AC-17 (1)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must monitor remote access logins.
+    control_id: PHTN-50-000012
+    scored: true
+    profile:
+      - default
+    information: |-
+      This is not applicable to the following VCF components: Operations HCX.
+
+      At the command line, run the following command to verify rsyslog is configured to log authentication requests:
+
+      # grep -E "(^auth.*|^authpriv.*|^daemon.*)" /etc/rsyslog.conf
+
+      Example result:
+
+      auth.*;authpriv.*;daemon.* /var/log/messages
+
+      If "auth.*", "authpriv.*", and "daemon.*" are not configured to be logged, this is a finding.
+    rationale: |-
+      Remote access services, such as those providing remote access to network devices and information systems, which lack automated monitoring capabilities, increase risk and make remote user access management difficult at best. Remote access is access to DOD nonpublic information systems by an authorized user (or an information system) communicating through an external, nonorganization-controlled network. Remote access methods include, for example, dial-up, broadband, and wireless. Automated monitoring of remote access sessions allows organizations to detect cyber attacks and also ensure ongoing compliance with remote access policies by auditing connection activities of remote access capabilities, such as Remote Desktop Protocol (RDP), on a variety of information system components (e.g., servers, workstations, notebook computers, smartphones, and tablets).
+    remediation: |-
+      Navigate to and open:
+
+      /etc/rsyslog.conf
+
+      Add or update the following line:
+
+      auth.*;authpriv.*;daemon.* /var/log/messages
+
+      Note: The path can be substituted for another suitable log destination dedicated to authentication logs.
+
+      At the command line, run the following command:
+
+      # systemctl restart rsyslog.service

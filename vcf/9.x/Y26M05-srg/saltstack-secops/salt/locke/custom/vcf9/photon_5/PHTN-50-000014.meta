@@ -1,0 +1,53 @@
+version: 1
+display_name: PHTN-50-000014 - The Photon operating system must configure auditd to log to disk.
+global_description: |-
+  Without establishing what type of events occurred, it would be difficult to establish, correlate, and investigate the events leading up to an outage or attack.
+
+  Audit record content must be shipped to a central location, but it must also be logged locally.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000014
+  srg:
+    - SRG-OS-000037-GPOS-00015
+  cci:
+    - CCI-000130
+  nist:
+    - AU-3 a
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must configure auditd to log to disk.
+    control_id: PHTN-50-000014
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify auditd is configured to write logs to disk:
+
+      # grep '^write_logs' /etc/audit/auditd.conf
+
+      Example result:
+
+      write_logs = yes
+
+      If there is no output, this is not a finding.
+
+      If "write_logs" exists and is not configured to "yes", this is a finding.
+    rationale: |-
+      Without establishing what type of events occurred, it would be difficult to establish, correlate, and investigate the events leading up to an outage or attack.
+
+      Audit record content must be shipped to a central location, but it must also be logged locally.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/audit/auditd.conf
+
+      Ensure the "write_logs" line is uncommented and set to the following:
+
+      write_logs = yes
+
+      At the command line, run the following command:
+
+      # pkill -SIGHUP auditd

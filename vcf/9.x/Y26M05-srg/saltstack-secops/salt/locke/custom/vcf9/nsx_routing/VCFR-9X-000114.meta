@@ -1,0 +1,42 @@
+version: 1
+display_name: VCFR-9X-000114 - The VMware Cloud Foundation NSX Tier-1 Gateway must be configured to advertise a hop limit of at least 32 in Router Advertisement messages for IPv6 stateless auto-configuration deployments.
+global_description: |-
+  The Neighbor Discovery protocol allows a hop limit value to be advertised by routers in a Router Advertisement message being used by hosts instead of the standardized default value. If a very small value was configured and advertised to hosts on the LAN segment, communications would fail due to the hop limit reaching zero before the packets sent by a host reached its destination.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFR-9X-000114
+  srg:
+    - SRG-NET-000512-RTR-000012
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_nsx_routing:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Tier-1 Gateway must be configured to advertise a hop limit of at least 32 in Router Advertisement messages for IPv6 stateless auto-configuration deployments.
+    control_id: VCFR-9X-000114
+    scored: true
+    profile:
+      - default
+    information: |-
+      If IPv6 forwarding is not enabled, this is Not Applicable.
+
+      From the NSX Manager web interface, go to Networking >> Connectivity >> Tier-1 Gateways.
+
+      For every Tier-1 Gateway, expand Tier-1 Gateway >>Additional Settings.
+
+      Click on the ND profile name to view the hop limit.
+
+      If the hop limit is not configured to at least 32, this is a finding.
+    rationale: |-
+      The Neighbor Discovery protocol allows a hop limit value to be advertised by routers in a Router Advertisement message being used by hosts instead of the standardized default value. If a very small value was configured and advertised to hosts on the LAN segment, communications would fail due to the hop limit reaching zero before the packets sent by a host reached its destination.
+    remediation: |-
+      To configure the Neighbor Discovery hop limit do the following:
+
+      From the NSX Manager web interface, go to Networking >> Connectivity >> Tier-1 Gateways >> edit the target Tier-1 gateway.
+
+      Expand Additional Settings and select an "ND Profile" from the drop down with an appropriate hop limit then click "Close Editing".
+
+      Note: The default ND profile has a hop limit of 64 and cannot be edited. If required create a new or edit another existing ND profile to use.

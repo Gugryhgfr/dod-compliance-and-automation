@@ -1,0 +1,44 @@
+version: 1
+display_name: VCFR-9X-000016 - The VMware Cloud Foundation NSX Tier-0 Gateway must be configured to have all inactive interfaces removed.
+global_description: |-
+  An inactive interface is rarely monitored or controlled and may expose a network to an undetected attack on that interface. Unauthorized personnel with access to the communication facility could gain access to a router by connecting to a configured interface that is not in use.
+
+  If an interface is no longer used, the configuration must be deleted and the interface disabled. For sub-interfaces, delete sub-interfaces that are on inactive interfaces and delete sub-interfaces that are themselves inactive. If the sub-interface is no longer necessary for authorized communications, it must be deleted.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFR-9X-000016
+  srg:
+    - SRG-NET-000019-RTR-000007
+  cci:
+    - CCI-001414
+  nist:
+    - AC-4
+benchmark_id:
+  vcf9_nsx_routing:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Tier-0 Gateway must be configured to have all inactive interfaces removed.
+    control_id: VCFR-9X-000016
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the NSX Manager web interface, go to Networking >> Connectivity >> Tier-0 Gateways.
+
+      For every Tier-0 Gateway, expand the Tier-0 Gateway >> Interfaces and GRE Tunnels, and click on the number of interfaces present to open the interfaces dialog.
+
+      Review each interface present to determine if they are not in use or inactive.
+
+      If there are any interfaces present on a Tier-0 Gateway that are not in use or inactive, this is a finding.
+    rationale: |-
+      An inactive interface is rarely monitored or controlled and may expose a network to an undetected attack on that interface. Unauthorized personnel with access to the communication facility could gain access to a router by connecting to a configured interface that is not in use.
+
+      If an interface is no longer used, the configuration must be deleted and the interface disabled. For sub-interfaces, delete sub-interfaces that are on inactive interfaces and delete sub-interfaces that are themselves inactive. If the sub-interface is no longer necessary for authorized communications, it must be deleted.
+    remediation: |-
+      Remove unused interfaces by doing the following:
+
+      From the NSX Manager web interface, go to Networking >> Connectivity >> Tier-0 Gateways and expand the target Tier-0 gateway.
+
+      Expand "Interfaces and GRE Tunnels", then click on the number of interfaces present to open the interfaces dialog.
+
+      Select "Delete" on the unneeded interface, and then click "Delete" again to confirm.

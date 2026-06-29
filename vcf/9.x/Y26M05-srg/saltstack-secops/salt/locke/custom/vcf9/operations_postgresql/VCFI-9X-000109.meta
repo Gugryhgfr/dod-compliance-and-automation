@@ -1,0 +1,43 @@
+version: 1
+display_name: VCFI-9X-000109 - The VMware Cloud Foundation Operations PostgreSQL service must log all connection attempts.
+global_description: |-
+  For completeness of forensic analysis, it is necessary to track successful and failed attempts to log on to PostgreSQL. Setting "log_connections" to "on" will cause each attempted connection to the server to be logged, as well as successful completion of client authentication.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFI-9X-000109
+  srg:
+    - SRG-APP-000503-DB-000350
+  cci:
+    - CCI-000172
+  nist:
+    - AU-12 c
+benchmark_id:
+  vcf9_operations_postgresql:
+    type: custom
+    desc: The VMware Cloud Foundation Operations PostgreSQL service must log all connection attempts.
+    control_id: VCFI-9X-000109
+    scored: true
+    profile:
+      - default
+    information: |-
+      As a database administrator, perform the following at the command prompt:
+
+      # su - postgres -c "/opt/vmware/vpostgres/current/bin/psql -p 5433 -A -t -c 'SHOW log_connections;'"
+
+      Example result:
+
+      on
+
+      If the "log_connections" setting is not configured to "on", this is a finding.
+    rationale: |-
+      For completeness of forensic analysis, it is necessary to track successful and failed attempts to log on to PostgreSQL. Setting "log_connections" to "on" will cause each attempted connection to the server to be logged, as well as successful completion of client authentication.
+    remediation: |-
+      As a database administrator, perform the following at the command prompt:
+
+      # su - postgres -c "/opt/vmware/vpostgres/current/bin/psql -p 5433 -A -t -c \"ALTER SYSTEM SET log_connections TO 'on';\""
+
+      Reload the PostgreSQL service by running the following command:
+
+      # systemctl restart vpostgres-repl.service

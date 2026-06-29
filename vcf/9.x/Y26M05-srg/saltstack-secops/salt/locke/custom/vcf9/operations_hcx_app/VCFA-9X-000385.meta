@@ -1,0 +1,39 @@
+version: 1
+display_name: VCFA-9X-000385 - VMware Cloud Foundation Operations HCX must include only approved trust anchors in trust stores or certificate stores managed by the organization.
+global_description: |-
+  Public key infrastructure (PKI) certificates are certificates with visibility external to organizational systems and certificates related to the internal operations of systems, such as application-specific time services. In cryptographic systems with a hierarchical structure, a trust anchor is an authoritative source (i.e., a certificate authority) for which trust is assumed and not derived. A root certificate for a PKI system is an example of a trust anchor. A trust store or certificate store maintains a list of trusted root certificates.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000385
+  srg:
+    - SRG-APP-000910
+  cci:
+    - CCI-004909
+  nist:
+    - SC-17 b
+benchmark_id:
+  vcf9_operations_hcx_app:
+    type: custom
+    desc: VMware Cloud Foundation Operations HCX must include only approved trust anchors in trust stores or certificate stores managed by the organization.
+    control_id: VCFA-9X-000385
+    scored: true
+    profile:
+      - default
+    information: |-
+      If VCF Operations HCX is not deployed, this is not applicable.
+
+      From the VCF Operations HCX Administration interface, go to Administration >> Certificate >> Trusted CA Certificate.
+
+      If there are any unknown or unapproved trusted root certificates present, this is a finding.
+    rationale: |-
+      Public key infrastructure (PKI) certificates are certificates with visibility external to organizational systems and certificates related to the internal operations of systems, such as application-specific time services. In cryptographic systems with a hierarchical structure, a trust anchor is an authoritative source (i.e., a certificate authority) for which trust is assumed and not derived. A root certificate for a PKI system is an example of a trust anchor. A trust store or certificate store maintains a list of trusted root certificates.
+    remediation: |-
+      From the VCF Operations HCX Administration interface, go to Administration >> Certificate >> Trusted CA Certificate.
+
+      For the target trusted certificate, click "Delete" from the menu on the left.
+
+      Confirm the deletion by clicking "Delete".
+
+      Note: Deleting non-user imported certificates can impact signing chains or otherwise impact VCF Operations HCX appliances.

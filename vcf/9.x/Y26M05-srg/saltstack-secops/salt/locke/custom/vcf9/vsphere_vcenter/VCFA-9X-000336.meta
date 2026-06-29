@@ -1,0 +1,44 @@
+version: 1
+display_name: VCFA-9X-000336 - The VMware Cloud Foundation vCenter Server must require authentication for published content libraries.
+global_description: |-
+  In the vSphere Client, you can create a local or a subscribed content library. By using content libraries, you can store and manage content in one vCenter Server instance. Alternatively, you can distribute content across vCenter Server instances to increase consistency and facilitate the deployment workloads at scale. When publishing a content library it can be protected by requiring authentication for subscribers.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000336
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must require authentication for published content libraries.
+    control_id: VCFA-9X-000336
+    scored: true
+    profile:
+      - default
+    information: |-
+      If Content Libraries are not used, this is not applicable.
+
+      From the vSphere Client, go to Content Libraries.
+
+      Review the "Password Protected" column.
+
+      If a content library is published and is not password protected, this is a finding.
+    rationale: |-
+      In the vSphere Client, you can create a local or a subscribed content library. By using content libraries, you can store and manage content in one vCenter Server instance. Alternatively, you can distribute content across vCenter Server instances to increase consistency and facilitate the deployment workloads at scale. When publishing a content library it can be protected by requiring authentication for subscribers.
+    remediation: |-
+      From the vSphere Client, go to Content Libraries.
+
+      Select the target content library.
+
+      Select "Actions" then "Edit Settings".
+
+      Click the checkbox to "Enable user authentication for access to this content library".
+
+      Enter and confirm a password for the content library. Click "Ok".
+
+      Note: Any subscribed content libraries will need to be updated to enable authentication and provide the password.

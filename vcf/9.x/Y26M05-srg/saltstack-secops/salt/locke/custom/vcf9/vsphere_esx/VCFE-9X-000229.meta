@@ -1,0 +1,61 @@
+version: 1
+display_name: 'VCFE-9X-000229 - The ESX host must enable "execInstalledOnly" enforcement for configuration encryption.'
+global_description: |-
+  The "execInstalledOnly" advanced ESX boot option, when enabled, helps protect your hosts against ransomware attacks by ensuring that the VMkernel executes only those binaries on a host that have been properly packaged and signed as part of a valid VIB. While this option is effective on its own, it can be further enhanced by telling the Secure Boot to check with the TPM to make sure that the boot process does not proceed unless this setting is enabled. This further protects against malicious offline changes to ESX configuration to disable the "execInstalledOnly" option.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000229
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: 'The ESX host must enable "execInstalledOnly" enforcement for configuration encryption.'
+    control_id: VCFE-9X-000229
+    scored: true
+    profile:
+      - default
+    information: |-
+      If the ESX host does not have a compatible TPM, this finding is downgraded to a CAT III.
+
+      From an ESX shell, run the following command:
+
+      # esxcli system settings encryption get
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $esxcli.system.settings.encryption.get.invoke() | Select RequireExecutablesOnlyFromInstalledVIBs | Format-List
+
+      Example result:
+
+      RequireExecutablesOnlyFromInstalledVIBs : true
+
+      If "Require Executables Only From Installed VIBs" is not enabled, this is a finding.
+    rationale: |-
+      The "execInstalledOnly" advanced ESX boot option, when enabled, helps protect your hosts against ransomware attacks by ensuring that the VMkernel executes only those binaries on a host that have been properly packaged and signed as part of a valid VIB. While this option is effective on its own, it can be further enhanced by telling the Secure Boot to check with the TPM to make sure that the boot process does not proceed unless this setting is enabled. This further protects against malicious offline changes to ESX configuration to disable the "execInstalledOnly" option.
+    remediation: |-
+      This setting cannot be configured until Secure Boot is properly enabled in the server's firmware.
+
+      From an ESX shell, run the following commands:
+
+      # esxcli system settings encryption set --require-exec-installed-only=True
+      # /bin/backup.sh 0
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $arguments = $esxcli.system.settings.encryption.set.CreateArgs()
+      $arguments.requireexecinstalledonly = $true
+      $esxcli.system.settings.encryption.set.Invoke($arguments)
+
+      Evacuate the host and gracefully reboot for changes to take effect.

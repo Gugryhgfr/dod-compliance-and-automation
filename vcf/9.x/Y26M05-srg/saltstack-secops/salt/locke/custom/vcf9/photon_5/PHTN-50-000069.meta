@@ -1,0 +1,53 @@
+version: 1
+display_name: PHTN-50-000069 - The Photon operating system must terminate idle Secure Shell (SSH) sessions after 15 minutes.
+global_description: |-
+  Terminating an idle session within a short time period reduces the window of opportunity for unauthorized personnel to take control of a management session enabled on the console or console port that has been left unattended. In addition, quickly terminating an idle session will also free up resources committed by the managed network element.
+
+  Terminating network connections associated with communications sessions includes, for example, de-allocating associated TCP/IP address/port pairs at the operating system level, and de-allocating networking assignments at the application level if multiple application sessions are using a single operating system-level network connection. This does not mean that the operating system terminates all sessions or network access; it only ends the inactive session and releases the resources associated with that session.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000069
+  srg:
+    - SRG-OS-000163-GPOS-00072
+  cci:
+    - CCI-001133
+    - CCI-002891
+  nist:
+    - MA-4 (7)
+    - SC-10
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must terminate idle Secure Shell (SSH) sessions after 15 minutes.
+    control_id: PHTN-50-000069
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify the running configuration of sshd:
+
+      # sshd -T|&grep -i ClientAliveInterval
+
+      Example result:
+
+      ClientAliveInterval 900
+
+      If there is no output or if "ClientAliveInterval" is not set to "900", this is a finding.
+    rationale: |-
+      Terminating an idle session within a short time period reduces the window of opportunity for unauthorized personnel to take control of a management session enabled on the console or console port that has been left unattended. In addition, quickly terminating an idle session will also free up resources committed by the managed network element.
+
+      Terminating network connections associated with communications sessions includes, for example, de-allocating associated TCP/IP address/port pairs at the operating system level, and de-allocating networking assignments at the application level if multiple application sessions are using a single operating system-level network connection. This does not mean that the operating system terminates all sessions or network access; it only ends the inactive session and releases the resources associated with that session.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/ssh/sshd_config
+
+      Ensure the "ClientAliveInterval" line is uncommented and set to the following:
+
+      ClientAliveInterval 900
+
+      At the command line, run the following command:
+
+      # systemctl restart sshd.service

@@ -1,0 +1,49 @@
+version: 1
+display_name: PHTN-50-000224 - The Photon operating system must not respond to IPv4 Internet Control Message Protocol (ICMP) echoes sent to a broadcast address.
+global_description: |-
+  Responding to broadcast (ICMP) echoes facilitates network mapping and provides a vector for amplification attacks.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000224
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must not respond to IPv4 Internet Control Message Protocol (ICMP) echoes sent to a broadcast address.
+    control_id: PHTN-50-000224
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify ICMP echoes sent to a broadcast address are ignored:
+
+      # /sbin/sysctl net.ipv4.icmp_echo_ignore_broadcasts
+
+      Example result:
+
+      net.ipv4.icmp_echo_ignore_broadcasts = 1
+
+      If the "net.ipv4.icmp_echo_ignore_broadcasts" kernel parameter is not set to "1", this is a finding.
+    rationale: |-
+      Responding to broadcast (ICMP) echoes facilitates network mapping and provides a vector for amplification attacks.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/sysctl.d/zz-stig-hardening.conf
+
+      Add or update the following line:
+
+      net.ipv4.icmp_echo_ignore_broadcasts = 1
+
+      At the command line, run the following command to load the new configuration:
+
+      # /sbin/sysctl --load /etc/sysctl.d/zz-stig-hardening.conf
+
+      Note: If the file zz-stig-hardening.conf does not exist it must be created.

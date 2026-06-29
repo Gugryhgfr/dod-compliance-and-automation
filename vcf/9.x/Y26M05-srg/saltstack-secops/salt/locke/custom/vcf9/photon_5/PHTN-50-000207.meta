@@ -1,0 +1,47 @@
+version: 1
+display_name: PHTN-50-000207 - The Photon operating system must configure Secure Shell (SSH) to disallow authentication with an empty password.
+global_description: |-
+  Blank passwords are one of the first things an attacker checks for when probing a system. Even if the user somehow has a blank password on the OS, SSH must not allow that user to log in.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000207
+  srg:
+    - SRG-OS-000480-GPOS-00229
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must configure Secure Shell (SSH) to disallow authentication with an empty password.
+    control_id: PHTN-50-000207
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify the running configuration of sshd:
+
+      # sshd -T|&grep -i PermitEmptyPasswords
+
+      Example result:
+
+      permitemptypasswords no
+
+      If "PermitEmptyPasswords" is not set to "no", this is a finding.
+    rationale: |-
+      Blank passwords are one of the first things an attacker checks for when probing a system. Even if the user somehow has a blank password on the OS, SSH must not allow that user to log in.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/ssh/sshd_config
+
+      Ensure the "PermitEmptyPasswords" line is uncommented and set to the following:
+
+      PermitEmptyPasswords no
+
+      At the command line, run the following command:
+
+      # systemctl restart sshd.service

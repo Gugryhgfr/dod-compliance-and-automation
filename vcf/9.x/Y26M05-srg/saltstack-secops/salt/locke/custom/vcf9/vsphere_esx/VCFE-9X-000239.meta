@@ -1,0 +1,72 @@
+version: 1
+display_name: VCFE-9X-000239 - The ESX host must not use the default Active Directory ESX Admin group.
+global_description: |-
+  When adding ESX hosts to Active Directory, all user/group accounts assigned to the Active Directory group "ESX Admins" will have full administrative access to the host.
+
+  If this group is not controlled or known to the system administrators, it may be used for inappropriate access to the host. Therefore, the default group must be changed to a site-specific Active Directory group and membership must be severely restricted.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000239
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must not use the default Active Directory ESX Admin group.
+    control_id: VCFE-9X-000239
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "Config.HostAgent.plugins.hostsvc.esxAdminsGroup" value and verify it is not set to "ESX Admins".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Config.HostAgent.plugins.hostsvc.esxAdminsGroup
+
+      For ESX hosts that are joined to Active Directory, if the "Config.HostAgent.plugins.hostsvc.esxAdminsGroup" setting is set to "ESX Admins", this is a finding.
+
+      For ESX hosts that are not joined to Active Directory, if the "Config.HostAgent.plugins.hostsvc.esxAdminsGroup" setting is not set to "", this is a finding.
+    rationale: |-
+      When adding ESX hosts to Active Directory, all user/group accounts assigned to the Active Directory group "ESX Admins" will have full administrative access to the host.
+
+      If this group is not controlled or known to the system administrators, it may be used for inappropriate access to the host. Therefore, the default group must be changed to a site-specific Active Directory group and membership must be severely restricted.
+    remediation: |-
+      For ESX hosts that are joined to Active Directory, perform the following steps:
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Config.HostAgent.plugins.hostsvc.esxAdminsGroup" key and configure its value to an appropriate Active Directory group other than "ESX Admins".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Config.HostAgent.plugins.hostsvc.esxAdminsGroup | Set-AdvancedSetting -Value "<site specific AD group>"
+
+      For ESX hosts that are NOT joined to Active Directory, perform the following steps:
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Config.HostAgent.plugins.hostsvc.esxAdminsGroup" key and remove any value present.
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Config.HostAgent.plugins.hostsvc.esxAdminsGroup | Set-AdvancedSetting -Value ""

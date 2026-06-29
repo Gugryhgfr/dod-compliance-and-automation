@@ -1,0 +1,65 @@
+version: 1
+display_name: VCFO-9X-000004 - The VMware Cloud Foundation Operations for Networks Platform NGINX server must implement HTTP Strict Transport Security (HSTS) to protect the integrity of remote sessions of external server contexts.
+global_description: |-
+  HTTP Strict Transport Security (HSTS) instructs web browsers to only use secure connections for all future requests when communicating with a web site. Doing so helps prevent SSL protocol attacks, SSL stripping, cookie hijacking, and other attempts to circumvent SSL protection.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFO-9X-000004
+  srg:
+    - SRG-APP-000015-WSR-000014
+  cci:
+    - CCI-001453
+  nist:
+    - AC-17 (2)
+benchmark_id:
+  vcf9_operations_net_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation Operations for Networks Platform NGINX server must implement HTTP Strict Transport Security (HSTS) to protect the integrity of remote sessions of external server contexts.
+    control_id: VCFO-9X-000004
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify a header is present to configure HSTS.
+
+      View the running configuration by running the following command:
+
+      # nginx -T 2>&1 | sed -n '/server\s{/{:a;N;/.*location/!ba;/listen.*\sssl/p}'
+
+      Example configuration:
+
+      server {
+      add_header Strict-Transport-Security max-age=15768000;
+      }
+
+      or
+
+      server {
+      add_header Strict-Transport-Security "max-age=31536000" always;
+      }
+
+      If an HSTS header is not configured for all servers and locations with SSL enabled, this is a finding.
+
+      Note: There can be several add_header directives. These directives are inherited from the previous configuration level if and only if there are no add_header directives defined on the current level so care must be taken if add_header is defined at multiple levels to include headers configured at a higher level.
+    rationale: |-
+      HTTP Strict Transport Security (HSTS) instructs web browsers to only use secure connections for all future requests when communicating with a web site. Doing so helps prevent SSL protocol attacks, SSL stripping, cookie hijacking, and other attempts to circumvent SSL protection.
+    remediation: |-
+      Navigate to and open:
+
+      The /etc/nginx/sites-available/vnera file.
+
+      Add or update the "add_header Strict-Transport-Security" directive for the server context listening on port 443, for example:
+
+      server {
+      listen 443 ssl http2;
+
+      add_header Strict-Transport-Security "max-age=31536000" always;
+      }
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload
+
+      Note: There can be several add_header directives. These directives are inherited from the previous configuration level if and only if there are no add_header directives defined on the current level so care must be taken if add_header is defined at multiple levels to include headers configured at a higher level.

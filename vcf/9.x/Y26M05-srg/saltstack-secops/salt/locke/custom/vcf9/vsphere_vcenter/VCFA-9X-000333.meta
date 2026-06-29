@@ -1,0 +1,50 @@
+version: 1
+display_name: 'VCFA-9X-000333 - The VMware Cloud Foundation vCenter Server must limit membership to the "SystemConfiguration.BashShellAdministrators" Single Sign-On (SSO) group.'
+global_description: |-
+  vCenter SSO integrates with PAM in the underlying Photon operating system so members of the "SystemConfiguration.BashShellAdministrators" SSO group can log on to the operating system without needing a separate account. However, even though unique SSO users log on, they are transparently using a group account named "sso-user" as far as Photon auditing is concerned. While the audit trail can still be traced back to the individual SSO user, it is a more involved process.
+
+  To force accountability and nonrepudiation, the SSO group "SystemConfiguration.BashShellAdministrators" must be severely restricted.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000333
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: 'The VMware Cloud Foundation vCenter Server must limit membership to the "SystemConfiguration.BashShellAdministrators" Single Sign-On (SSO) group.'
+    control_id: VCFA-9X-000333
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Administration >> Single Sign On >> Users and Groups >> Groups.
+
+      Click the next page arrow until the "SystemConfiguration.BashShellAdministrators" group appears.
+
+      Click "SystemConfiguration.BashShellAdministrators".
+
+      Review the members of the group and ensure that only authorized accounts are present.
+
+      Note: By default the Administrator and two unique service accounts similar to "vmware-applmgmtservice-714684a4-342f-4eff-a232-cdc21def00c2" and "svc-sddc-manager-vcenter-1-2493" will be in the group and should not be removed.
+
+      If there are any accounts present as members of SystemConfiguration.BashShellAdministrators that are not authorized, this is a finding.
+    rationale: |-
+      vCenter SSO integrates with PAM in the underlying Photon operating system so members of the "SystemConfiguration.BashShellAdministrators" SSO group can log on to the operating system without needing a separate account. However, even though unique SSO users log on, they are transparently using a group account named "sso-user" as far as Photon auditing is concerned. While the audit trail can still be traced back to the individual SSO user, it is a more involved process.
+
+      To force accountability and nonrepudiation, the SSO group "SystemConfiguration.BashShellAdministrators" must be severely restricted.
+    remediation: |-
+      From the vSphere Client, go to Administration >> Single Sign On >> Users and Groups >> Groups.
+
+      Click the next page arrow until the "SystemConfiguration.BashShellAdministrators" group appears.
+
+      Click "SystemConfiguration.BashShellAdministrators".
+
+      Click the three vertical dots next to the name of each unauthorized account.
+
+      Select "Remove Member".

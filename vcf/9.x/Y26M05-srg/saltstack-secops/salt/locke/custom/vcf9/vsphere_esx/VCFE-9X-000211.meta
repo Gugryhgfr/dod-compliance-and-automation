@@ -1,0 +1,55 @@
+version: 1
+display_name: VCFE-9X-000211 - The ESX host Secure Shell (SSH) daemon must set a timeout interval on idle sessions.
+global_description: |-
+  Automatically logging out idle users guards against compromises via hijacked administrative sessions.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000211
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host Secure Shell (SSH) daemon must set a timeout interval on idle sessions.
+    control_id: VCFE-9X-000211
+    scored: true
+    profile:
+      - default
+    information: |-
+      From an ESX shell, run the following command:
+
+      # esxcli system ssh server config list -k clientaliveinterval
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $esxcli.system.ssh.server.config.list.invoke() | Where-Object {$_.Key -eq 'clientaliveinterval'}
+
+      Example result:
+
+      clientaliveinterval 200
+
+      If "clientaliveinterval" is not configured to "200", this is a finding.
+    rationale: |-
+      Automatically logging out idle users guards against compromises via hijacked administrative sessions.
+    remediation: |-
+      From an ESX shell, run the following command:
+
+      # esxcli system ssh server config set -k clientaliveinterval -v 200
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $arguments = $esxcli.system.ssh.server.config.set.CreateArgs()
+      $arguments.keyword = 'clientaliveinterval'
+      $arguments.value = '200'
+      $esxcli.system.ssh.server.config.set.Invoke($arguments)

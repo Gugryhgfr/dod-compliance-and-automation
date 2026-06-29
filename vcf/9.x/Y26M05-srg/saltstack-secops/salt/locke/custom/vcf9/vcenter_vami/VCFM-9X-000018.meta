@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFM-9X-000018 - The VMware Cloud Foundation vCenter VAMI Lighttpd service log files must only be accessible by privileged users.
+global_description: |-
+  Log data is essential in the investigation of events. If log data were to become compromised, then competent forensic analysis and discovery of the true source of potentially malicious system activity would be difficult, if not impossible, to achieve. In addition, access to log records provides information an attacker could potentially use to their advantage since each event record might contain communication ports, protocols, services, trust relationships, user names, etc.
+
+  The web server must protect the log data from unauthorized read, write, copy, etc. This can be done by the web server if the web server is also doing the logging function. The web server may also use an external log system. In either case, the logs must be protected from access by non-privileged users.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFM-9X-000018
+  srg:
+    - SRG-APP-000118-WSR-000068
+  cci:
+    - CCI-000162
+    - CCI-000163
+    - CCI-000164
+  nist:
+    - AU-9 a
+benchmark_id:
+  vcf9_vcenter_vami:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter VAMI Lighttpd service log files must only be accessible by privileged users.
+    control_id: VCFM-9X-000018
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command prompt, run the following:
+
+      # find /var/log/vmware/applmgmt/ /var/log/vmware/applmgmt-audit/ -xdev -type f -a '(' -perm -o+w -o -not -user root -o -not -group root ')' -exec ls -ld {} \;
+      # find /var/log/lighttpd/ -xdev -type f -a '(' -perm -o+r -o -not -user lighttpd -o -not -group lighttpd ')' -exec ls -ld {} \;
+
+      If any files are returned, this is a finding.
+    rationale: |-
+      Log data is essential in the investigation of events. If log data were to become compromised, then competent forensic analysis and discovery of the true source of potentially malicious system activity would be difficult, if not impossible, to achieve. In addition, access to log records provides information an attacker could potentially use to their advantage since each event record might contain communication ports, protocols, services, trust relationships, user names, etc.
+
+      The web server must protect the log data from unauthorized read, write, copy, etc. This can be done by the web server if the web server is also doing the logging function. The web server may also use an external log system. In either case, the logs must be protected from access by non-privileged users.
+    remediation: |-
+      At the command prompt, run the following commands for log files under /var/log/lighttpd/:
+
+      # chmod o-r <file>
+      # chown lighttpd:lighttpd <file>
+
+      At the command prompt, run the following commands for all other log files:
+
+      # chmod o-w <file>
+      # chown root:root <file>
+
+      Note: Substitute <file> with the listed file.

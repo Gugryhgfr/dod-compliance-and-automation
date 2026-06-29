@@ -1,0 +1,43 @@
+version: 1
+display_name: PHTN-50-000185 - The Photon operating system must enforce a delay of at least four seconds between logon prompts following a failed logon attempt in login.defs.
+global_description: |-
+  Limiting the number of logon attempts over a certain time interval reduces the chances that an unauthorized user may gain access to an account.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000185
+  srg:
+    - SRG-OS-000480-GPOS-00226
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must enforce a delay of at least four seconds between logon prompts following a failed logon attempt in login.defs.
+    control_id: PHTN-50-000185
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify a four second delay is configured between logon attempts:
+
+      # grep '^FAIL_DELAY' /etc/login.defs
+
+      Example result:
+
+      FAIL_DELAY 4
+
+      If the "FAIL_DELAY" option is not set to 4 or more, is missing or commented out, this is a finding.
+    rationale: |-
+      Limiting the number of logon attempts over a certain time interval reduces the chances that an unauthorized user may gain access to an account.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/login.defs
+
+      Add or update the following line:
+
+      FAIL_DELAY 4

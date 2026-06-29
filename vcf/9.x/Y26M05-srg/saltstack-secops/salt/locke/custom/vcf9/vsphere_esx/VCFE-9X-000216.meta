@@ -1,0 +1,52 @@
+version: 1
+display_name: VCFE-9X-000216 - The ESX host must configure the firewall to block network traffic by default.
+global_description: |-
+  In addition to service-specific firewall rules, ESX has a default firewall rule policy to allow or deny incoming and outgoing traffic. Reduce the risk of attack by ensuring this is set to deny incoming and outgoing traffic.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000216
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must configure the firewall to block network traffic by default.
+    control_id: VCFE-9X-000216
+    scored: true
+    profile:
+      - default
+    information: |-
+      From an ESX shell, run the following command:
+
+      # esxcli network firewall get
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $esxcli.network.firewall.get.invoke()
+
+      If the "Default Action" does not equal "DROP", this is a finding.
+      If "Enabled" does not equal "true", this is a finding.
+    rationale: |-
+      In addition to service-specific firewall rules, ESX has a default firewall rule policy to allow or deny incoming and outgoing traffic. Reduce the risk of attack by ensuring this is set to deny incoming and outgoing traffic.
+    remediation: |-
+      From an ESX shell, run the following command:
+
+      # esxcli network firewall set --default-action false --enabled true
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $arguments = $esxcli.network.firewall.set.CreateArgs()
+      $arguments.enabled = $true
+      $arguments.defaultaction = $false
+      $esxcli.network.firewall.set.Invoke($arguments)

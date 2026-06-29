@@ -1,0 +1,58 @@
+version: 1
+display_name: VCFB-9X-000040 - The VMware Cloud Foundation SDDC Manager NGINX server private keys must be protected from unauthorized access.
+global_description: |-
+  The web server's private key is used to prove the identity of the server to clients and securely exchange the shared secret key used to encrypt communications between the web server and clients.
+
+  By gaining access to the private key, an attacker can pretend to be an authorized server and decrypt the SSL traffic between a client and the web server.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFB-9X-000040
+  srg:
+    - SRG-APP-000176-WSR-000096
+  cci:
+    - CCI-000186
+    - CCI-004910
+  nist:
+    - IA-5 (2) (a) (1)
+    - SC-28 (3)
+benchmark_id:
+  vcf9_sddc_manager_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation SDDC Manager NGINX server private keys must be protected from unauthorized access.
+    control_id: VCFB-9X-000040
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify file permissions on private keys.
+
+      View the defined SSL certificate keys by running the following command:
+
+      # nginx -T 2>&1 | grep ssl_certificate_key
+
+      Example output:
+
+      ssl_certificate_key /etc/ssl/private/vcf_https.key;
+
+      For each ssl_certificate_key returned, run the following command:
+
+      # stat -c "%n permisions are %a, is owned by %U and group owned by %G" /etc/ssl/private/vcf_https.key
+
+      Example output:
+
+      /etc/ssl/private/vcf_https.key permisions are 640, is owned by root and group owned by root
+
+      If any key file is not owned by root or group root or permissions are more permissive than 640, this is a finding.
+    rationale: |-
+      The web server's private key is used to prove the identity of the server to clients and securely exchange the shared secret key used to encrypt communications between the web server and clients.
+
+      By gaining access to the private key, an attacker can pretend to be an authorized server and decrypt the SSL traffic between a client and the web server.
+    remediation: |-
+      At the command line, run the following:
+
+      # chown root:root <key file>
+      # chmod 640 <key file>
+
+      Replace <key file> with the key files found with incorrect permissions or ownership.

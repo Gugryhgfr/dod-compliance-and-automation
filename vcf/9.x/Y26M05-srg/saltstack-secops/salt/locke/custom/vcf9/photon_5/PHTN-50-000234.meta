@@ -1,0 +1,44 @@
+version: 1
+display_name: PHTN-50-000234 - The Photon operating system must be configured to protect the Secure Shell (SSH) private host key from unauthorized access.
+global_description: |-
+  If an unauthorized user obtains the private SSH host key file, the host could be impersonated.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000234
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must be configured to protect the Secure Shell (SSH) private host key from unauthorized access.
+    control_id: PHTN-50-000234
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command:
+
+      # stat -c "%n permissions are %a and owned by %U:%G" /etc/ssh/*key
+
+      Example result:
+
+      /etc/ssh/ssh_host_dsa_key permissions are 600 and owned by root:root
+      /etc/ssh/ssh_host_ecdsa_key permissions are 600 and owned by root:root
+      /etc/ssh/ssh_host_ed25519_key permissions are 600 and owned by root:root
+      /etc/ssh/ssh_host_rsa_key permissions are 600 and owned by root:root
+
+      If any key file listed is not owned by root or not group owned by root or does not have permissions of "0600", this is a finding.
+    rationale: |-
+      If an unauthorized user obtains the private SSH host key file, the host could be impersonated.
+    remediation: |-
+      At the command line, run the following commands for each returned file:
+
+      # chmod 600 <file>
+      # chown root:root <file>
+      # systemctl restart sshd.service

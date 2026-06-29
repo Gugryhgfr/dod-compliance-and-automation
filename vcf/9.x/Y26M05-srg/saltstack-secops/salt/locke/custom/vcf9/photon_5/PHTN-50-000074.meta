@@ -1,0 +1,49 @@
+version: 1
+display_name: PHTN-50-000074 - The Photon operating system must reveal error messages only to authorized users.
+global_description: |-
+  Only authorized personnel should be aware of errors and the details of the errors. Error messages are an indicator of an organization's operational state or can identify the operating system or platform. Additionally, Personally Identifiable Information (PII) and operational information must not be revealed through error messages to unauthorized personnel or their designated representatives.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000074
+  srg:
+    - SRG-OS-000206-GPOS-00084
+  cci:
+    - CCI-001314
+  nist:
+    - SI-11 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must reveal error messages only to authorized users.
+    control_id: PHTN-50-000074
+    scored: true
+    profile:
+      - default
+    information: |-
+      This is not applicable to the following VCF components: Operations HCX.
+
+      At the command line, run the following command to verify rsyslog generates log files that are not world readable:
+
+      # grep '^\$umask' /etc/rsyslog.conf
+
+      Example result:
+
+      $umask 0037
+
+      If "$umask" is not set to "0037" or more restrictive, this is a finding.
+    rationale: |-
+      Only authorized personnel should be aware of errors and the details of the errors. Error messages are an indicator of an organization's operational state or can identify the operating system or platform. Additionally, Personally Identifiable Information (PII) and operational information must not be revealed through error messages to unauthorized personnel or their designated representatives.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/rsyslog.conf
+
+      Add or update the following line:
+
+      $umask 0037
+
+      At the command line, run the following command:
+
+      # systemctl restart rsyslog.service

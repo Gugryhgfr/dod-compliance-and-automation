@@ -1,0 +1,43 @@
+version: 1
+display_name: VCFC-9X-000009 - The VMware Cloud Foundation SDDC Manager PostgreSQL service must initiate session auditing upon startup.
+global_description: |-
+  Session auditing is for use when a user's activities are under investigation. To be sure of capturing all activity during those periods when session auditing is in use, it needs to be in operation for the whole time the PostgreSQL is running.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFC-9X-000009
+  srg:
+    - SRG-APP-000092-DB-000208
+  cci:
+    - CCI-001464
+  nist:
+    - AU-14 (1)
+benchmark_id:
+  vcf9_sddc_manager_postgresql:
+    type: custom
+    desc: The VMware Cloud Foundation SDDC Manager PostgreSQL service must initiate session auditing upon startup.
+    control_id: VCFC-9X-000009
+    scored: true
+    profile:
+      - default
+    information: |-
+      As a database administrator, perform the following at the command prompt:
+
+      # /usr/pgsql/16/bin/psql -h localhost -U postgres -A -t -c "SHOW log_destination;"
+
+      Example result:
+
+      stderr
+
+      If the "log_destination" setting is not configured to "stderr", this is a finding.
+    rationale: |-
+      Session auditing is for use when a user's activities are under investigation. To be sure of capturing all activity during those periods when session auditing is in use, it needs to be in operation for the whole time the PostgreSQL is running.
+    remediation: |-
+      As a database administrator, perform the following at the command prompt:
+
+      # /usr/pgsql/16/bin/psql -h localhost -U postgres -c "ALTER SYSTEM SET log_destination = 'stderr';"
+
+      Reload the PostgreSQL service by running the following command:
+
+      # systemctl reload postgres

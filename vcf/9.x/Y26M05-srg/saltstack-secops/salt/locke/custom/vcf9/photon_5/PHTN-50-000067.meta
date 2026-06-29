@@ -1,0 +1,49 @@
+version: 1
+display_name: PHTN-50-000067 - The Photon operating system must restrict access to the kernel message buffer.
+global_description: |-
+  Restricting access to the kernel message buffer limits access only to root. This prevents attackers from gaining additional system information as a nonprivileged user.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000067
+  srg:
+    - SRG-OS-000138-GPOS-00069
+  cci:
+    - CCI-001090
+  nist:
+    - SC-4
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must restrict access to the kernel message buffer.
+    control_id: PHTN-50-000067
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify kernel message buffer restrictions are enabled:
+
+      # /sbin/sysctl kernel.dmesg_restrict
+
+      Example result:
+
+      kernel.dmesg_restrict = 1
+
+      If the "kernel.dmesg_restrict" kernel parameter is not set to "1", this is a finding.
+    rationale: |-
+      Restricting access to the kernel message buffer limits access only to root. This prevents attackers from gaining additional system information as a nonprivileged user.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/sysctl.d/zz-stig-hardening.conf
+
+      Add or update the following line:
+
+      kernel.dmesg_restrict = 1
+
+      At the command line, run the following command to load the new configuration:
+
+      # /sbin/sysctl --load /etc/sysctl.d/zz-stig-hardening.conf
+
+      Note: If the file zz-stig-hardening.conf does not exist it must be created.

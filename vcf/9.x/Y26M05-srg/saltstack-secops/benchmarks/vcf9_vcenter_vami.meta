@@ -1,0 +1,30 @@
+name: vcf9_vcenter_vami
+display_name: VMware Cloud Foundation 9.x - vCenter VAMI (Lighttpd)
+desc: Custom benchmark ported from the VMware Cloud Foundation 9.x STIG Readiness Guide.
+version: '1'
+authority: custom
+reference: VMware Cloud Foundation 9.x STIG Readiness Guide (Y26M05)
+ids:
+  - VCFM-9X-000001
+  - VCFM-9X-000004
+  - VCFM-9X-000005
+  - VCFM-9X-000009
+  - VCFM-9X-000018
+  - VCFM-9X-000021
+  - VCFM-9X-000030
+  - VCFM-9X-000032
+  - VCFM-9X-000033
+  - VCFM-9X-000039
+  - VCFM-9X-000061
+  - VCFM-9X-000062
+  - VCFM-9X-000063
+  - VCFM-9X-000065
+  - VCFM-9X-000066
+  - VCFM-9X-000067
+  - VCFM-9X-000101
+  - VCFM-9X-000125
+  - VCFM-9X-000126
+  - VCFM-9X-000127
+  - VCFM-9X-000128
+  - VCFM-9X-000129
+  - VCFM-9X-000130

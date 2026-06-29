@@ -1,0 +1,46 @@
+version: 1
+display_name: VCFN-9X-000039 - The VMware Cloud Foundation NSX Manager must enforce password complexity by requiring that at least one uppercase character be used for local accounts.
+global_description: |-
+  Use of a complex password helps to increase the time and resources required to compromise the password. Password complexity, or strength, is a measure of the effectiveness of a password in resisting attempts at guessing and brute-force attacks.
+
+  Password complexity is one factor of several that determine how long it takes to crack a password. The more complex the password is, the greater the number of possible combinations that need to be tested before the password is compromised.
+
+  Multifactor authentication (MFA) is required for all administrative and user accounts on network devices, except for an account of last resort and (where applicable) a root account. Passwords should only be used when MFA using PKI is not available, and for the account of last resort and root account.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFN-9X-000039
+  srg:
+    - SRG-APP-000166-NDM-000254
+  cci:
+    - CCI-004066
+  nist:
+    - IA-5 (1) (h)
+benchmark_id:
+  vcf9_nsx_manager:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Manager must enforce password complexity by requiring that at least one uppercase character be used for local accounts.
+    control_id: VCFN-9X-000039
+    scored: true
+    profile:
+      - default
+    information: |-
+      From an NSX Manager shell, run the following NSX CLI command:
+
+      >  get password-complexity
+
+      If the minimum uppercase characters is not 1 or more, this is a finding.
+
+      Note: If a maximum number of uppercase characters has been configured a minimum will not be shown.
+    rationale: |-
+      Use of a complex password helps to increase the time and resources required to compromise the password. Password complexity, or strength, is a measure of the effectiveness of a password in resisting attempts at guessing and brute-force attacks.
+
+      Password complexity is one factor of several that determine how long it takes to crack a password. The more complex the password is, the greater the number of possible combinations that need to be tested before the password is compromised.
+
+      Multifactor authentication (MFA) is required for all administrative and user accounts on network devices, except for an account of last resort and (where applicable) a root account. Passwords should only be used when MFA using PKI is not available, and for the account of last resort and root account.
+    remediation: |-
+      From an NSX Manager shell, run the following NSX CLI command:
+
+      > set password-complexity upper-chars -1
+
+      Note: Negative numbers indicate a minimum number of characters.

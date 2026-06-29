@@ -1,0 +1,45 @@
+version: 1
+display_name: PHTN-50-000127 - The Photon operating system must install AIDE to detect changes to baseline configurations.
+global_description: |-
+  Unauthorized changes to the baseline configuration could make the system vulnerable to various attacks or allow unauthorized access to the operating system. Changes to operating system configurations can have unintended side effects, some of which may be relevant to security.
+
+  Detecting such changes and providing an automated response can help avoid unintended, negative consequences that could ultimately affect the security state of the operating system. The operating system's IMO/ISSO and SAs must be notified via email and/or monitoring system trap when there is an unauthorized modification of a configuration item.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000127
+  srg:
+    - SRG-OS-000363-GPOS-00150
+  cci:
+    - CCI-001744
+    - CCI-002699
+  nist:
+    - CM-3 (5)
+    - SI-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must install AIDE to detect changes to baseline configurations.
+    control_id: PHTN-50-000127
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following commands to verify AIDE is installed and used to monitor for file changes:
+
+      # rpm -qa | grep '^aide'
+
+      Example result:
+
+      aide-0.17.4-5.ph5.x86_64
+
+      If AIDE is not installed, this is a finding.
+    rationale: |-
+      Unauthorized changes to the baseline configuration could make the system vulnerable to various attacks or allow unauthorized access to the operating system. Changes to operating system configurations can have unintended side effects, some of which may be relevant to security.
+
+      Detecting such changes and providing an automated response can help avoid unintended, negative consequences that could ultimately affect the security state of the operating system. The operating system's IMO/ISSO and SAs must be notified via email and/or monitoring system trap when there is an unauthorized modification of a configuration item.
+    remediation: |-
+      At the command line, run the following command:
+
+      # tdnf install aide

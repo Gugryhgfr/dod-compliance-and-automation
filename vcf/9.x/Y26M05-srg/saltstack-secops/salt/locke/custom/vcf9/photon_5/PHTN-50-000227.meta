@@ -1,0 +1,51 @@
+version: 1
+display_name: PHTN-50-000227 - The Photon operating system must not send IPv4 Internet Control Message Protocol (ICMP) redirects.
+global_description: |-
+  ICMP redirect messages are used by routers to inform hosts that a more direct route exists for a particular destination. These messages contain information from the system's route table, possibly revealing portions of the network topology.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000227
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must not send IPv4 Internet Control Message Protocol (ICMP) redirects.
+    control_id: PHTN-50-000227
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify ICMP send redirects are not accepted:
+
+      # /sbin/sysctl -a --pattern "net.ipv4.conf.(all|default).send_redirects"
+
+      Expected result:
+
+      net.ipv4.conf.all.send_redirects = 0
+      net.ipv4.conf.default.send_redirects = 0
+
+      If the "send_redirects" kernel parameters are not set to "0", this is a finding.
+    rationale: |-
+      ICMP redirect messages are used by routers to inform hosts that a more direct route exists for a particular destination. These messages contain information from the system's route table, possibly revealing portions of the network topology.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/sysctl.d/zz-stig-hardening.conf
+
+      Add or update the following lines:
+
+      net.ipv4.conf.all.send_redirects = 0
+      net.ipv4.conf.default.send_redirects = 0
+
+      At the command line, run the following command to load the new configuration:
+
+      # /sbin/sysctl --load /etc/sysctl.d/zz-stig-hardening.conf
+
+      Note: If the file zz-stig-hardening.conf does not exist it must be created.

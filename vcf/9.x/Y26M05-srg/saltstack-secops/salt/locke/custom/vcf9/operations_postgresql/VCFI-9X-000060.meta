@@ -1,0 +1,49 @@
+version: 1
+display_name: VCFI-9X-000060 - The VMware Cloud Foundation Operations PostgreSQL service must provide nonprivileged users with minimal error information.
+global_description: |-
+  Any DBMS or associated application providing too much information in error messages on the screen or printout risks compromising the data and security of the system. The structure and content of error messages need to contain the minimal amount of information.
+
+  Databases can inadvertently provide a wealth of information to an attacker through improperly handled error messages. In addition to sensitive business or personal information, database errors can provide host names, IP addresses, usernames, and other system information not required for troubleshooting but very useful to someone targeting the system.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFI-9X-000060
+  srg:
+    - SRG-APP-000266-DB-000162
+  cci:
+    - CCI-001312
+    - CCI-001314
+  nist:
+    - SI-11 a
+    - SI-11 b
+benchmark_id:
+  vcf9_operations_postgresql:
+    type: custom
+    desc: The VMware Cloud Foundation Operations PostgreSQL service must provide nonprivileged users with minimal error information.
+    control_id: VCFI-9X-000060
+    scored: true
+    profile:
+      - default
+    information: |-
+      As a database administrator, perform the following at the command prompt:
+
+      # su - postgres -c "/opt/vmware/vpostgres/current/bin/psql -p 5433 -A -t -c 'SHOW client_min_messages;'"
+
+      Example result:
+
+      error
+
+      If the "client_min_messages" setting is not configured to "error", this is a finding.
+    rationale: |-
+      Any DBMS or associated application providing too much information in error messages on the screen or printout risks compromising the data and security of the system. The structure and content of error messages need to contain the minimal amount of information.
+
+      Databases can inadvertently provide a wealth of information to an attacker through improperly handled error messages. In addition to sensitive business or personal information, database errors can provide host names, IP addresses, usernames, and other system information not required for troubleshooting but very useful to someone targeting the system.
+    remediation: |-
+      As a database administrator, perform the following at the command prompt:
+
+      # su - postgres -c "/opt/vmware/vpostgres/current/bin/psql -p 5433 -A -t -c \"ALTER SYSTEM SET client_min_messages TO 'error';\""
+
+      Reload the PostgreSQL service by running the following command:
+
+      # systemctl restart vpostgres-repl.service

@@ -1,0 +1,54 @@
+version: 1
+display_name: VCFE-9X-000235 - The ESX host must not enable log filtering.
+global_description: |-
+  The log filtering capability allows users to modify the logging policy of the syslog service that is running on an ESX host. Users can create log filters to reduce the number of repetitive entries in the ESX logs and to deny specific log events entirely.
+
+  Setting a limit to the amount of logging information restricts the ability to detect and respond to potential security issues or system failures properly.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000235
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must not enable log filtering.
+    control_id: VCFE-9X-000235
+    scored: true
+    profile:
+      - default
+    information: |-
+      From an ESX shell, run the following command:
+
+      # esxcli system syslog config logfilter get
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $esxcli.system.syslog.config.logfilter.get.invoke()
+
+      If "LogFilteringEnabled" is not set to "false", this is a finding.
+    rationale: |-
+      The log filtering capability allows users to modify the logging policy of the syslog service that is running on an ESX host. Users can create log filters to reduce the number of repetitive entries in the ESX logs and to deny specific log events entirely.
+
+      Setting a limit to the amount of logging information restricts the ability to detect and respond to potential security issues or system failures properly.
+    remediation: |-
+      From an ESX shell, run the following command:
+
+      # esxcli system syslog config logfilter set --log-filtering-enabled=false
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $arguments = $esxcli.system.syslog.config.logfilter.set.CreateArgs()
+      $arguments.logfilteringenabled = $false
+      $esxcli.system.syslog.config.logfilter.set.invoke($arguments)

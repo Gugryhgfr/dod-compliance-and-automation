@@ -1,0 +1,74 @@
+version: 1
+display_name: VCFN-9X-000012 - The VMware Cloud Foundation NSX Manager must be configured to enforce the limit of three consecutive invalid logon attempts, after which time it must block any login attempt for 15 minutes.
+global_description: |-
+  By limiting the number of failed login attempts, the risk of unauthorized system access via user password guessing, otherwise known as brute-forcing, is reduced.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFN-9X-000012
+  srg:
+    - SRG-APP-000065-NDM-000214
+  cci:
+    - CCI-000044
+  nist:
+    - AC-7 a
+benchmark_id:
+  vcf9_nsx_manager:
+    type: custom
+    desc: The VMware Cloud Foundation NSX Manager must be configured to enforce the limit of three consecutive invalid logon attempts, after which time it must block any login attempt for 15 minutes.
+    control_id: VCFN-9X-000012
+    scored: true
+    profile:
+      - default
+    information: |-
+      From an NSX Manager shell, run the following NSX CLI commands:
+
+      > get auth-policy api lockout-reset-period
+
+      Example result:
+
+      900 seconds
+
+      If the API "lockout-reset-period" is configured to a value greater than "900", this is a finding.
+
+      > get auth-policy api lockout-period
+
+      Example result:
+
+      900 seconds
+
+      If the API "lockout-period" is configured to "0" or is less than "900", this is a finding.
+
+      > get auth-policy api max-auth-failures
+
+      Example result:
+
+      3
+
+      If the API "max-auth-failures" is not configured to "3", this is a finding.
+
+      > get auth-policy cli lockout-period
+
+      Example result:
+
+      900 seconds
+
+      If the CLI "lockout-period" is configured to "0" or is less than "900", this is a finding.
+
+      > get auth-policy cli max-auth-failures
+
+      Example result:
+
+      3
+
+      If the CLI "max-auth-failures" is not configured to "3", this is a finding.
+    rationale: |-
+      By limiting the number of failed login attempts, the risk of unauthorized system access via user password guessing, otherwise known as brute-forcing, is reduced.
+    remediation: |-
+      From an NSX Manager shell, run the following commands:
+
+      > set auth-policy api lockout-reset-period 900
+      > set auth-policy api lockout-period 900
+      > set auth-policy api max-auth-failures 3
+      > set auth-policy cli lockout-period 900
+      > set auth-policy cli max-auth-failures 3

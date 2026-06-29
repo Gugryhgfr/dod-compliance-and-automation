@@ -1,0 +1,69 @@
+version: 1
+display_name: VCFA-9X-000345 - The VMware Cloud Foundation vCenter Server must disable the distributed port group Media Access Control (MAC) learning policy.
+global_description: |-
+  MAC Learning enables a distributed switch to provide network connectivity to systems where more than one MAC address is used on a vNIC. This can be useful in special cases like nested virtualization (running ESXi inside ESXi, for example). MAC Learning also supports unknown unicast flooding. Normally, when a packet that is received by a port has an unknown destination MAC address, the packet is dropped. With unknown unicast flooding enabled, the port floods unknown unicast traffic to every port on the switch that has MAC Learning and unknown unicast flooding enabled. This property is enabled by default, but only if MAC Learning is enabled. It is recommended to disable MAC Learning unless it is in use intentionally for a known workload that requires it.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000345
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must disable the distributed port group Media Access Control (MAC) learning policy.
+    control_id: VCFA-9X-000345
+    scored: true
+    profile:
+      - default
+    information: |-
+      If distributed switches are not used, this is not applicable.
+
+      From the vSphere Client, go to "Networking".
+
+      Select a distributed switch >> Select a port group >> Configure >> Settings >> Policies.
+
+      Verify the "MAC Learning" status is set to "Disabled".
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following command:
+
+      Get-VDPortgroup | Where-Object {$_.ExtensionData.Config.BackingType -eq "standard" -and $_.IsUplink -eq $false} | Select-Object Name,@{N=\"MAC Learning Enabled\";E={$_.ExtensionData.Config.DefaultPortConfig.MacManagementPolicy.MacLearningPolicy.Enabled}}
+
+      If the "MAC Learning" policy is enabled on any port group, this is a finding.
+
+      Note: Uplink and NSX backed distributed port groups are not in scope of this rule.
+    rationale: |-
+      MAC Learning enables a distributed switch to provide network connectivity to systems where more than one MAC address is used on a vNIC. This can be useful in special cases like nested virtualization (running ESXi inside ESXi, for example). MAC Learning also supports unknown unicast flooding. Normally, when a packet that is received by a port has an unknown destination MAC address, the packet is dropped. With unknown unicast flooding enabled, the port floods unknown unicast traffic to every port on the switch that has MAC Learning and unknown unicast flooding enabled. This property is enabled by default, but only if MAC Learning is enabled. It is recommended to disable MAC Learning unless it is in use intentionally for a known workload that requires it.
+    remediation: |-
+      From the vSphere Client, go to "Networking".
+
+      Select a distributed switch >> Select a port group >> Configure >> Settings >> Policies.
+
+      Click "Edit".
+
+      Click the "Security" tab.
+
+      Set the "MAC Learning" status to "Disabled".
+
+      Click "OK".
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following commands:
+
+      $pgs = Get-VDPortgroup | Where-Object {$_.ExtensionData.Config.BackingType -eq "standard" -and $_.IsUplink -eq $false} | Get-View
+      ForEach($pg in $pgs){
+      $spec = New-Object VMware.Vim.DVPortgroupConfigSpec
+      $spec.DefaultPortConfig = New-Object VMware.Vim.VMwareDVSPortSetting
+      $spec.DefaultPortConfig.MacManagementPolicy = New-Object VMware.Vim.DVSMacManagementPolicy
+      $spec.DefaultPortConfig.MacManagementPolicy.MacLearningPolicy = New-Object VMware.Vim.DVSMacLearningPolicy
+      $spec.DefaultPortConfig.MacManagementPolicy.MacLearningPolicy.Enabled = $false
+      $spec.ConfigVersion = $pg.Config.ConfigVersion
+      $pg.ReconfigureDVPortgroup_Task($spec)
+      }

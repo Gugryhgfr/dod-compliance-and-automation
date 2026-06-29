@@ -1,0 +1,49 @@
+version: 1
+display_name: VCFJ-9X-000128 - The VMware Cloud Foundation Operations HCX Apache HTTP service must configure the Referrer-Policy header.
+global_description: |-
+  A Referrer header may expose sensitive data in another web server's log if you use sensitive data in your URL parameters, such as personal information, username, and password or persistent sessions. Ultimately, depending on your application design, not using a properly configured Referrer Policy may allow session hijacking, credential gathering, or sensitive data exposure in a third party's logs.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFJ-9X-000128
+  srg:
+    - SRG-APP-000516-WSR-000174
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_operations_hcx_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations HCX Apache HTTP service must configure the Referrer-Policy header.
+    control_id: VCFJ-9X-000128
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify a header is configured to set Referrer-Policy.
+
+      At the command prompt, run the following:
+
+      # cat /opt/vmware/config/apache-httpd/hcx-virtual-hosts.conf | sed -n "/^<VirtualHost\s\*:443>/,/<\/VirtualHost>/p" | grep -i "Header"
+
+      Example output:
+
+      Header set Referrer-Policy "no-referrer"
+
+      If a header directive is not present to configure "Referrer-Policy" as shown in the example, this is a finding.
+    rationale: |-
+      A Referrer header may expose sensitive data in another web server's log if you use sensitive data in your URL parameters, such as personal information, username, and password or persistent sessions. Ultimately, depending on your application design, not using a properly configured Referrer Policy may allow session hijacking, credential gathering, or sensitive data exposure in a third party's logs.
+    remediation: |-
+      Navigate to and open:
+
+      /opt/vmware/config/apache-httpd/hcx-virtual-hosts.conf
+
+      Find the "VirtualHost" section listening on port 443 and add or update the following line:
+
+      Header set Referrer-Policy "no-referrer"
+
+      Reload the configuration by running the following command:
+
+      # systemctl reload httpd

@@ -1,0 +1,35 @@
+version: 1
+display_name: PHTN-50-000040 - The Photon operating system must not have the telnet package installed.
+global_description: |-
+  Passwords need to be protected at all times, and encryption is the standard method for protecting passwords. If passwords are not encrypted, they can be plainly read (i.e., clear text) and easily compromised.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000040
+  srg:
+    - SRG-OS-000074-GPOS-00042
+  cci:
+    - CCI-000197
+  nist:
+    - IA-5 (1) (c)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must not have the telnet package installed.
+    control_id: PHTN-50-000040
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify telnet is not installed:
+
+      # rpm -qa | grep telnet
+
+      If any results are returned indicating telnet is installed, this is a finding.
+    rationale: |-
+      Passwords need to be protected at all times, and encryption is the standard method for protecting passwords. If passwords are not encrypted, they can be plainly read (i.e., clear text) and easily compromised.
+    remediation: |-
+      At the command line, run the following command:
+
+      # tdnf remove <package name>

@@ -1,0 +1,64 @@
+version: 1
+display_name: 'VCFA-9X-000325 - The VMware Cloud Foundation vCenter Server must set the distributed port group Promiscuous Mode policy to "Reject".'
+global_description: |-
+  When promiscuous mode is enabled for a virtual switch, all virtual machines connected to the port group have the potential of reading all packets across that network, meaning only the virtual machines connected to that port group.
+
+  Promiscuous mode is disabled by default on the ESXi Server, and this is the recommended setting.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000325
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: 'The VMware Cloud Foundation vCenter Server must set the distributed port group Promiscuous Mode policy to "Reject".'
+    control_id: VCFA-9X-000325
+    scored: true
+    profile:
+      - default
+    information: |-
+      If distributed switches are not used, this is not applicable.
+
+      From the vSphere Client, go to "Networking".
+
+      Select a distributed switch >> Select a port group >> Configure >> Settings >> Policies.
+
+      Verify "Promiscuous Mode" is set to "Reject".
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following command:
+
+      Get-VDPortgroup | Where-Object {$_.ExtensionData.Config.BackingType -eq "standard" -and $_.IsUplink -eq $false} | Get-VDSecurityPolicy
+
+      If the "Promiscuous Mode" policy is set to accept on a nonuplink port group, this is a finding.
+
+      Note: Uplink and NSX backed distributed port groups are not in scope of this rule.
+    rationale: |-
+      When promiscuous mode is enabled for a virtual switch, all virtual machines connected to the port group have the potential of reading all packets across that network, meaning only the virtual machines connected to that port group.
+
+      Promiscuous mode is disabled by default on the ESXi Server, and this is the recommended setting.
+    remediation: |-
+      From the vSphere Client, go to "Networking".
+
+      Select a distributed switch >> Select a port group >> Configure >> Settings >> Policies.
+
+      Click "Edit".
+
+      Click the "Security" tab.
+
+      Set "Promiscuous Mode" to "Reject".
+
+      Click "OK".
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following command:
+
+      Get-VDPortgroup | Where-Object {$_.ExtensionData.Config.BackingType -eq "standard" -and $_.IsUplink -eq $false} | Get-VDSecurityPolicy | Set-VDSecurityPolicy -AllowPromiscuous $false

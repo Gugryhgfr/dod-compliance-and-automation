@@ -1,0 +1,39 @@
+version: 1
+display_name: VCFA-9X-000353 - VMware Cloud Foundation Operations must enable firewall hardening.
+global_description: |-
+  In a VCF Operations cluster there are some network ports which are used only for inter-node communication, however these ports accept incoming connections from any source. In order to secure these ports the firewall hardening option should be enabled which restricts access to these ports to only members of the Operations cluster.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000353
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_operations_app:
+    type: custom
+    desc: VMware Cloud Foundation Operations must enable firewall hardening.
+    control_id: VCFA-9X-000353
+    scored: true
+    profile:
+      - default
+    information: |-
+      Login to the admin portal (/admin/) as an administrator.
+
+      Go to Administrator Settings >> Security Settings.
+
+      View the status of "Firewall Hardening".
+
+      If "Firewall Hardening" is not activated, this is a finding.
+    rationale: |-
+      In a VCF Operations cluster there are some network ports which are used only for inter-node communication, however these ports accept incoming connections from any source. In order to secure these ports the firewall hardening option should be enabled which restricts access to these ports to only members of the Operations cluster.
+    remediation: |-
+      Enabling firewall hardening must be done from the admin portal. Login to the admin portal (/admin/) as an administrator.
+
+      Go to Administrator Settings >> Security Settings.
+
+      Click the "Activate Firewall Hardening" button.

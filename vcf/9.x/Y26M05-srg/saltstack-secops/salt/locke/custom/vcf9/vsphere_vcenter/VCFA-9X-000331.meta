@@ -1,0 +1,60 @@
+version: 1
+display_name: VCFA-9X-000331 - The VMware Cloud Foundation vCenter Server must have Mutual Challenge Handshake Authentication Protocol (CHAP) enabled for the vSAN Internet Small Computer System Interface (iSCSI) target service.
+global_description: |-
+  When enabled, vSphere performs bidirectional authentication of both the iSCSI target and host. When not authenticating both the iSCSI target and host, the potential exists for a man-in-the-middle attack in which an attacker might impersonate either side of the connection to steal data. Bidirectional authentication mitigates this risk.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000331
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must have Mutual Challenge Handshake Authentication Protocol (CHAP) enabled for the vSAN Internet Small Computer System Interface (iSCSI) target service.
+    control_id: VCFA-9X-000331
+    scored: true
+    profile:
+      - default
+    information: |-
+      If no clusters are enabled for vSAN or if vSAN is enabled but the iSCSI target service is not enabled, this is not applicable.
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select a vSAN Enabled Cluster >> Configure >> vSAN >> Services.
+
+      Review the vSAN iSCSI Target Service configuration.
+
+      If the default authentication type is not "Mutual CHAP", this is a finding.
+
+      Next review any configured iSCSI targets to ensure they are configured for mutual CHAP.
+
+      Select a vSAN Enabled Cluster >> Configure >> vSAN >> iSCSI Targets.
+
+      For each iSCSI target, review the value in the "Authentication" column.
+
+      If the Authentication method is not set to "Mutual CHAP" for any iSCSI target, this is a finding.
+    rationale: |-
+      When enabled, vSphere performs bidirectional authentication of both the iSCSI target and host. When not authenticating both the iSCSI target and host, the potential exists for a man-in-the-middle attack in which an attacker might impersonate either side of the connection to steal data. Bidirectional authentication mitigates this risk.
+    remediation: |-
+      To configure a default authentication type for the vSAN iSCSI Target Service, do the following:
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select a vSAN Enabled Cluster >> Configure >> vSAN >> Services.
+
+      Click Edit on the vSAN iSCSI Target Service tile.
+
+      In the Authentication dropdown select "Mutual CHAP" and configure the incoming and outgoing user and secret fields then click Apply.
+
+      To configure an iSCSI target with authentication different from the default authentication configuration, do the following:
+
+      Select a vSAN Enabled Cluster >> Configure >> vSAN >> iSCSI Targets.
+
+      Select the target iSCSI target and click Edit.
+
+      In the Authentication dropdown select "Mutual CHAP" and configure the incoming and outgoing user and secret fields then click Apply.

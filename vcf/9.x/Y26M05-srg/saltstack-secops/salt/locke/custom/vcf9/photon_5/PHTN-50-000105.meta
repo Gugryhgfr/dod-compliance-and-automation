@@ -1,0 +1,49 @@
+version: 1
+display_name: PHTN-50-000105 - The Photon operating system must enable symlink access control protection in the kernel.
+global_description: |-
+  By enabling the fs.protected_symlinks kernel parameter, symbolic links are permitted to be followed only when outside a sticky world-writable directory, or when the UID of the link and follower match, or when the directory owner matches the symlink's owner. Disallowing such symlinks helps mitigate vulnerabilities based on insecure file system accessed by privileged programs, avoiding an exploitation vector exploiting unsafe use of open() or creat().
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000105
+  srg:
+    - SRG-OS-000324-GPOS-00125
+  cci:
+    - CCI-002235
+  nist:
+    - AC-6 (10)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must enable symlink access control protection in the kernel.
+    control_id: PHTN-50-000105
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify symlink protection is enabled:
+
+      # /sbin/sysctl fs.protected_symlinks
+
+      Example result:
+
+      fs.protected_symlinks = 1
+
+      If the "fs.protected_symlinks" kernel parameter is not set to "1", this is a finding.
+    rationale: |-
+      By enabling the fs.protected_symlinks kernel parameter, symbolic links are permitted to be followed only when outside a sticky world-writable directory, or when the UID of the link and follower match, or when the directory owner matches the symlink's owner. Disallowing such symlinks helps mitigate vulnerabilities based on insecure file system accessed by privileged programs, avoiding an exploitation vector exploiting unsafe use of open() or creat().
+    remediation: |-
+      Navigate to and open:
+
+      /etc/sysctl.d/zz-stig-hardening.conf
+
+      Add or update the following line:
+
+      fs.protected_symlinks = 1
+
+      At the command line, run the following command to load the new configuration:
+
+      # /sbin/sysctl --load /etc/sysctl.d/zz-stig-hardening.conf
+
+      Note: If the file zz-stig-hardening.conf does not exist it must be created.

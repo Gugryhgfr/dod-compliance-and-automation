@@ -1,0 +1,48 @@
+version: 1
+display_name: VCFE-9X-000203 - The ESX host must protect the confidentiality and integrity of transmitted information by isolating ESX management traffic.
+global_description: |-
+  The vSphere management network provides access to the vSphere management interface on each component. Services running on the management interface provide an opportunity for an attacker to gain privileged access to the systems. Any remote attack most likely would begin with gaining entry to this network.
+
+  The management VMkernel port group can be on a standard or distributed virtual switch but must be on a dedicated network and must not be shared with any other functions.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000203
+  srg:
+    - SRG-OS-000423-VMM-001700
+  cci:
+    - CCI-002418
+  nist:
+    - SC-8
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must protect the confidentiality and integrity of transmitted information by isolating ESX management traffic.
+    control_id: VCFE-9X-000203
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> Networking >> VMkernel adapters.
+
+      Review each VMkernel adapter that is used for management traffic and view the "Enabled services".
+
+      If any services other than "Management" are enabled on the Management VMkernel adapter, this is a finding.
+
+      If the network segment is accessible, except to networks where other management-related entities are located such as vCenter, this is a finding.
+
+      If there are any other systems or devices such as VMs on the ESX management network, this is a finding.
+    rationale: |-
+      The vSphere management network provides access to the vSphere management interface on each component. Services running on the management interface provide an opportunity for an attacker to gain privileged access to the systems. Any remote attack most likely would begin with gaining entry to this network.
+
+      The management VMkernel port group can be on a standard or distributed virtual switch but must be on a dedicated network and must not be shared with any other functions.
+    remediation: |-
+      To remove other enabled services from the ESX VMKernel port group used for management, do the following:
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> Networking >> VMkernel adapters.
+
+      Select the Management VMkernel and click "Edit". On the Port properties tab, uncheck all services except for "Management". Click "OK".

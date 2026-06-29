@@ -1,0 +1,58 @@
+version: 1
+display_name: VCFE-9X-000222 - The ESX host must restrict use of the dvFilter network application programming interface (API).
+global_description: |-
+  If the organization is not using products that use the dvFilter network API, the host should not be configured to send network information to a virtual machine (VM).
+
+  If the API is enabled, an attacker might attempt to connect a virtual machine to it, potentially providing access to the network of other VMs on the host.
+
+  If using a product that makes use of this API, verify the host has been configured correctly. If not using such a product, ensure the setting is blank.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000222
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must restrict use of the dvFilter network application programming interface (API).
+    control_id: VCFE-9X-000222
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "Net.DVFilterBindIpAddress" value and verify the value is blank or the correct IP address of a security appliance if in use.
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Net.DVFilterBindIpAddress
+
+      If the "Net.DVFilterBindIpAddress" setting is not blank and security appliances are not in use on the host, this is a finding.
+    rationale: |-
+      If the organization is not using products that use the dvFilter network API, the host should not be configured to send network information to a virtual machine (VM).
+
+      If the API is enabled, an attacker might attempt to connect a virtual machine to it, potentially providing access to the network of other VMs on the host.
+
+      If using a product that makes use of this API, verify the host has been configured correctly. If not using such a product, ensure the setting is blank.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Net.DVFilterBindIpAddress" value and remove any incorrect addresses.
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Net.DVFilterBindIpAddress | Set-AdvancedSetting -Value ""

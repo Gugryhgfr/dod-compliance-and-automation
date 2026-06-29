@@ -1,0 +1,47 @@
+version: 1
+display_name: PHTN-50-000184 - The Photon operating system must prevent the use of dictionary words for passwords.
+global_description: |-
+  If the operating system allows the user to select passwords based on dictionary words, then this increases the chances of password compromise by increasing the opportunity for successful guesses and brute-force attacks.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000184
+  srg:
+    - SRG-OS-000480-GPOS-00225
+  cci:
+    - CCI-000366
+    - CCI-004061
+  nist:
+    - CM-6 b
+    - IA-5 (1) (b)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must prevent the use of dictionary words for passwords.
+    control_id: PHTN-50-000184
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify passwords do not match dictionary words:
+
+      # grep '^dictcheck' /etc/security/pwquality.conf
+
+      Example result:
+
+      dictcheck = 1
+
+      If the "dictcheck" option is not set to 1, is missing or commented out, this is a finding.
+
+      Note: If pwquality.conf is not used to configure pam_pwquality.so, these options may be specified on the pwquality line in the system-password file.
+    rationale: |-
+      If the operating system allows the user to select passwords based on dictionary words, then this increases the chances of password compromise by increasing the opportunity for successful guesses and brute-force attacks.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/security/pwquality.conf
+
+      Add or update the following lines:
+
+      dictcheck = 1

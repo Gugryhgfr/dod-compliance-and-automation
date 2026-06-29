@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFE-9X-000046 - The ESX host must be configured to disable nonessential capabilities by disabling the Managed Object Browser (MOB).
+global_description: |-
+  The MOB provides a way to explore the object model used by the VMkernel to manage the host and enables configurations to be changed. This interface is meant to be used primarily for debugging the vSphere Software Development Kit (SDK), but because there are no access controls it could also be used as a method to obtain information about a host being targeted for unauthorized access.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000046
+  srg:
+    - SRG-OS-000095-VMM-000480
+  cci:
+    - CCI-000381
+  nist:
+    - CM-7 a
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must be configured to disable nonessential capabilities by disabling the Managed Object Browser (MOB).
+    control_id: VCFE-9X-000046
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "Config.HostAgent.plugins.solo.enableMob" value and verify it is set to "false".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Config.HostAgent.plugins.solo.enableMob
+
+      If the "Config.HostAgent.plugins.solo.enableMob" setting is not set to "false", this is a finding.
+    rationale: |-
+      The MOB provides a way to explore the object model used by the VMkernel to manage the host and enables configurations to be changed. This interface is meant to be used primarily for debugging the vSphere Software Development Kit (SDK), but because there are no access controls it could also be used as a method to obtain information about a host being targeted for unauthorized access.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Config.HostAgent.plugins.solo.enableMob" value and configure it to "false".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Config.HostAgent.plugins.solo.enableMob | Set-AdvancedSetting -Value false

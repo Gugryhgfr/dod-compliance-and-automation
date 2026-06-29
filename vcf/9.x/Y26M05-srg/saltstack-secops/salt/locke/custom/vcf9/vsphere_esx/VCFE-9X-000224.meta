@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFE-9X-000224 - The ESX host must not suppress warnings that the local or remote shell sessions are enabled.
+global_description: |-
+  Warnings that local or remote shell sessions are enabled alert administrators to activity they may not be aware of and need to investigate.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000224
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must not suppress warnings that the local or remote shell sessions are enabled.
+    control_id: VCFE-9X-000224
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "UserVars.SuppressShellWarning" value and verify it is set to "0".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name UserVars.SuppressShellWarning
+
+      If the "UserVars.SuppressShellWarning" setting is not set to "0", this is a finding.
+    rationale: |-
+      Warnings that local or remote shell sessions are enabled alert administrators to activity they may not be aware of and need to investigate.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "UserVars.SuppressShellWarning" value and configure it to "0".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name UserVars.SuppressShellWarning | Set-AdvancedSetting -Value 0

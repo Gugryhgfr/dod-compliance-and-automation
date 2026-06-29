@@ -1,0 +1,68 @@
+version: 1
+display_name: VCFE-9X-000048 - The ESX host must uniquely identify and must authenticate organizational users by using Active Directory.
+global_description: |-
+  Join ESX hosts to an Active Directory domain to eliminate the need to create and maintain multiple local user accounts. Using Active Directory for user authentication simplifies the ESX host configuration, ensures password complexity and reuse policies are enforced, and reduces the risk of security breaches and unauthorized access.
+
+  Note: If the Active Directory group "ESX Admins" (default) exists, all users and groups assigned as members to this group will have full administrative access to all ESX hosts in the domain.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000048
+  srg:
+    - SRG-OS-000104-VMM-000500
+  cci:
+    - CCI-000764
+    - CCI-001682
+    - CCI-003650
+    - CCI-004045
+  nist:
+    - AC-2 (2)
+    - AC-3 (13)
+    - IA-2
+    - IA-2 (5)
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must uniquely identify and must authenticate organizational users by using Active Directory.
+    control_id: VCFE-9X-000048
+    scored: true
+    profile:
+      - default
+    information: |-
+      For systems that do not use Active Directory and have no local user accounts other than root and/or service accounts, this is not applicable.
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Authentication Services.
+
+      Verify the "Directory Services Type" is set to "Active Directory".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-VMHostAuthentication
+
+      For systems that do not use Active Directory and do have local user accounts, other than root and/or service accounts, this is a finding.
+
+      If the "Directory Services Type" is not set to "Active Directory", this is a finding.
+    rationale: |-
+      Join ESX hosts to an Active Directory domain to eliminate the need to create and maintain multiple local user accounts. Using Active Directory for user authentication simplifies the ESX host configuration, ensures password complexity and reuse policies are enforced, and reduces the risk of security breaches and unauthorized access.
+
+      Note: If the Active Directory group "ESX Admins" (default) exists, all users and groups assigned as members to this group will have full administrative access to all ESX hosts in the domain.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Authentication Services.
+
+      Click "Join Domain..." and enter the AD domain to join.
+
+      Select the "Using credentials" radio button and enter the credentials of an account with permissions to join machines to AD (use UPN naming "user@domain"). Click "OK".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-VMHostAuthentication | Set-VMHostAuthentication -JoinDomain -Domain "domain name" -User "username" -Password "password"
+
+      If any local user accounts are present besides root and service accounts, delete them by going to Host UI >> Manage >> Security & Users >> Users.

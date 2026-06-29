@@ -1,0 +1,77 @@
+version: 1
+display_name: VCFJ-9X-000003 - The VMware Cloud Foundation Operations HCX Apache HTTP service must use cryptography to protect the integrity of remote sessions.
+global_description: |-
+  Data exchanged between the user and the Apache web server can range from static display data to credentials used to log on to the hosted application. Even when data appears to be static, the non-displayed logic in a web page may expose business logic or trusted system relationships. The integrity of all the data being exchanged between the user and the Apache web server must always be trusted. To protect the integrity and trust, encryption methods must be used to protect the complete communication session.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFJ-9X-000003
+  srg:
+    - SRG-APP-000014-WSR-000006
+  cci:
+    - CCI-000068
+    - CCI-000197
+    - CCI-000213
+    - CCI-001188
+    - CCI-001453
+    - CCI-002418
+    - CCI-002420
+    - CCI-002422
+    - CCI-002470
+  nist:
+    - AC-17 (2)
+    - AC-3
+    - IA-5 (1) (c)
+    - SC-23 (3)
+    - SC-23 (5)
+    - SC-8
+    - SC-8 (2)
+benchmark_id:
+  vcf9_operations_hcx_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations HCX Apache HTTP service must use cryptography to protect the integrity of remote sessions.
+    control_id: VCFJ-9X-000003
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify the "ssl_module" is present.
+
+      At the command prompt, run the following:
+
+      # httpd -M | grep -i "ssl_module"
+
+      Example output:
+
+      ssl_module (shared)
+
+      If the "ssl_module" is not found, this is a finding.
+
+      Verify that insecure protocols are disabled.
+
+      At the command prompt, run the following:
+
+      # grep -i "SSLProtocol" /etc/httpd/conf/httpd.conf /opt/vmware/config/apache-httpd/hcx-ssl.conf /opt/vmware/config/apache-httpd/hcx-virtual-hosts.conf
+
+      Example output:
+
+      SSLProtocol +TLSv1.2 +TLSv1.3
+
+      If the value of "SSLProtocol" includes anything other than "+TLSv1.2" or "+TLSv1.3", this is a finding.
+    rationale: |-
+      Data exchanged between the user and the Apache web server can range from static display data to credentials used to log on to the hosted application. Even when data appears to be static, the non-displayed logic in a web page may expose business logic or trusted system relationships. The integrity of all the data being exchanged between the user and the Apache web server must always be trusted. To protect the integrity and trust, encryption methods must be used to protect the complete communication session.
+    remediation: |-
+      Navigate to and open:
+
+      /opt/vmware/config/apache-httpd/hcx-ssl.conf
+
+      Note: If the offending configuration was found in a different file edit that file instead.
+
+      Add or update the following lines:
+
+      SSLProtocol +TLSv1.2 +TLSv1.3
+
+      Reload the configuration by running the following command:
+
+      # systemctl reload httpd

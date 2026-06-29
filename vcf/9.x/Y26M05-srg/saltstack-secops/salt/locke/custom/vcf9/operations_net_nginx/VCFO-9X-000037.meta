@@ -1,0 +1,74 @@
+version: 1
+display_name: VCFO-9X-000037 - The VMware Cloud Foundation Operations for Networks Platform NGINX server must be configured to use a specified IP address and port.
+global_description: |-
+  The web server must be configured to listen on a specified IP address and port.  Without specifying an IP address and port for the web server to utilize, the web server will listen on all IP addresses available to the hosting server.  If the web server has multiple IP addresses, i.e., a management IP address, the web server will also accept connections on the management IP address.
+
+  Accessing the hosted application through an IP address normally used for nonapplication functions opens the possibility of user access to resources, utilities, files, ports, and protocols that are protected on the desired application IP address.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFO-9X-000037
+  srg:
+    - SRG-APP-000142-WSR-000089
+  cci:
+    - CCI-000382
+    - CCI-001762
+  nist:
+    - CM-7 (1) (b)
+    - CM-7 b
+benchmark_id:
+  vcf9_operations_net_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation Operations for Networks Platform NGINX server must be configured to use a specified IP address and port.
+    control_id: VCFO-9X-000037
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify the listen directive for each server context.
+
+      View the running configuration by running the following command:
+
+      # nginx -T 2>&1 | sed -n '/server\s{/{:a;N;/.*location/!ba;/listen.*/p}' | grep listen | grep -vE '80|#'
+
+      Example configuration:
+
+      listen localhost:6060;
+      listen localhost:3100;
+      listen 443 ssl http2;
+      listen localhost:7070;
+      listen localhost:7071;
+      listen localhost:7074;
+      listen localhost:7072;
+
+      If the configured "listen" directives do not define a specified IP/hostname and port, this is a finding.
+
+      If the configured "listen" directives for ssl enabled server contexts do not have an address specified, this is NOT a finding.
+    rationale: |-
+      The web server must be configured to listen on a specified IP address and port.  Without specifying an IP address and port for the web server to utilize, the web server will listen on all IP addresses available to the hosting server.  If the web server has multiple IP addresses, i.e., a management IP address, the web server will also accept connections on the management IP address.
+
+      Accessing the hosted application through an IP address normally used for nonapplication functions opens the possibility of user access to resources, utilities, files, ports, and protocols that are protected on the desired application IP address.
+    remediation: |-
+      SSL enabled server contexts intended to listen on all interfaces are acceptable. Server contexts without ssl enabled that are proxied locally should define "localhost" or "127.0.0.1" for the address.
+
+      Navigate to and open:
+
+      The /etc/nginx/sites-available/vnera file.
+
+      Update the server's listen directive, for example:
+
+      # nginx -T 2>&1 | sed -n '/server\s{/{:a;N;/.*location/!ba;/listen.*/p}' | grep listen | grep -vE '80|#'
+
+      Example configuration:
+
+      listen localhost:6060;
+      listen localhost:3100;
+      listen localhost:7070;
+      listen localhost:7071;
+      listen localhost:7074;
+      listen localhost:7072;
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload

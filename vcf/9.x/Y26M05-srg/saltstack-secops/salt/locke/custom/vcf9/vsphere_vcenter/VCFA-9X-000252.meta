@@ -1,0 +1,57 @@
+version: 1
+display_name: VCFA-9X-000252 - The VMware Cloud Foundation vCenter Server must disable the distributed virtual switch health check.
+global_description: |-
+  Network health check is disabled by default in vCenter. Once enabled, the health check packets contain information on host#, vds#, and port#, which an attacker would find useful. It is recommended that network health check be used only for troubleshooting and turned off when troubleshooting is finished.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000252
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must disable the distributed virtual switch health check.
+    control_id: VCFA-9X-000252
+    scored: true
+    profile:
+      - default
+    information: |-
+      If distributed switches are not used, this is not applicable.
+
+      From the vSphere Client, go to "Networking".
+
+      Select a distributed switch >> Configure >> Settings >> Health Check.
+
+      View the health check pane and verify the "VLAN and MTU" and "Teaming and failover" checks are "Disabled".
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following commands:
+
+      $vds = Get-VDSwitch
+      $vds.ExtensionData.Config.HealthCheckConfig
+
+      If the health check feature is enabled on distributed switches and is not on temporarily for troubleshooting purposes, this is a finding.
+    rationale: |-
+      Network health check is disabled by default in vCenter. Once enabled, the health check packets contain information on host#, vds#, and port#, which an attacker would find useful. It is recommended that network health check be used only for troubleshooting and turned off when troubleshooting is finished.
+    remediation: |-
+      From the vSphere Client, go to "Networking".
+
+      Select a distributed switch >> Configure >> Settings >> Health Check.
+
+      Click "Edit".
+
+      Disable the "VLAN and MTU" and "Teaming and failover" checks.
+
+      Click "OK".
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following command:
+
+      Get-View -ViewType DistributedVirtualSwitch | ?{($_.config.HealthCheckConfig | ?{$_.enable -notmatch "False"})}| %{$_.UpdateDVSHealthCheckConfig(@((New-Object Vmware.Vim.VMwareDVSVlanMtuHealthCheckConfig -property @{enable=0}),(New-Object Vmware.Vim.VMwareDVSTeamingHealthCheckConfig -property @{enable=0})))}

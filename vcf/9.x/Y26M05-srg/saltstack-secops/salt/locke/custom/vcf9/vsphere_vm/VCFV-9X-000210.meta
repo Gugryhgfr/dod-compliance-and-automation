@@ -1,0 +1,60 @@
+version: 1
+display_name: VCFV-9X-000210 - Virtual machines (VMs) must configure log size.
+global_description: |-
+  The ESX hypervisor maintains logs for each individual VM by default. These logs contain information including but not limited to power events, system failure information, tools status and activity, time sync, virtual hardware changes, vMotion migrations, and machine clones.
+
+  By default, the size of these logs is unlimited, and they are only rotated on vMotion or power events. This can cause storage issues at scale for VMs that do not vMotion or power cycle often.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFV-9X-000210
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vm:
+    type: custom
+    desc: Virtual machines (VMs) must configure log size.
+    control_id: VCFV-9X-000210
+    scored: true
+    profile:
+      - default
+    information: |-
+      For each virtual machine do the following:
+
+      From the vSphere Client, right-click the Virtual Machine and go to Edit Settings >> Advanced Parameters.
+
+      Verify the "log.rotateSize" value is set to "2048000".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host or vCenter server, run the following command:
+
+      Get-VM "VM Name" | Get-AdvancedSetting -Name log.rotateSize
+
+      If the virtual machine advanced setting "log.rotateSize" is not set to "2048000", this is a finding.
+
+      If the virtual machine advanced setting "log.rotateSize" does not exist, this is not a finding.
+    rationale: |-
+      The ESX hypervisor maintains logs for each individual VM by default. These logs contain information including but not limited to power events, system failure information, tools status and activity, time sync, virtual hardware changes, vMotion migrations, and machine clones.
+
+      By default, the size of these logs is unlimited, and they are only rotated on vMotion or power events. This can cause storage issues at scale for VMs that do not vMotion or power cycle often.
+    remediation: |-
+      For each virtual machine do the following:
+
+      From the vSphere Client, right-click the Virtual Machine and go to Edit Settings >> Advanced Parameters.
+
+      Find the "log.rotateSize" value and set it to "2048000".
+
+      If the setting does not exist no action is needed.
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host or vCenter server, run the following command:
+
+      Get-VM "VM Name" | Get-AdvancedSetting -Name log.rotateSize | Set-AdvancedSetting -Value 2048000
+
+      Note: The VM must be powered off to configure the advanced settings through the vSphere Client. Therefore, it is recommended to configure these settings with PowerCLI as this can be done while the VM is powered on. Settings do not take effect via either method until the virtual machine is cold started, not rebooted.

@@ -1,0 +1,41 @@
+version: 1
+display_name: PHTN-50-000241 - The Photon operating system must install rsyslog for offloading of audit logs.
+global_description: |-
+  Information stored in one location is vulnerable to accidental or incidental deletion or alteration. Off-loading is a common process in information systems with limited audit storage capacity.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000241
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must install rsyslog for offloading of audit logs.
+    control_id: PHTN-50-000241
+    scored: true
+    profile:
+      - default
+    information: |-
+      This is not applicable to the following VCF components: Operations HCX.
+
+      At the command line, run the following commands to verify rsyslog is installed:
+
+      # rpm -qa | grep '^rsyslog-'
+
+      Example result:
+
+      rsyslog-8.2212.0-1.ph5.x86_64
+
+      If rsyslog is not installed, this is a finding.
+    rationale: |-
+      Information stored in one location is vulnerable to accidental or incidental deletion or alteration. Off-loading is a common process in information systems with limited audit storage capacity.
+    remediation: |-
+      At the command line, run the following command:
+
+      # tdnf install rsyslog

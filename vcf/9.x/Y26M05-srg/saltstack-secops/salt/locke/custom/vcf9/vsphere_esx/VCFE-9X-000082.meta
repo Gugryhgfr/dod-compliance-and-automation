@@ -1,0 +1,78 @@
+version: 1
+display_name: VCFE-9X-000082 - The ESX host must enable Secure Boot enforcement for configuration encryption.
+global_description: |-
+  Starting in vSphere 7.0 Update 2, the ESX configuration is protected by encryption. When an ESX host is optionally protected by a TPM, the ESX configuration encryption key is sealed by the TPM.
+
+  Many ESX services store secrets in their configuration files. These configurations persist in an ESX host's boot bank as an encrypted archived file. As a result, attackers cannot read or alter this file directly, even if they have physical access to the ESX host's storage. In addition to preventing an attacker from accessing secrets, a secure ESX configuration when used with a TPM can save virtual machine encryption keys across reboots. As a result, encrypted workloads can continue to function when a key server is unavailable or unreachable.
+
+  Secure Boot is part of the UEFI firmware standard. With UEFI Secure Boot enabled, a host refuses to load any UEFI driver or app unless the operating system bootloader has a valid digital signature. Secure Boot for ESX requires support from the firmware and it requires that all ESX kernel modules, drivers and VIBs be signed by VMware or a partner subordinate.
+
+  Secure Boot is enabled in the BIOS of the ESX physical server and supported by the hypervisor boot loader. This control flips ESX from merely supporting Secure Boot to requiring it. Without this setting enabled, and configuration encryption, an ESX host could be subject to offline attacks and an attacker could simply transfer the ESX install drive to a host without Secure Boot and boot it up.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000082
+  srg:
+    - SRG-OS-000257-VMM-000910
+  cci:
+    - CCI-001494
+    - CCI-001495
+    - CCI-002696
+    - CCI-002699
+  nist:
+    - AU-9
+    - SI-6 a
+    - SI-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must enable Secure Boot enforcement for configuration encryption.
+    control_id: VCFE-9X-000082
+    scored: true
+    profile:
+      - default
+    information: |-
+      If the ESX host does not have a compatible TPM, this finding is downgraded to a CAT III.
+
+      From an ESX shell, run the following command:
+
+      # esxcli system settings encryption get
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $esxcli.system.settings.encryption.get.invoke() | Select RequireSecureBoot | Format-List
+
+      Example result:
+
+      Require Secure Boot: true
+
+      If "Require Secure Boot" is not set to "true", this is a finding.
+    rationale: |-
+      Starting in vSphere 7.0 Update 2, the ESX configuration is protected by encryption. When an ESX host is optionally protected by a TPM, the ESX configuration encryption key is sealed by the TPM.
+
+      Many ESX services store secrets in their configuration files. These configurations persist in an ESX host's boot bank as an encrypted archived file. As a result, attackers cannot read or alter this file directly, even if they have physical access to the ESX host's storage. In addition to preventing an attacker from accessing secrets, a secure ESX configuration when used with a TPM can save virtual machine encryption keys across reboots. As a result, encrypted workloads can continue to function when a key server is unavailable or unreachable.
+
+      Secure Boot is part of the UEFI firmware standard. With UEFI Secure Boot enabled, a host refuses to load any UEFI driver or app unless the operating system bootloader has a valid digital signature. Secure Boot for ESX requires support from the firmware and it requires that all ESX kernel modules, drivers and VIBs be signed by VMware or a partner subordinate.
+
+      Secure Boot is enabled in the BIOS of the ESX physical server and supported by the hypervisor boot loader. This control flips ESX from merely supporting Secure Boot to requiring it. Without this setting enabled, and configuration encryption, an ESX host could be subject to offline attacks and an attacker could simply transfer the ESX install drive to a host without Secure Boot and boot it up.
+    remediation: |-
+      This setting cannot be configured until Secure Boot is properly enabled in the server's firmware.
+
+      From an ESX shell, run the following commands:
+
+      # esxcli system settings encryption set --require-secure-boot=true
+      # /bin/backup.sh 0
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $arguments = $esxcli.system.settings.encryption.set.CreateArgs()
+      $arguments.requiresecureboot = $true
+      $esxcli.system.settings.encryption.set.Invoke($arguments)
+
+      Evacuate the host and gracefully reboot for changes to take effect.

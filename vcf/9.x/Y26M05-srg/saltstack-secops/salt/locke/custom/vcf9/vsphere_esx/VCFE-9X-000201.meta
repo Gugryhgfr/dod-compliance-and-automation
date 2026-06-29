@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFE-9X-000201 - The ESX host must set a timeout to automatically end idle DCUI sessions after 10 minutes.
+global_description: |-
+  When the Direct Console User Interface (DCUI) is enabled and logged in, it should be automatically logged out if left logged on to avoid access by unauthorized persons. The "DcuiTimeOut" setting defines a window of time after which the DCUI will be logged out.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000201
+  srg:
+    - SRG-OS-000163-VMM-000700
+  cci:
+    - CCI-001133
+  nist:
+    - SC-10
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must set a timeout to automatically end idle DCUI sessions after 10 minutes.
+    control_id: VCFE-9X-000201
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "UserVars.DcuiTimeOut" value and verify it is set to "600" or less and not "0".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name UserVars.DcuiTimeOut
+
+      If the "UserVars.DcuiTimeOut" setting is set to a value greater than "600" or is set to "0", this is a finding.
+    rationale: |-
+      When the Direct Console User Interface (DCUI) is enabled and logged in, it should be automatically logged out if left logged on to avoid access by unauthorized persons. The "DcuiTimeOut" setting defines a window of time after which the DCUI will be logged out.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "UserVars.DcuiTimeOut" value and configure it to "600".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name UserVars.DcuiTimeOut | Set-AdvancedSetting -Value 600

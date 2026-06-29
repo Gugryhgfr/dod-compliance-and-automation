@@ -1,0 +1,37 @@
+version: 1
+display_name: VCFA-9X-000374 - VMware Cloud Foundation Automation must disable tenant branding on login and logout pages.
+global_description: |-
+  To avoid disclosing the existence of other tenants, individual tenant branding must not be displayed on the login and logout screens and should only be shown once logged in.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000374
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_automation:
+    type: custom
+    desc: VMware Cloud Foundation Automation must disable tenant branding on login and logout pages.
+    control_id: VCFA-9X-000374
+    scored: true
+    profile:
+      - default
+    information: |-
+      If VCF Automation is not deployed, this is not applicable.
+
+      From the VCF Automation Provider interface, go to Administration >> Branding.
+
+      Click "Settings" and review the "Enable Login and Logout Page Branding" option.
+
+      If "Enable Login and Logout Page Branding" is enabled, this is a finding.
+    rationale: |-
+      To avoid disclosing the existence of other tenants, individual tenant branding must not be displayed on the login and logout screens and should only be shown once logged in.
+    remediation: |-
+      From the VCF Automation Provider interface, go to Administration >> Branding.
+
+      Click "Settings" and disable "Enable Login and Logout Page Branding" then click "Save".

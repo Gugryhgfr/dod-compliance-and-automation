@@ -1,0 +1,44 @@
+version: 1
+display_name: VCFA-9X-000051 - VMware Cloud Foundation vCenter Server client plugins must be verified.
+global_description: |-
+  The vCenter Server includes a vSphere Client extensibility framework, which provides the ability to extend the vSphere Client with menu selections or toolbar icons that provide access to vCenter Server add-on components or external, web-based functionality.
+
+  vSphere Client plugins or extensions run at the same privilege level as the user. Malicious extensions might masquerade as useful add-ons while compromising the system by stealing credentials or incorrectly configuring the system.
+
+  Additionally, vCenter comes with a number of plugins preinstalled that are necessary for proper operation.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000051
+  srg:
+    - SRG-APP-000141
+  cci:
+    - CCI-000381
+  nist:
+    - CM-7 a
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: VMware Cloud Foundation vCenter Server client plugins must be verified.
+    control_id: VCFA-9X-000051
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Administration >> Solutions >> Client Plugins.
+
+      View the Installed/Available Plugins list and verify they are all identified as authorized Broadcom, VMware, third-party (partner), and/or site-specific approved plugins.
+
+      If any installed/available plugins in the viewable list cannot be verified as allowed vSphere Client plugins from trusted sources or are not in active use, this is a finding.
+    rationale: |-
+      The vCenter Server includes a vSphere Client extensibility framework, which provides the ability to extend the vSphere Client with menu selections or toolbar icons that provide access to vCenter Server add-on components or external, web-based functionality.
+
+      vSphere Client plugins or extensions run at the same privilege level as the user. Malicious extensions might masquerade as useful add-ons while compromising the system by stealing credentials or incorrectly configuring the system.
+
+      Additionally, vCenter comes with a number of plugins preinstalled that are necessary for proper operation.
+    remediation: |-
+      From the vSphere Client, go to Administration >> Solutions >> Client Plugins.
+
+      Click on the name of the target plugin.
+
+      Select the plugin and click "Remove" and "Yes" to confirm.

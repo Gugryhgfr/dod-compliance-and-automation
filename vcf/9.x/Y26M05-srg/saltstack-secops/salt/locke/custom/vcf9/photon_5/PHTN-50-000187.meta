@@ -1,0 +1,43 @@
+version: 1
+display_name: PHTN-50-000187 - The Photon operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files.
+global_description: |-
+  Setting the most restrictive default permissions ensures that when new accounts are created they do not have unnecessary access.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000187
+  srg:
+    - SRG-OS-000480-GPOS-00228
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files.
+    control_id: PHTN-50-000187
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify the default umask configuration:
+
+      # grep '^UMASK' /etc/login.defs
+
+      Expected result:
+
+      UMASK 077
+
+      If the "UMASK" option is not set to "077", is missing or commented out, this is a finding.
+    rationale: |-
+      Setting the most restrictive default permissions ensures that when new accounts are created they do not have unnecessary access.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/login.defs
+
+      Add or update the following line:
+
+      UMASK 077

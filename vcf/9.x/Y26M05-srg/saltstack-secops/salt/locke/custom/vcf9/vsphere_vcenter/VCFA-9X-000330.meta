@@ -1,0 +1,48 @@
+version: 1
+display_name: VCFA-9X-000330 - The VMware Cloud Foundation vCenter Server must disable or restrict the connectivity between vSAN Health Check and public Hardware Compatibility List (HCL) by use of an external proxy server.
+global_description: |-
+  The vSAN Health Check is able to download the HCL from VMware to check compliance against the underlying vSAN Cluster hosts. To ensure the vCenter server is not directly downloading content from the internet, this functionality must be disabled. If this feature is necessary, an external proxy server must be configured.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000330
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must disable or restrict the connectivity between vSAN Health Check and public Hardware Compatibility List (HCL) by use of an external proxy server.
+    control_id: VCFA-9X-000330
+    scored: true
+    profile:
+      - default
+    information: |-
+      If no clusters are enabled for vSAN, this is not applicable.
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the vCenter Server >> Configure >> vSAN >> Internet Connectivity.
+
+      If the HCL internet download is not required, verify "Status" is "Disabled".
+
+      If the "Status" is "Enabled", this is a finding.
+
+      If the HCL internet download is required, verify "Status" is "Enabled" and custom proxy settings are configured.
+
+      If "Status" is "Enabled" and a custom proxy is not configured, this is a finding.
+    rationale: |-
+      The vSAN Health Check is able to download the HCL from VMware to check compliance against the underlying vSAN Cluster hosts. To ensure the vCenter server is not directly downloading content from the internet, this functionality must be disabled. If this feature is necessary, an external proxy server must be configured.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the vCenter Server >> Configure >> vSAN >> Internet Connectivity.
+
+      Click "Edit".
+
+      If the HCL internet download is not required, ensure that "Status" is "Disabled".
+
+      If the HCL internet download is required, ensure that "Status" is "Enabled" and that a custom proxy host is appropriately configured.

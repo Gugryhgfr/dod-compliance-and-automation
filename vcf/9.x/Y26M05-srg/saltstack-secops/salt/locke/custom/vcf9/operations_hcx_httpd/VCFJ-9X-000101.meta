@@ -1,0 +1,49 @@
+version: 1
+display_name: VCFJ-9X-000101 - The VMware Cloud Foundation Operations HCX Apache HTTP service must implement HTTP Strict Transport Security (HSTS) to protect the integrity of remote sessions.
+global_description: |-
+  HTTP Strict Transport Security (HSTS) instructs web browsers to only use secure connections for all future requests when communicating with a web site. Doing so helps prevent SSL protocol attacks, SSL stripping, cookie hijacking, and other attempts to circumvent SSL protection.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFJ-9X-000101
+  srg:
+    - SRG-APP-000516-WSR-000174
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_operations_hcx_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations HCX Apache HTTP service must implement HTTP Strict Transport Security (HSTS) to protect the integrity of remote sessions.
+    control_id: VCFJ-9X-000101
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify a header is present to configure HSTS.
+
+      At the command prompt, run the following:
+
+      # cat /opt/vmware/config/apache-httpd/hcx-virtual-hosts.conf | sed -n "/^<VirtualHost\s\*:443>/,/<\/VirtualHost>/p" | grep -i "Header"
+
+      Example output:
+
+      Header set Strict-Transport-Security "max-age=31536000 ; includeSubDomains"
+
+      If a header directive is not present to configure "Strict-Transport-Security", this is a finding.
+    rationale: |-
+      HTTP Strict Transport Security (HSTS) instructs web browsers to only use secure connections for all future requests when communicating with a web site. Doing so helps prevent SSL protocol attacks, SSL stripping, cookie hijacking, and other attempts to circumvent SSL protection.
+    remediation: |-
+      Navigate to and open:
+
+      /opt/vmware/config/apache-httpd/hcx-virtual-hosts.conf
+
+      Find the "VirtualHost" section listening on port 443 and add or update the following line:
+
+      Header set Strict-Transport-Security "max-age=31536000 ; includeSubDomains"
+
+      Reload the configuration by running the following command:
+
+      # systemctl reload httpd

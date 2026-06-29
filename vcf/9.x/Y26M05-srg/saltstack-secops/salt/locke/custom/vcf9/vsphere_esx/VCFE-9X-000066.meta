@@ -1,0 +1,52 @@
+version: 1
+display_name: VCFE-9X-000066 - The ESX host must set a timeout to automatically end idle shell sessions after fifteen minutes.
+global_description: |-
+  If a user forgets to log out of their local or remote ESX Shell session, the idle connection will remain open indefinitely and increase the likelihood of inappropriate host access via session hijacking. The "ESXiShellInteractiveTimeOut" allows the automatic termination of idle shell sessions.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000066
+  srg:
+    - SRG-OS-000163-VMM-000700
+  cci:
+    - CCI-001133
+    - CCI-002361
+  nist:
+    - AC-12
+    - SC-10
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must set a timeout to automatically end idle shell sessions after fifteen minutes.
+    control_id: VCFE-9X-000066
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "UserVars.ESXiShellInteractiveTimeOut" value and verify it is set to "900" or less and not "0".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name UserVars.ESXiShellInteractiveTimeOut
+
+      If the "UserVars.ESXiShellInteractiveTimeOut" setting is set to a value greater than "900" or "0", this is a finding.
+    rationale: |-
+      If a user forgets to log out of their local or remote ESX Shell session, the idle connection will remain open indefinitely and increase the likelihood of inappropriate host access via session hijacking. The "ESXiShellInteractiveTimeOut" allows the automatic termination of idle shell sessions.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "UserVars.ESXiShellInteractiveTimeOut" value and configure it to "900".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name UserVars.ESXiShellInteractiveTimeOut | Set-AdvancedSetting -Value 900

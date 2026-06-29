@@ -1,0 +1,46 @@
+version: 1
+display_name: 'VCFM-9X-000039 - The VMware Cloud Foundation vCenter VAMI Lighttpd service must restrict access to the web server''s private key.'
+global_description: |-
+  The web server's private key is used to prove the identity of the server to clients and securely exchange the shared secret key used to encrypt communications between the web server and clients.
+
+  By gaining access to the private key, an attacker can pretend to be an authorized server and decrypt the SSL traffic between a client and the web server.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFM-9X-000039
+  srg:
+    - SRG-APP-000176-WSR-000096
+  cci:
+    - CCI-000186
+    - CCI-004910
+  nist:
+    - IA-5 (2) (a) (1)
+    - SC-28 (3)
+benchmark_id:
+  vcf9_vcenter_vami:
+    type: custom
+    desc: 'The VMware Cloud Foundation vCenter VAMI Lighttpd service must restrict access to the web server''s private key.'
+    control_id: VCFM-9X-000039
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command prompt, run the following:
+
+      # stat -c "%n has %a permissions and is owned by %U:%G" /etc/applmgmt/appliance/server.pem
+
+      Example result:
+
+      /etc/applmgmt/appliance/server.pem has 600 permissions and is owned by root:root
+
+      If the server's private key is not owned by root with permissions of "600" or more restrictive, this is a finding.
+    rationale: |-
+      The web server's private key is used to prove the identity of the server to clients and securely exchange the shared secret key used to encrypt communications between the web server and clients.
+
+      By gaining access to the private key, an attacker can pretend to be an authorized server and decrypt the SSL traffic between a client and the web server.
+    remediation: |-
+      At the command prompt, run the following:
+
+      # chown root:root /etc/applmgmt/appliance/server.pem
+      # chmod 600 /etc/applmgmt/appliance/server.pem

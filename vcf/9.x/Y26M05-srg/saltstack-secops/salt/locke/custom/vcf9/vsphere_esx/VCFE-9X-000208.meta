@@ -1,0 +1,55 @@
+version: 1
+display_name: VCFE-9X-000208 - The ESX host Secure Shell (SSH) daemon must not permit user environment settings.
+global_description: |-
+  SSH environment options potentially allow users to bypass access restriction in some configurations. Users must not be able to present environment options to the SSH daemon.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000208
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host Secure Shell (SSH) daemon must not permit user environment settings.
+    control_id: VCFE-9X-000208
+    scored: true
+    profile:
+      - default
+    information: |-
+      From an ESX shell, run the following command:
+
+      # esxcli system ssh server config list -k permituserenvironment
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $esxcli.system.ssh.server.config.list.invoke() | Where-Object {$_.Key -eq 'permituserenvironment'}
+
+      Example result:
+
+      permituserenvironment no
+
+      If "permituserenvironment" is not configured to "no", this is a finding.
+    rationale: |-
+      SSH environment options potentially allow users to bypass access restriction in some configurations. Users must not be able to present environment options to the SSH daemon.
+    remediation: |-
+      From an ESX shell, run the following command:
+
+      # esxcli system ssh server config set -k permituserenvironment -v no
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $arguments = $esxcli.system.ssh.server.config.set.CreateArgs()
+      $arguments.keyword = 'permituserenvironment'
+      $arguments.value = 'no'
+      $esxcli.system.ssh.server.config.set.Invoke($arguments)

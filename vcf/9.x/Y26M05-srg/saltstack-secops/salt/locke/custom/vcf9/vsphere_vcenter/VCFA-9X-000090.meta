@@ -1,0 +1,56 @@
+version: 1
+display_name: VCFA-9X-000090 - VMware Cloud Foundation vCenter Server assigned roles and permissions must be verified.
+global_description: |-
+  Users and service accounts must only be assigned privileges they require. Least privilege requires that these privileges must only be assigned if needed to reduce risk of confidentiality, availability, or integrity loss.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000090
+  srg:
+    - SRG-APP-000211
+  cci:
+    - CCI-001082
+    - CCI-001764
+  nist:
+    - CM-7 (2)
+    - SC-2
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: VMware Cloud Foundation vCenter Server assigned roles and permissions must be verified.
+    control_id: VCFA-9X-000090
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Administration >> Access Control >> Roles.
+
+      View each role and verify the users and/or groups assigned to it by clicking on "Usage".
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following command:
+
+      Get-VIPermission | Select-Object Principal,Role,Entity,Propagate,IsGroup | Sort-Object Principal | FT -Auto
+
+      Application service account and user required privileges should be documented.
+
+      If any user or service account has more privileges than required, this is a finding.
+    rationale: |-
+      Users and service accounts must only be assigned privileges they require. Least privilege requires that these privileges must only be assigned if needed to reduce risk of confidentiality, availability, or integrity loss.
+    remediation: |-
+      To update a user's or group's permissions to an existing role with reduced permissions, do the following:
+
+      From the vSphere Client, go to Administration >> Access Control >> Global Permissions.
+
+      Select the user or group, click the pencil button, change the assigned role, and click "OK".
+
+      Note: If permissions are assigned on a specific object, the role must be updated where it is assigned (for example, at the cluster level).
+
+      To create a new role with reduced permissions, do the following:
+
+      From the vSphere Client, go to Administration >> Access Control >> Roles.
+
+      Click the green plus sign and enter a name for the role and select only the specific permissions required.
+
+      Users can then be assigned to the newly created role.

@@ -1,0 +1,12 @@
+name: vcf9_automation
+display_name: VMware Cloud Foundation 9.x - Automation
+desc: Custom benchmark ported from the VMware Cloud Foundation 9.x STIG Readiness Guide.
+version: '1'
+authority: custom
+reference: VMware Cloud Foundation 9.x STIG Readiness Guide (Y26M05)
+ids:
+  - VCFA-9X-000104
+  - VCFA-9X-000373
+  - VCFA-9X-000374
+  - VCFA-9X-000375
+  - VCFA-9X-000381

@@ -1,0 +1,41 @@
+version: 1
+display_name: VCFA-9X-000381 - VMware Cloud Foundation Automation assigned roles and permissions must be verified.
+global_description: |-
+  Users and service accounts must only be assigned privileges they require. Least privilege requires that these privileges must only be assigned if needed to reduce risk of confidentiality, availability, or integrity loss.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000381
+  srg:
+    - SRG-APP-000211
+  cci:
+    - CCI-001082
+  nist:
+    - SC-2
+benchmark_id:
+  vcf9_automation:
+    type: custom
+    desc: VMware Cloud Foundation Automation assigned roles and permissions must be verified.
+    control_id: VCFA-9X-000381
+    scored: true
+    profile:
+      - default
+    information: |-
+      If VCF Automation is not deployed, this is not applicable.
+
+      From the VCF Automation Provider interface, go to Administration >> Access Control.
+
+      Review the users, groups, and service accounts tabs and their assigned roles.
+
+      If any user, group, or service account has more privileges than required, this is a finding.
+    rationale: |-
+      Users and service accounts must only be assigned privileges they require. Least privilege requires that these privileges must only be assigned if needed to reduce risk of confidentiality, availability, or integrity loss.
+    remediation: |-
+      To update a user's or group's permissions to a role with reduced permissions, do the following:
+
+      From the VCF Automation Provider interface, go to Administration >> Access Control.
+
+      For the target the user or group, click the menu button on the left and select "Edit".
+
+      Update or remove roles from the "Role" drop down menu and click "Save".

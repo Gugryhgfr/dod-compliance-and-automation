@@ -1,0 +1,43 @@
+version: 1
+display_name: VCFH-9X-000024 - The VMware Cloud Foundation Operations Apache HTTP service must not perform user management for hosted applications.
+global_description: |-
+  User management and authentication can be an essential part of any application hosted by the web server. Along with authenticating users, the user management function must perform several other tasks like password complexity, locking users after a configurable number of failed logins, and management of temporary and emergency accounts; and all of this must be done enterprise-wide.
+
+  The web server contains a minimal user management function, but the web server user management function does not offer enterprise-wide user management, and user management is not the primary function of the web server. User management for the hosted applications should be done through a facility that is built for enterprise-wide user management, like LDAP and Active Directory.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFH-9X-000024
+  srg:
+    - SRG-APP-000141-WSR-000015
+  cci:
+    - CCI-000381
+  nist:
+    - CM-7 a
+benchmark_id:
+  vcf9_operations_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations Apache HTTP service must not perform user management for hosted applications.
+    control_id: VCFH-9X-000024
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify the server is not performing user management functions.
+
+      At the command prompt, run the following:
+
+      # grep -i "AuthUserFile" /etc/httpd/conf/httpd.conf /etc/httpd/conf/extra/httpd-ssl.conf /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf
+
+      If there is any output indicating the server is performing user management, this is a finding.
+    rationale: |-
+      User management and authentication can be an essential part of any application hosted by the web server. Along with authenticating users, the user management function must perform several other tasks like password complexity, locking users after a configurable number of failed logins, and management of temporary and emergency accounts; and all of this must be done enterprise-wide.
+
+      The web server contains a minimal user management function, but the web server user management function does not offer enterprise-wide user management, and user management is not the primary function of the web server. User management for the hosted applications should be done through a facility that is built for enterprise-wide user management, like LDAP and Active Directory.
+    remediation: |-
+      Navigate to the file found with the "AuthUserFile" directive and remove it.
+
+      Reload the configuration by running the following command:
+
+      # systemctl reload httpd

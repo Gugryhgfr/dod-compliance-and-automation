@@ -1,0 +1,45 @@
+version: 1
+display_name: PHTN-50-000235 - The Photon operating system must enforce password complexity on the root account.
+global_description: |-
+  Password complexity rules must apply to all accounts on the system, including root. Without specifying the enforce_for_root flag, pam_pwquality does not apply complexity rules to the root user. While root users can find ways around this requirement, given its superuser power, it is necessary to attempt to force compliance.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000235
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must enforce password complexity on the root account.
+    control_id: PHTN-50-000235
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify password complexity is enforced for the root account:
+
+      # grep '^enforce_for_root' /etc/security/pwquality.conf
+
+      Example result:
+
+      enforce_for_root
+
+      If the "enforce_for_root" option is missing or commented out, this is a finding.
+
+      Note: If pwquality.conf is not used to configure pam_pwquality.so, these options may be specified on the pwquality line in the system-password file.
+    rationale: |-
+      Password complexity rules must apply to all accounts on the system, including root. Without specifying the enforce_for_root flag, pam_pwquality does not apply complexity rules to the root user. While root users can find ways around this requirement, given its superuser power, it is necessary to attempt to force compliance.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/security/pwquality.conf
+
+      Add or update the following lines:
+
+      enforce_for_root

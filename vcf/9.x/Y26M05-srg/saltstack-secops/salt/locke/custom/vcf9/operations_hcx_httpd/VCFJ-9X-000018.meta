@@ -1,0 +1,50 @@
+version: 1
+display_name: VCFJ-9X-000018 - The VMware Cloud Foundation Operations HCX Apache HTTP service log files must only be accessible by privileged users.
+global_description: |-
+  Log data is essential in the investigation of events. If log data were to become compromised, then competent forensic analysis and discovery of the true source of potentially malicious system activity would be difficult, if not impossible, to achieve. In addition, access to log records provides information an attacker could potentially use to their advantage since each event record might contain communication ports, protocols, services, trust relationships, user names, etc.
+
+  The web server must protect the log data from unauthorized read, write, copy, etc. This can be done by the web server if the web server is also doing the logging function. The web server may also use an external log system. In either case, the logs must be protected from access by non-privileged users.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFJ-9X-000018
+  srg:
+    - SRG-APP-000118-WSR-000068
+  cci:
+    - CCI-000162
+    - CCI-000163
+    - CCI-000164
+  nist:
+    - AU-9 a
+benchmark_id:
+  vcf9_operations_hcx_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations HCX Apache HTTP service log files must only be accessible by privileged users.
+    control_id: VCFJ-9X-000018
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify log permissions are configured appropriately.
+
+      At the command line, run the following:
+
+      # find /common/logs/httpd/ -type f -exec stat -c "%n is owned by %U and group %G permissions are %a" {} $1\;
+
+      If any log file is not owned by root or an authorized user, this is a finding.
+
+      If any log file is not group owned by root or an authorized user, this is a finding.
+
+      If any log file is more permissive than 0640, this is a finding.
+    rationale: |-
+      Log data is essential in the investigation of events. If log data were to become compromised, then competent forensic analysis and discovery of the true source of potentially malicious system activity would be difficult, if not impossible, to achieve. In addition, access to log records provides information an attacker could potentially use to their advantage since each event record might contain communication ports, protocols, services, trust relationships, user names, etc.
+
+      The web server must protect the log data from unauthorized read, write, copy, etc. This can be done by the web server if the web server is also doing the logging function. The web server may also use an external log system. In either case, the logs must be protected from access by non-privileged users.
+    remediation: |-
+      At the command line, run the following:
+
+      # chown root:root <log file>
+      # chmod 640 <log file>
+
+      Replace <log file> with the log files found with incorrect permissions or ownership and update user and group as appropriate.

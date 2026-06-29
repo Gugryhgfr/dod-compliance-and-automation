@@ -1,0 +1,45 @@
+version: 1
+display_name: VCFA-9X-000082 - The VMware Cloud Foundation vCenter Server must terminate sessions after 15 minutes of inactivity.
+global_description: |-
+  Terminating an idle session within a short time period reduces the window of opportunity for unauthorized personnel to take control of a management session enabled on the console or console port that has been left unattended. In addition, quickly terminating an idle session will also free up resources committed by the managed network element.
+
+  Terminating network connections associated with communications sessions includes, for example, de-allocating associated TCP/IP address/port pairs at the operating system level, or de-allocating networking assignments at the application level if multiple application sessions are using a single, operating system level network connection. This does not mean that the application terminates all sessions or network access; it only ends the inactive session and releases the resources associated with that session.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000082
+  srg:
+    - SRG-APP-000190
+  cci:
+    - CCI-000366
+    - CCI-001133
+    - CCI-002038
+    - CCI-002361
+    - CCI-005162
+  nist:
+    - AC-12
+    - CM-6 b
+    - IA-11
+    - SC-10
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must terminate sessions after 15 minutes of inactivity.
+    control_id: VCFA-9X-000082
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Administration >> Deployment >> Client Configuration.
+
+      View the value of the "Session timeout" setting.
+
+      If the "Session timeout" is not set to "15 minute(s)" or less, this is a finding.
+    rationale: |-
+      Terminating an idle session within a short time period reduces the window of opportunity for unauthorized personnel to take control of a management session enabled on the console or console port that has been left unattended. In addition, quickly terminating an idle session will also free up resources committed by the managed network element.
+
+      Terminating network connections associated with communications sessions includes, for example, de-allocating associated TCP/IP address/port pairs at the operating system level, or de-allocating networking assignments at the application level if multiple application sessions are using a single, operating system level network connection. This does not mean that the application terminates all sessions or network access; it only ends the inactive session and releases the resources associated with that session.
+    remediation: |-
+      From the vSphere Client, go to Administration >> Deployment >> Client Configuration.
+
+      Click "Edit" and enter "15" minutes into the "Session timeout" setting. Click "Save".

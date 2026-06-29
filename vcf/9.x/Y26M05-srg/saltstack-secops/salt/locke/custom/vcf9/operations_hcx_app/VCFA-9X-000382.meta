@@ -1,0 +1,57 @@
+version: 1
+display_name: VCFA-9X-000382 - VMware Cloud Foundation Operations HCX must be configured to forward logs to a central log server.
+global_description: |-
+  Information stored in one location is vulnerable to accidental or incidental deletion or alteration.
+
+  Offloading is a common process in information systems with limited audit storage capacity.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000382
+  srg:
+    - SRG-APP-000358
+  cci:
+    - CCI-001851
+  nist:
+    - AU-4 (1)
+benchmark_id:
+  vcf9_operations_hcx_app:
+    type: custom
+    desc: VMware Cloud Foundation Operations HCX must be configured to forward logs to a central log server.
+    control_id: VCFA-9X-000382
+    scored: true
+    profile:
+      - default
+    information: |-
+      If VCF Operations HCX is not deployed, this is not applicable.
+
+      From the VCF Operations HCX Administration interface, go to Administration >> General Settings >> Syslog Server.
+
+      Review the primary and secondary syslog server configuration.
+
+      If log forwarding is not configured to an authorized central log server, this is a finding.
+    rationale: |-
+      Information stored in one location is vulnerable to accidental or incidental deletion or alteration.
+
+      Offloading is a common process in information systems with limited audit storage capacity.
+    remediation: |-
+      Configuring a syslog server for VCF Operations HCX forwards logs for both the manager and any dataplane appliances.
+
+      From the VCF Operations HCX Administration interface, go to Administration >> General Settings >> Syslog Server.
+
+      Click "Edit".
+
+      Enter an IP or FQDN for an authorized central log server, port, and select a protocol for the primary syslog server.
+
+      Optionally enter a secondary syslog server and click "Save".
+
+      Manager logs are forwarded immediately but a "Force Sync" must be performed for the changes to take effect on dataplane appliances.
+
+      To perform a force sync, do the following:
+
+      From the VCF Operations HCX interface, go to Infrastructure >> Interconnect >> Service Mesh.
+
+      For each service mesh select "View Appliances".
+
+      Select all appliances and click "Force-Sync".

@@ -1,0 +1,61 @@
+version: 1
+display_name: VCFJ-9X-000034 - The VMware Cloud Foundation Operations HCX Apache HTTP service must protect system resources and privileged operations from hosted applications.
+global_description: |-
+  A web server may host one to many applications.  Each application will need certain system resources and privileged operations to operate correctly.  The web server must be configured to contain and control the applications and protect the system resources and privileged operations from those not needed by the application for operation.
+
+  Limiting the application will confine the potential harm a compromised application could cause to a system.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFJ-9X-000034
+  srg:
+    - SRG-APP-000141-WSR-000086
+  cci:
+    - CCI-000381
+  nist:
+    - CM-7 a
+benchmark_id:
+  vcf9_operations_hcx_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations HCX Apache HTTP service must protect system resources and privileged operations from hosted applications.
+    control_id: VCFJ-9X-000034
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify the service is run as a nonprivileged and dedicated service account.
+
+      At the command prompt, run the following:
+
+      # grep -i -E "User|Group" /etc/httpd/conf/httpd.conf /opt/vmware/config/apache-httpd/hcx-ssl.conf /opt/vmware/config/apache-httpd/hcx-virtual-hosts.conf
+
+      Example output:
+
+      User admin
+      Group secureall
+
+      If "User" is configured to "root" or "0", this is a finding.
+
+      If "Group" is configured to "root" or "0", this is a finding.
+
+      If the "User" or "Group" is configured with an account that is not dedicated to running the service or has more privileges than needed, this is a finding.
+    rationale: |-
+      A web server may host one to many applications.  Each application will need certain system resources and privileged operations to operate correctly.  The web server must be configured to contain and control the applications and protect the system resources and privileged operations from those not needed by the application for operation.
+
+      Limiting the application will confine the potential harm a compromised application could cause to a system.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/httpd/conf/httpd.conf
+
+      Note: If the offending configuration was found in a different file edit that file instead.
+
+      Add or update the "User" and/or "Group" directives with a dedicated service account.
+
+      User admin
+      Group secureall
+
+      Restart the service by running the following command:
+
+      # systemctl restart httpd

@@ -1,0 +1,67 @@
+version: 1
+display_name: VCFH-9X-000094 - The VMware Cloud Foundation Operations Apache HTTP service must enable HTTP/2.
+global_description: |-
+  HTTP/2, like HTTPS, enhances security compared to HTTP/1.x by minimizing the risk of header-based attacks (e.g., header injection and manipulation).
+
+  Websites that fully utilize HTTP/2 are inherently protected and defend against smuggling attacks. HTTP/2 provides the method for specifying the length of a request, which removes any potential for ambiguity that can be leveraged by an attacker.
+
+  This is applicable to all web architectures such as load balancing/proxy use cases.
+  - The front-end and back-end servers should both be configured to use HTTP/2.
+  - HTTP/2 must be used for communications between web servers.
+  - Browser vendors have agreed to only support HTTP/2 only in HTTPS mode, thus TLS must be configured to meet this requirement. TLS configuration is out of scope for this requirement.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFH-9X-000094
+  srg:
+    - SRG-APP-000439-WSR-000192
+  cci:
+    - CCI-002418
+  nist:
+    - SC-8
+benchmark_id:
+  vcf9_operations_httpd:
+    type: custom
+    desc: The VMware Cloud Foundation Operations Apache HTTP service must enable HTTP/2.
+    control_id: VCFH-9X-000094
+    scored: true
+    profile:
+      - default
+    information: |-
+      Verify that the http/2 protocol is enabled..
+
+      At the command prompt, run the following:
+
+      # cat /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf | sed -n "/^<VirtualHost\s\*:443>/,/<\/VirtualHost>/p" | grep -i "Protocols"
+
+      Example output:
+
+      Protocols h2 h2c http/1.1
+
+      If the value of "Protocols" does not include "h2" first, this is a finding.
+
+      Note: By default, the first one is the most preferred protocol.
+    rationale: |-
+      HTTP/2, like HTTPS, enhances security compared to HTTP/1.x by minimizing the risk of header-based attacks (e.g., header injection and manipulation).
+
+      Websites that fully utilize HTTP/2 are inherently protected and defend against smuggling attacks. HTTP/2 provides the method for specifying the length of a request, which removes any potential for ambiguity that can be leveraged by an attacker.
+
+      This is applicable to all web architectures such as load balancing/proxy use cases.
+      - The front-end and back-end servers should both be configured to use HTTP/2.
+      - HTTP/2 must be used for communications between web servers.
+      - Browser vendors have agreed to only support HTTP/2 only in HTTPS mode, thus TLS must be configured to meet this requirement. TLS configuration is out of scope for this requirement.
+    remediation: |-
+      Navigate to and open:
+
+      /usr/lib/vmware-vcopssuite/utilities/conf/vcops-apache.conf
+
+      Note: If the offending configuration was found in a different file edit that file instead.
+
+      Find the "VirtualHost" section listening on port 443 and add or update the following line ensuring "h2" is first:
+
+      Protocols h2 h2c http/1.1
+
+      Reload the configuration by running the following command:
+
+      # systemctl reload httpd

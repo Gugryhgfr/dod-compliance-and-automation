@@ -1,0 +1,43 @@
+version: 1
+display_name: PHTN-50-000209 - The Photon operating system must create a home directory for all new local interactive user accounts.
+global_description: |-
+  If local interactive users are not assigned a valid home directory, there is no place for the storage and control of files they should own.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000209
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must create a home directory for all new local interactive user accounts.
+    control_id: PHTN-50-000209
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify a home directory is created for all new user accounts:
+
+      # grep '^CREATE_HOME' /etc/login.defs
+
+      Example result:
+
+      CREATE_HOME yes
+
+      If the "CREATE_HOME" option is not set to "yes", is missing or commented out, this is a finding.
+    rationale: |-
+      If local interactive users are not assigned a valid home directory, there is no place for the storage and control of files they should own.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/login.defs
+
+      Add or update the following line:
+
+      CREATE_HOME yes

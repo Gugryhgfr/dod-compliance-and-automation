@@ -1,0 +1,52 @@
+version: 1
+display_name: VCFE-9X-000241 - The ESX host must not disable validation of users and groups.
+global_description: |-
+  When joined to Active Directory, ESX will periodically validate group membership for any groups with permissions to the host. This process ensures any changes made to groups in Active Directory are synced to ESX and must not be disabled.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000241
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must not disable validation of users and groups.
+    control_id: VCFE-9X-000241
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "Config.HostAgent.plugins.vimsvc.authValidateInterval" value and verify it is not set to "0" and is not greater than "90".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Config.HostAgent.plugins.vimsvc.authValidateInterval
+
+      If the "Config.HostAgent.plugins.vimsvc.authValidateInterval" setting is set to "0", this is a finding.
+
+      If the "Config.HostAgent.plugins.vimsvc.authValidateInterval" setting is set to greater than "90", this is a finding.
+    rationale: |-
+      When joined to Active Directory, ESX will periodically validate group membership for any groups with permissions to the host. This process ensures any changes made to groups in Active Directory are synced to ESX and must not be disabled.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Config.HostAgent.plugins.vimsvc.authValidateInterval" key and configure its value to "90".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Config.HostAgent.plugins.vimsvc.authValidateInterval | Set-AdvancedSetting -Value "90"

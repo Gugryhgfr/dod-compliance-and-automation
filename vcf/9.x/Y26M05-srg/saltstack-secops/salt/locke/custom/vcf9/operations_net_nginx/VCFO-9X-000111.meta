@@ -1,0 +1,71 @@
+version: 1
+display_name: VCFO-9X-000111 - The VMware Cloud Foundation Operations for Networks Platform NGINX server must enable HTTP/2.
+global_description: |-
+  HTTP/2, like HTTPS, enhances security compared to HTTP/1.x by minimizing the risk of header-based attacks (e.g., header injection and manipulation).
+
+  Websites that fully utilize HTTP/2 are inherently protected and defend against smuggling attacks. HTTP/2 provides the method for specifying the length of a request, which removes any potential for ambiguity that can be leveraged by an attacker.
+
+  This is applicable to all web architectures such as load balancing/proxy use cases.
+  - The front-end and back-end servers should both be configured to use HTTP/2.
+  - HTTP/2 must be used for communications between web servers.
+  - Browser vendors have agreed to only support HTTP/2 only in HTTPS mode, thus TLS must be configured to meet this requirement. TLS configuration is out of scope for this requirement.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFO-9X-000111
+  srg:
+    - SRG-APP-000439-WSR-000192
+  cci:
+    - CCI-001310
+    - CCI-002418
+  nist:
+    - SC-8
+    - SI-10
+benchmark_id:
+  vcf9_operations_net_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation Operations for Networks Platform NGINX server must enable HTTP/2.
+    control_id: VCFO-9X-000111
+    scored: true
+    profile:
+      - default
+    information: |-
+      If a server context does not have "ssl" enabled on any listener directives, this is Not Applicable for that server context.
+
+      Verify http2 is enabled for each server context or in the http context.
+
+      View the running configuration by running the following command:
+
+      # nginx -T 2>&1 | sed -n '/server\s{/{:a;N;/.*location/!ba;/listen.*\sssl/p}' | grep http2
+
+      Example configuration:
+
+      server {
+      http2 on;
+      }
+
+      If the "http2" directive is not configured to "on" for a server context that has "ssl" enabled or is not inherited from the http context, this is a finding.
+
+      Note: "http2" can be defined on the listen directive but this method is deprecated.
+    rationale: |-
+      HTTP/2, like HTTPS, enhances security compared to HTTP/1.x by minimizing the risk of header-based attacks (e.g., header injection and manipulation).
+
+      Websites that fully utilize HTTP/2 are inherently protected and defend against smuggling attacks. HTTP/2 provides the method for specifying the length of a request, which removes any potential for ambiguity that can be leveraged by an attacker.
+
+      This is applicable to all web architectures such as load balancing/proxy use cases.
+      - The front-end and back-end servers should both be configured to use HTTP/2.
+      - HTTP/2 must be used for communications between web servers.
+      - Browser vendors have agreed to only support HTTP/2 only in HTTPS mode, thus TLS must be configured to meet this requirement. TLS configuration is out of scope for this requirement.
+    remediation: |-
+      Navigate to and open:
+
+      The /etc/nginx/sites-available/vnera file.
+
+      Add or update the "http2" directive for the server context listening on port 443, for example:
+
+      http2 on;
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload

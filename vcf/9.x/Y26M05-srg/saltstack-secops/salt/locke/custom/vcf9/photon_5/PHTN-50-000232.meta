@@ -1,0 +1,49 @@
+version: 1
+display_name: PHTN-50-000232 - The Photon operating system must send TCP timestamps.
+global_description: |-
+  TCP timestamps are used to provide protection against wrapped sequence numbers. It is possible to calculate system uptime (and boot time) by analyzing TCP timestamps. These calculated uptimes can help a bad actor in determining likely patch levels for vulnerabilities.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000232
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must send TCP timestamps.
+    control_id: PHTN-50-000232
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify TCP timestamps are enabled:
+
+      # /sbin/sysctl net.ipv4.tcp_timestamps
+
+      Expected result:
+
+      net.ipv4.tcp_timestamps = 1
+
+      If the "net.ipv4.tcp_timestamps" kernel parameter is not set to "1", this is a finding.
+    rationale: |-
+      TCP timestamps are used to provide protection against wrapped sequence numbers. It is possible to calculate system uptime (and boot time) by analyzing TCP timestamps. These calculated uptimes can help a bad actor in determining likely patch levels for vulnerabilities.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/sysctl.d/zz-stig-hardening.conf
+
+      Add or update the following line:
+
+      net.ipv4.tcp_timestamps = 1
+
+      At the command line, run the following command to load the new configuration:
+
+      # /sbin/sysctl --load /etc/sysctl.d/zz-stig-hardening.conf
+
+      Note: If the file zz-stig-hardening.conf does not exist it must be created.

@@ -1,0 +1,53 @@
+version: 1
+display_name: VCFB-9X-000007 - The VMware Cloud Foundation SDDC Manager NGINX server must generate log records for system events.
+global_description: |-
+  Log records can be generated from various components within the web server (e.g., httpd, plug-ins to external backends, etc.). From a web server perspective, certain specific web server functionalities may be logged as well. The web server must allow the definition of what events are to be logged. As conditions change, the number and types of events to be logged may change, and the web server must be able to facilitate these changes.
+
+  The minimum list of logged events should be those pertaining to system startup and shutdown, system access, and system authentication events. If these events are not logged at a minimum, any type of forensic investigation would be missing pertinent information needed to replay what occurred.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFB-9X-000007
+  srg:
+    - SRG-APP-000089-WSR-000047
+  cci:
+    - CCI-000169
+    - CCI-001464
+  nist:
+    - AU-12 a
+    - AU-14 (1)
+benchmark_id:
+  vcf9_sddc_manager_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation SDDC Manager NGINX server must generate log records for system events.
+    control_id: VCFB-9X-000007
+    scored: true
+    profile:
+      - default
+    information: |-
+      View the running configuration by running the following command:
+
+      # nginx -T 2>&1 | grep "^error_log"
+
+      Example result:
+
+      error_log /var/log/nginx/error.log info;
+
+      If the output does not include the "error_log" directive in the main context and set to at least "info", this is a finding.
+    rationale: |-
+      Log records can be generated from various components within the web server (e.g., httpd, plug-ins to external backends, etc.). From a web server perspective, certain specific web server functionalities may be logged as well. The web server must allow the definition of what events are to be logged. As conditions change, the number and types of events to be logged may change, and the web server must be able to facilitate these changes.
+
+      The minimum list of logged events should be those pertaining to system startup and shutdown, system access, and system authentication events. If these events are not logged at a minimum, any type of forensic investigation would be missing pertinent information needed to replay what occurred.
+    remediation: |-
+      Navigate to and open:
+
+      The nginx.conf (/etc/nginx/nginx.conf by default) file.
+
+      Add the following line in the main context at the top of the file:
+
+      error_log /var/log/nginx/error.log info;
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload

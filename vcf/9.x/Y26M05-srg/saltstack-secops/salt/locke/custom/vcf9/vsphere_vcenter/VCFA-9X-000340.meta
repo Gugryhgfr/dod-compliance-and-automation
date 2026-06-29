@@ -1,0 +1,46 @@
+version: 1
+display_name: VCFA-9X-000340 - The VMware Cloud Foundation vCenter Server must remove unauthorized port mirroring sessions on distributed switches.
+global_description: |-
+  The vSphere Distributed Virtual Switch can enable port mirroring sessions allowing traffic to be mirrored from one source to a destination. If port mirroring is configured unknowingly this could allow an attacker to observe network traffic of virtual machines.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000340
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must remove unauthorized port mirroring sessions on distributed switches.
+    control_id: VCFA-9X-000340
+    scored: true
+    profile:
+      - default
+    information: |-
+      If distributed switches are not used, this is not applicable.
+
+      From the vSphere Client, go to "Networking".
+
+      Select a distributed switch >> Configure >> Settings >> Port Mirroring.
+
+      Review any configured "Port Mirroring" sessions.
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following command:
+
+      Get-VDSwitch | select Name,@{N="Port Mirroring Sessions";E={$_.ExtensionData.Config.VspanSession.Name}}
+
+      If there are any unauthorized port mirroring sessions configured, this is a finding.
+    rationale: |-
+      The vSphere Distributed Virtual Switch can enable port mirroring sessions allowing traffic to be mirrored from one source to a destination. If port mirroring is configured unknowingly this could allow an attacker to observe network traffic of virtual machines.
+    remediation: |-
+      From the vSphere Client, go to "Networking".
+
+      Select a distributed switch >> Configure >> Settings >> Port Mirroring.
+
+      Select the unauthorized "Port Mirroring" session and click "Remove". Click "OK".

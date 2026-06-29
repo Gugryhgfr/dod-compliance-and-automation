@@ -1,0 +1,51 @@
+version: 1
+display_name: VCFE-9X-000237 - The ESX host must deny shell access for the dcui account.
+global_description: |-
+  The dcui user is used for process isolation for the DCUI itself. The account has shell access which can be deactivated to reduce attack surface.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000237
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must deny shell access for the dcui account.
+    control_id: VCFE-9X-000237
+    scored: true
+    profile:
+      - default
+    information: |-
+      From an ESX shell, run the following command:
+
+      # esxcli system account list
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $esxcli.system.account.list.Invoke() | Where-Object {$_.UserID -eq 'dcui'}
+
+      If shell access is not disabled for the dcui account, this is a finding.
+    rationale: |-
+      The dcui user is used for process isolation for the DCUI itself. The account has shell access which can be deactivated to reduce attack surface.
+    remediation: |-
+      From an ESX shell, run the following command:
+
+      # esxcli system account set -i dcui -s false
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following commands:
+
+      $esxcli = Get-EsxCli -v2
+      $arguments = $esxcli.system.account.set.CreateArgs()
+      $arguments.id = "dcui"
+      $arguments.shellaccess = "false"
+      $esxcli.system.account.set.invoke($arguments)

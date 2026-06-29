@@ -1,0 +1,35 @@
+version: 1
+display_name: VCFA-9X-000001 - VMware Cloud Foundation Operations must limit the number of concurrent sessions.
+global_description: |-
+  Application management includes the ability to control the number of users and user sessions that use an application. Limiting the number of allowed users and sessions per user is helpful in limiting risks related to denial-of-service (DoS) attacks.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000001
+  srg:
+    - SRG-APP-000001
+  cci:
+    - CCI-000054
+  nist:
+    - AC-10
+benchmark_id:
+  vcf9_operations_app:
+    type: custom
+    desc: VMware Cloud Foundation Operations must limit the number of concurrent sessions.
+    control_id: VCFA-9X-000001
+    scored: true
+    profile:
+      - default
+    information: |-
+      From VCF Operations, go to Administration >> Global Settings >> User Access.
+
+      Verify the "Concurrent UI login sessions" setting is deactivated.
+
+      If the "Concurrent UI login sessions" setting is not deactivated, this is a finding.
+    rationale: |-
+      Application management includes the ability to control the number of users and user sessions that use an application. Limiting the number of allowed users and sessions per user is helpful in limiting risks related to denial-of-service (DoS) attacks.
+    remediation: |-
+      From VCF Operations, go to Administration >> Global Settings >> User Access.
+
+      Find the "Concurrent UI login sessions" setting and click on the "Activated" radio button to disable it and click "Save".

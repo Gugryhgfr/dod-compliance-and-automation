@@ -1,0 +1,36 @@
+version: 1
+display_name: PHTN-50-000210 - The Photon operating system must disable the debug-shell service.
+global_description: |-
+  The debug-shell service is intended to diagnose systemd related boot issues with various systemctl commands. Once enabled and following a system reboot, the root shell will be available on tty9. This service must remain disabled until and unless otherwise directed by VMware support.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000210
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must disable the debug-shell service.
+    control_id: PHTN-50-000210
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify the debug-shell service is disabled:
+
+      # systemctl status debug-shell.service --no-pager
+
+      If the debug-shell service is not stopped and disabled, this is a finding.
+    rationale: |-
+      The debug-shell service is intended to diagnose systemd related boot issues with various systemctl commands. Once enabled and following a system reboot, the root shell will be available on tty9. This service must remain disabled until and unless otherwise directed by VMware support.
+    remediation: |-
+      At the command line, run the following commands:
+
+      # systemctl stop debug-shell.service
+      # systemctl disable debug-shell.service

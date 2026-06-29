@@ -1,0 +1,61 @@
+version: 1
+display_name: VCFA-9X-000356 - VMware Cloud Foundation SDDC Manager must configure the API admin account.
+global_description: |-
+  A local account is used to access VMware Cloud Foundation APIs when the management vCenter Server is down. If you upgraded from a previous release or didn't configure the account when deploying using the API this account's password is unset. If left unset this would make managing and accessing the environment in some scenarios difficult to recover from.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFA-9X-000356
+  srg:
+    - SRG-APP-000516
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_sddc_manager_app:
+    type: custom
+    desc: VMware Cloud Foundation SDDC Manager must configure the API admin account.
+    control_id: VCFA-9X-000356
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the SDDC Manager UI, go to Developer Center >> API Explorer.
+
+      Locate the "Users" section and expand "GET" for "/v1/users/local/admin" and click "Execute".
+
+      or
+
+      From a command prompt, run the following command:
+
+      $ curl 'https://sddc-manager.sfo01.rainpole.local/v1/users/local/admin' -i -X GET -H 'Authorization: Bearer etYWRta....'
+
+      Note: The SDDC Manager URL and bearer token must be replaced in the example.
+
+      Review the response and verify "isConfigured" is set to "true".
+
+      If the "admin@local" account is not configured, this is a finding.
+    rationale: |-
+      A local account is used to access VMware Cloud Foundation APIs when the management vCenter Server is down. If you upgraded from a previous release or didn't configure the account when deploying using the API this account's password is unset. If left unset this would make managing and accessing the environment in some scenarios difficult to recover from.
+    remediation: |-
+      From the SDDC Manager UI, go to Developer Center >> API Explorer.
+
+      Locate the "Users" section and expand "PATCH" for "/v1/users/local/admin".
+
+      Enter the following in the value text box:
+
+      {
+      "newPassword": "",
+      }
+
+      Update the "newPassword" property value with an appropriate value that meets the following requirements:
+
+      -Minimum length: 12
+      -Maximum length: 127
+      -At least one lowercase letter, one uppercase letter, a number, and one of the following special characters ! % @ $ ^ # ? *
+      -A character cannot be repeated more than three times consecutively
+      -Must not include three of the same consecutive characters
+
+      Click "Execute" to set the admin API user password.

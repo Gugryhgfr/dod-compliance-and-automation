@@ -1,0 +1,40 @@
+version: 1
+display_name: PHTN-50-000042 - The Photon operating systems must enforce a 90-day maximum password lifetime restriction.
+global_description: |-
+  Any password, no matter how complex, can eventually be cracked. Therefore, passwords need to be changed periodically. If the operating system does not limit the lifetime of passwords and force users to change their passwords, there is the risk that the operating system passwords could be compromised.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000042
+  srg:
+    - SRG-OS-000076-GPOS-00044
+  cci:
+    - CCI-004066
+  nist:
+    - IA-5 (1) (h)
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating systems must enforce a 90-day maximum password lifetime restriction.
+    control_id: PHTN-50-000042
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify a 90-day maximum password lifetime restriction:
+
+      # grep '^PASS_MAX_DAYS' /etc/login.defs
+
+      If "PASS_MAX_DAYS" is not set to <= 90, is missing or commented out, this is a finding.
+      If "PASS_MAX_DAYS" is disabled or set to -1, this is a finding.
+    rationale: |-
+      Any password, no matter how complex, can eventually be cracked. Therefore, passwords need to be changed periodically. If the operating system does not limit the lifetime of passwords and force users to change their passwords, there is the risk that the operating system passwords could be compromised.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/login.defs
+
+      Add or update the following line:
+
+      PASS_MAX_DAYS 90

@@ -1,0 +1,52 @@
+version: 1
+display_name: VCFE-9X-000228 - The ESX host must only run binaries from signed VIBs.
+global_description: |-
+  The "execInstalledOnly" advanced ESX boot option, when enabled, helps protect your hosts against ransomware attacks by ensuring that the VMkernel executes only those binaries on a host that have been properly packaged and signed as part of a valid VIB.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000228
+  srg:
+    - SRG-OS-000480-VMM-002000
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must only run binaries from signed VIBs.
+    control_id: VCFE-9X-000228
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "VMkernel.Boot.execInstalledOnly" value and verify that it is "true".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name VMkernel.Boot.execInstalledOnly
+
+      If the "VMkernel.Boot.execInstalledOnly" setting is not "true", this is a finding.
+    rationale: |-
+      The "execInstalledOnly" advanced ESX boot option, when enabled, helps protect your hosts against ransomware attacks by ensuring that the VMkernel executes only those binaries on a host that have been properly packaged and signed as part of a valid VIB.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "VMkernel.Boot.execInstalledOnly" value and configure it to "true".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name VMkernel.Boot.execInstalledOnly | Set-AdvancedSetting -Value True
+
+      Note: A reboot of the host is required to complete the process.

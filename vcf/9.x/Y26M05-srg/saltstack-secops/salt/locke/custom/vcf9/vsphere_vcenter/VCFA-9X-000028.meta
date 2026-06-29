@@ -1,0 +1,58 @@
+version: 1
+display_name: VCFA-9X-000028 - The VMware Cloud Foundation vCenter Server must produce audit records containing information to establish what type of events occurred.
+global_description: |-
+  Without establishing what types of events occurred, it would be difficult to establish, correlate, and investigate the events leading up to an outage or attack.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFA-9X-000028
+  srg:
+    - SRG-APP-000095
+  cci:
+    - CCI-000130
+    - CCI-000132
+    - CCI-000133
+    - CCI-000134
+    - CCI-001487
+  nist:
+    - AU-3 a
+    - AU-3 c
+    - AU-3 d
+    - AU-3 e
+    - AU-3 f
+benchmark_id:
+  vcf9_vsphere_vcenter:
+    type: custom
+    desc: The VMware Cloud Foundation vCenter Server must produce audit records containing information to establish what type of events occurred.
+    control_id: VCFA-9X-000028
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select a vCenter Server >> Configure >> Settings >> Advanced Settings.
+
+      Verify the "config.log.level" value is set to "info".
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following command:
+
+      Get-AdvancedSetting -Entity <vcenter server name> -Name config.log.level and verify it is set to "info".
+
+      If the "config.log.level" value is not set to "info" or does not exist, this is a finding.
+    rationale: |-
+      Without establishing what types of events occurred, it would be difficult to establish, correlate, and investigate the events leading up to an outage or attack.
+    remediation: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select a vCenter Server >> Configure >> Settings >> Advanced Settings.
+
+      Click "Edit Settings" and configure the "config.log.level" setting to "info".
+
+      or
+
+      From a PowerCLI command prompt while connected to the vCenter server, run the following command:
+
+      Get-AdvancedSetting -Entity <vcenter server name> -Name config.log.level | Set-AdvancedSetting -Value info

@@ -1,0 +1,60 @@
+version: 1
+display_name: VCFE-9X-000198 - The ESX host must enable audit logging.
+global_description: |-
+  ESX offers both local and remote audit recordkeeping to meet the requirements of the NIAP Virtualization Protection Profile and Server Virtualization Extended Package. Local records are stored on any accessible local or VMFS path. Remote records are sent to the global syslog servers configured elsewhere.
+
+  To operate in the NIAP validated state, ESX must enable and properly configure this audit system. This system is disabled by default.
+
+  Note: Audit records can be viewed locally via the "/bin/viewAudit" utility over SSH or at the ESX shell.
+osfinger: []  # API/proxy-managed control; not tied to a minion OS grain
+refs:
+  disa_stig:
+    - VCFE-9X-000198
+  srg:
+    - SRG-OS-000037-VMM-000150
+  cci:
+    - CCI-000130
+  nist:
+    - AU-3 a
+benchmark_id:
+  vcf9_vsphere_esx:
+    type: custom
+    desc: The ESX host must enable audit logging.
+    control_id: VCFE-9X-000198
+    scored: true
+    profile:
+      - default
+    information: |-
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Select the "Syslog.global.auditRecord.storageEnable" value and verify it is set to "true".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Syslog.global.auditRecord.storageEnable
+
+      If the "Syslog.global.auditRecord.storageEnable" setting is not set to "true", this is a finding.
+    rationale: |-
+      ESX offers both local and remote audit recordkeeping to meet the requirements of the NIAP Virtualization Protection Profile and Server Virtualization Extended Package. Local records are stored on any accessible local or VMFS path. Remote records are sent to the global syslog servers configured elsewhere.
+
+      To operate in the NIAP validated state, ESX must enable and properly configure this audit system. This system is disabled by default.
+
+      Note: Audit records can be viewed locally via the "/bin/viewAudit" utility over SSH or at the ESX shell.
+    remediation: |-
+      Note: VCFE-9X-000110 and VCFE-9X-000202 must be configured and validated prior to enabling audit logging.
+
+      From the vSphere Client, go to Hosts and Clusters.
+
+      Select the ESX Host >> Configure >> System >> Advanced System Settings.
+
+      Click "Edit". Select the "Syslog.global.auditRecord.storageEnable" value and configure it to "true".
+
+      or
+
+      From a PowerCLI command prompt while connected to the ESX host, run the following command:
+
+      Get-VMHost | Get-AdvancedSetting -Name Syslog.global.auditRecord.storageEnable | Set-AdvancedSetting -Value "true"

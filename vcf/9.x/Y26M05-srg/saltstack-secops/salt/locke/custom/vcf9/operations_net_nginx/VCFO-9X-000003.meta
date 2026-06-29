@@ -1,0 +1,67 @@
+version: 1
+display_name: VCFO-9X-000003 - The VMware Cloud Foundation Operations for Networks Platform NGINX server must enable SSL on external server contexts.
+global_description: |-
+  The web server has several remote communications channels. Examples are user requests via http/https, communication to a backend database, or communication to authenticate users. The encryption used to communicate must match the data that is being retrieved or presented.
+
+  Methods of communication are http for publicly displayed information, https to encrypt when user data is being transmitted, VPN tunneling, or other encryption methods to a database.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - VCFO-9X-000003
+  srg:
+    - SRG-APP-000014-WSR-000006
+  cci:
+    - CCI-000068
+    - CCI-000197
+    - CCI-002418
+  nist:
+    - AC-17 (2)
+    - IA-5 (1) (c)
+    - SC-8
+benchmark_id:
+  vcf9_operations_net_nginx:
+    type: custom
+    desc: The VMware Cloud Foundation Operations for Networks Platform NGINX server must enable SSL on external server contexts.
+    control_id: VCFO-9X-000003
+    scored: true
+    profile:
+      - default
+    information: |-
+      If a server context is not listening on an externally accessible interface, this is Not Applicable for that server context.
+
+      Verify ssl is enabled for each server context.
+
+      View the running configuration by running the following command:
+
+      # nginx -T 2>&1 | sed -n '/server\s{/{:a;N;/.*location/!ba;/listen.*/p}' | grep listen | grep -vE '80|#'
+
+      Example configuration:
+
+      listen localhost:6060;
+      listen localhost:3100;
+      listen 443 ssl http2;
+      listen localhost:7070;
+      listen localhost:7071;
+      listen localhost:7074;
+      listen localhost:7072;
+
+      If the "ssl" option is not specified on the listen directive for a server context that is externally accessible, this is a finding.
+    rationale: |-
+      The web server has several remote communications channels. Examples are user requests via http/https, communication to a backend database, or communication to authenticate users. The encryption used to communicate must match the data that is being retrieved or presented.
+
+      Methods of communication are http for publicly displayed information, https to encrypt when user data is being transmitted, VPN tunneling, or other encryption methods to a database.
+    remediation: |-
+      Navigate to and open:
+
+      The /etc/nginx/sites-available/vnera file.
+
+      Add the ssl option to the server's listen directive, for example:
+
+      listen 443 ssl;
+
+      Reload the NGINX configuration by running the following command:
+
+      # nginx -s reload
+
+      Note: The ssl_certificate and ssl_certificate_key also need to be defined in order for SSL to work.

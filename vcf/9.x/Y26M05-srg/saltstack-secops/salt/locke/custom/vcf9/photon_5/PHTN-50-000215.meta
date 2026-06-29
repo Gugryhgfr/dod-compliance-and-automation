@@ -1,0 +1,47 @@
+version: 1
+display_name: PHTN-50-000215 - The Photon operating system must configure Secure Shell (SSH) to disallow compression of the encrypted session stream.
+global_description: |-
+  If compression is allowed in a SSH connection prior to authentication, vulnerabilities in the compression software could result in compromise of the system from an unauthenticated connection.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000215
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must configure Secure Shell (SSH) to disallow compression of the encrypted session stream.
+    control_id: PHTN-50-000215
+    scored: true
+    profile:
+      - default
+    information: |-
+      At the command line, run the following command to verify the running configuration of sshd:
+
+      # sshd -T|&grep -i Compression
+
+      Example result:
+
+      compression no
+
+      If there is no output or if "Compression" is not set to "delayed" or "no", this is a finding.
+    rationale: |-
+      If compression is allowed in a SSH connection prior to authentication, vulnerabilities in the compression software could result in compromise of the system from an unauthenticated connection.
+    remediation: |-
+      Navigate to and open:
+
+      /etc/ssh/sshd_config
+
+      Ensure the "Compression" line is uncommented and set to the following:
+
+      Compression no
+
+      At the command line, run the following command:
+
+      # systemctl restart sshd.service

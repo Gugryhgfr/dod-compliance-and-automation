@@ -1,0 +1,38 @@
+version: 1
+display_name: PHTN-50-000242 - The Photon operating system must enable the rsyslog service.
+global_description: |-
+  Information stored in one location is vulnerable to accidental or incidental deletion or alteration. Off-loading is a common process in information systems with limited audit storage capacity.
+osfinger:
+  - VMware Photon OS-5
+refs:
+  disa_stig:
+    - PHTN-50-000242
+  srg:
+    - SRG-OS-000480-GPOS-00227
+  cci:
+    - CCI-000366
+  nist:
+    - CM-6 b
+benchmark_id:
+  vcf9_photon_5:
+    type: custom
+    desc: The Photon operating system must enable the rsyslog service.
+    control_id: PHTN-50-000242
+    scored: true
+    profile:
+      - default
+    information: |-
+      This is not applicable to the following VCF components: Operations HCX.
+
+      At the command line, run the following command to verify rsyslog is enabled and running:
+
+      # systemctl status rsyslog --no-pager
+
+      If the rsyslog service is not enabled and running, this is a finding.
+    rationale: |-
+      Information stored in one location is vulnerable to accidental or incidental deletion or alteration. Off-loading is a common process in information systems with limited audit storage capacity.
+    remediation: |-
+      At the command line, run the following commands:
+
+      # systemctl enable rsyslog
+      # systemctl start rsyslog
